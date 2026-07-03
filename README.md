@@ -29,6 +29,18 @@
 - 정량 데이터와 직접 사용 경험을 함께 본다
 - 좁게, 깊게. 다 하려다 아무것도 안 되는 것보다 하나를 깊이 판다
 
----
+## About
 
-문의: monicalee@kakao.com
+**이가원 (Monica Gawon Lee)** · 프로덕트 매니저를 준비하고 있습니다 (Open to Work)
+
+콘텐츠·영상 산업에서 5년간 해외 작품의 투자·수입·배급과 글로벌 인더스트리 행사를 운영하다, 스토리텔링과 기술의 교차점에서 일하고 싶어 프로덕트의 세계로 넘어왔습니다. 영상 생성 AI 스타트업에서 크로스 펑셔널 TF를 리드하며 신규 서비스를 기획했습니다. Junction Asia 2025 해커톤에서 Upstage Track 2위를 수상했습니다.
+
+**출시한 프로덕트**
+
+- [Glayer](https://glayer.framer.website/): Apple Vision Pro · 미술감독을 위한 공간 만들기 앱
+- [Escaple](https://apps.apple.com/us/app/escaple-immersive-escaperoom/id6749660261): Apple Vision Pro · 방탈출 앱
+- [SlotIn](https://apps.apple.com/kr/app/slotin-calendar/id6757516972): iPhone · 일정 관리 앱
+
+- LinkedIn: [linkedin.com/in/gawonmonicalee](https://www.linkedin.com/in/gawonmonicalee/)
+- Medium: [medium.com/@monicagawonlee](https://medium.com/@monicagawonlee)
+- Mail: [monicalee@kakao.com](mailto:monicalee@kakao.com)
