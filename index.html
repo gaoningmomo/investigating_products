@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigating Products</title>
+<style>
+:root{
+  --text:#1d1d1f; --muted:#6e6e73; --blue:#0071e3; --card:#f5f5f7; --border:#e8e8ed;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard','Malgun Gothic',sans-serif;background:#fff;color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
+.nav-in{max-width:920px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav .brand{font-size:14.5px;font-weight:700;letter-spacing:-.2px}
+.nav a{color:var(--muted);text-decoration:none;font-size:13px}
+.nav a:hover{color:var(--text)}
+.hero{max-width:920px;margin:0 auto;padding:96px 24px 72px;text-align:center}
+.hero .eyebrow{display:inline-block;font-size:12.5px;font-weight:700;color:var(--blue);background:#f0f6ff;padding:5px 14px;border-radius:99px;margin-bottom:22px;letter-spacing:.2px}
+.hero h1{font-size:52px;font-weight:800;letter-spacing:-1.8px;line-height:1.12}
+.hero p{margin:20px auto 0;max-width:560px;font-size:17px;color:var(--muted);letter-spacing:-.2px}
+.sec{max-width:920px;margin:0 auto;padding:0 24px 84px}
+.sec h2{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:680px){.grid{grid-template-columns:1fr}.hero h1{font-size:38px}}
+.pcard{display:block;background:var(--card);border-radius:22px;padding:30px 30px 26px;text-decoration:none;color:var(--text);transition:transform .25s ease,box-shadow .25s ease}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(0,0,0,.10)}
+.pcard .no{font-size:12.5px;font-weight:800;color:var(--muted);letter-spacing:.6px}
+.pcard h3{font-size:23px;font-weight:800;letter-spacing:-.5px;margin:8px 0 10px}
+.pcard .desc{font-size:14px;color:var(--muted);line-height:1.65;min-height:70px}
+.pcard .go{display:inline-block;margin-top:16px;font-size:14.5px;font-weight:600;color:var(--blue)}
+.pcard.soon{border:1.5px dashed #d2d2d7;background:#fff;cursor:default}
+.pcard.soon:hover{transform:none;box-shadow:none}
+.pcard.soon .desc{min-height:70px}
+.timeline{position:relative;background:var(--card);border-radius:22px;padding:34px 38px 28px 64px}
+.timeline::before{content:"";position:absolute;left:39px;top:44px;bottom:40px;width:2px;background:#d2d2d7}
+.tl-item{position:relative;padding-bottom:26px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item .dot{position:absolute;left:-37px;top:0;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--card)}
+.tl-item h4{font-size:15.5px;font-weight:750;letter-spacing:-.3px;line-height:1.5}
+.tl-item h4 span{font-size:12.5px;font-weight:500;color:var(--muted);margin-left:8px}
+.tl-item .q{margin-top:2px;font-size:13px;color:var(--muted)}
+.tl-item .q b{color:var(--blue);font-weight:700}
+@media(max-width:680px){.timeline{padding:28px 24px 24px 56px}.timeline::before{left:33px}}
+.prins{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:680px){.prins{grid-template-columns:1fr}}
+.prin{background:var(--card);border-radius:18px;padding:24px 26px}
+.prin h4{font-size:17px;font-weight:800;letter-spacing:-.4px}
+.prin p{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.65}
+.subhead{font-size:14px;font-weight:700;color:var(--muted);margin:34px 0 14px;letter-spacing:.3px;text-transform:uppercase}
+footer{background:var(--card);border-top:1px solid var(--border);padding:30px 24px;text-align:center;color:var(--muted);font-size:12.5px}
+footer a{color:var(--muted)}
+/* about */
+.about{background:var(--card);border-radius:22px;padding:40px 44px}
+.about h3{font-size:26px;font-weight:800;letter-spacing:-.6px}
+.about h3 span{font-size:14px;font-weight:600;color:var(--muted);margin-left:10px;letter-spacing:0}
+.about .role{margin-top:6px;font-size:15px;font-weight:600;color:var(--blue)}
+.about .otw{display:inline-block;font-size:11.5px;font-weight:700;color:#248a3d;background:#eefaf1;border-radius:99px;padding:3px 11px;margin-left:8px;vertical-align:2px}
+.about .bio{margin-top:14px;font-size:14.5px;color:var(--muted);line-height:1.75;max-width:640px}
+.about .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.about .chips span{font-size:12.5px;font-weight:600;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:99px;padding:6px 14px}
+.about .ships-title{margin-top:24px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.3px}
+.about .ships{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:10px}
+.about .ship{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px 16px;text-decoration:none;transition:box-shadow .2s ease,transform .2s ease}
+.about .ship:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.about .ship img{width:54px;height:54px;border-radius:13px;object-fit:cover;flex:0 0 auto;border:1px solid var(--border);background:#f5f5f7}
+.about .ship b{display:block;font-size:14.5px;font-weight:750;color:var(--text);letter-spacing:-.2px;margin-top:4px}
+.about .ship .plat{display:inline-block;font-size:10.5px;font-weight:700;color:var(--blue);background:#f0f6ff;border-radius:99px;padding:2px 9px;white-space:nowrap}
+.about .ship .d{display:block;margin-top:3px;font-size:12px;color:var(--muted);line-height:1.5}
+.about .links{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px}
+.about .links a{font-size:14px;font-weight:600;color:var(--blue);text-decoration:none}
+.about .links a:hover{text-decoration:underline}
+@media(max-width:680px){.about{padding:30px 26px}}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-in">
+  <span class="brand">Investigating Products</span>
+  <a href="https://github.com/gaoningmomo/investigating_products" target="_blank">GitHub ↗</a>
+</div></nav>
+
+<header class="hero">
+  <span class="eyebrow">Product Analysis Archive</span>
+  <h1>프로덕트를 하나씩,<br>깊게 뜯어봅니다.</h1>
+  <p>즐겨 쓰거나 궁금했던 서비스를 골라 비즈니스 모델부터 사용자 경험까지 직접 데이터를 모아 분석하고, 개선안을 제안하는 기록입니다.</p>
+</header>
+
+<section class="sec">
+  <h2>분석 아카이브</h2>
+  <div class="grid">
+    <a class="pcard" href="remember/index.html">
+      <span class="no">CASE 01</span>
+      <h3>리멤버 (Remember)</h3>
+      <p class="desc">옳은 방향(Platform 확장)으로 가고 있으나 실행이 코어(Product)를 훼손 중. 균형을 되찾는 '스카웃 라벨 가시화'를 심층 제안합니다.</p>
+      <span class="go">보러 가기 →</span>
+    </a>
+    <div class="pcard soon">
+      <span class="no">CASE 02</span>
+      <h3>다음 프로덕트</h3>
+      <p class="desc">다음 분석을 준비하고 있습니다. 한 번에 하나의 프로덕트를 깊게 파는 것을 원칙으로 합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>모든 분석은 같은 뼈대를 따릅니다</h2>
+
+  <p class="subhead">Process</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="dot">01</div><h4>Overview<span>비즈니스 모델 캔버스</span></h4><p class="q"><b>Q.</b> 이 서비스는 어떤 구조로 돈을 버는가?</p></div>
+    <div class="tl-item"><div class="dot">02</div><h4>개요·정체성<span>시장 포지셔닝</span></h4><p class="q"><b>Q.</b> 이 서비스의 본질은 무엇이고, 시장 어디에 서 있는가?</p></div>
+    <div class="tl-item"><div class="dot">03</div><h4>문제 진단<span>데이터 직접 수집·분석</span></h4><p class="q"><b>Q.</b> 데이터가 말하는 진짜 문제는 무엇인가?</p></div>
+    <div class="tl-item"><div class="dot">04</div><h4>개선안 도출<span>발산 → 수렴 → 우선순위</span></h4><p class="q"><b>Q.</b> 가능한 해법 중 무엇을 가장 먼저 해야 하는가?</p></div>
+    <div class="tl-item"><div class="dot">05</div><h4>심층 설계<span>1순위 개선안 구체화</span></h4><p class="q"><b>Q.</b> 그 해법을 어떻게 설계하고, 성공을 무엇으로 측정하는가?</p></div>
+    <div class="tl-item"><div class="dot">06</div><h4>가설·검증<span>팩트와 가설의 분리</span></h4><p class="q"><b>Q.</b> 내 주장 중 무엇이 팩트고 무엇이 가설인가?</p></div>
+    <div class="tl-item"><div class="dot">07</div><h4>회고<span>배움의 기록</span></h4><p class="q"><b>Q.</b> 이 과정에서 무엇을 배웠는가?</p></div>
+  </div>
+
+  <p class="subhead">Principles</p>
+  <div class="prins">
+    <div class="prin"><h4>확신보다 가설.</h4><p>검증 안 된 주장은 가설이라고 명시합니다.</p></div>
+    <div class="prin"><h4>프레임은 도구다.</h4><p>프레임에 데이터를 끼워 맞추지 않고, 질문에 맞는 프레임을 고릅니다.</p></div>
+    <div class="prin"><h4>데이터 × 직접 사용.</h4><p>정량 데이터와 실사용 경험을 함께 봐야 문제의 결이 보입니다.</p></div>
+    <div class="prin"><h4>좁게, 깊게.</h4><p>다 하려다 아무것도 안 되는 것보다, 한 번에 하나를 깊이 팝니다.</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>About</h2>
+  <div class="about">
+    <h3>이가원 <span>Monica Gawon Lee</span></h3>
+    <p class="role">프로덕트 매니저가 되기 위해 준비하고 있습니다 <span class="otw">Open to Work</span></p>
+    <p class="bio">콘텐츠·영상 산업에서 5년간 해외 작품의 투자·수입·배급과 글로벌 인더스트리 행사를 운영하다, 스토리텔링과 기술의 교차점에서 일하고 싶어 프로덕트의 세계로 넘어왔습니다. 영상 생성 AI 스타트업에서 크로스 펑셔널 TF를 리드하며 신규 서비스를 기획했습니다. 이 아카이브는 좋은 프로덕트를 직접 뜯어보며 PM의 시야를 벼리는 훈련의 기록입니다.</p>
+    <div class="chips">
+      <span>콘텐츠·영상 산업 5년 → AI PM</span>
+      <span>Junction Asia 2025 Upstage Track 2위</span>
+    </div>
+    <p class="ships-title">출시한 프로덕트</p>
+    <div class="ships">
+      <a class="ship" href="https://glayer.framer.website/" target="_blank">
+        <img src="assets/glayer.png" alt="Glayer">
+        <div><span class="plat">Apple Vision Pro</span><b>Glayer ↗</b><span class="d">미술감독을 위한 공간 만들기 앱</span></div>
+      </a>
+      <a class="ship" href="https://apps.apple.com/us/app/escaple-immersive-escaperoom/id6749660261" target="_blank">
+        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/84/59/a3/8459a393-06c4-8f2f-5c5a-97b529f38050/AppIcon.lsr/512x512bb.jpg" alt="Escaple">
+        <div><span class="plat">Apple Vision Pro</span><b>Escaple ↗</b><span class="d">몰입형 방탈출 앱</span></div>
+      </a>
+      <a class="ship" href="https://apps.apple.com/kr/app/slotin-calendar/id6757516972" target="_blank">
+        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/19/48/63/19486305-c982-40c3-4f85-c5cd1bd304fa/AppIcon-0-0-1x_U007ephone-0-1-0-85-220.png/512x512bb.jpg" alt="SlotIn">
+        <div><span class="plat">iPhone</span><b>SlotIn ↗</b><span class="d">빈 시간을 시각화하는 일정 관리 앱</span></div>
+      </a>
+    </div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/gawonmonicalee/" target="_blank">LinkedIn ↗</a>
+      <a href="https://github.com/gaoningmomo" target="_blank">GitHub ↗</a>
+      <a href="https://medium.com/@monicagawonlee" target="_blank">Medium ↗</a>
+      <a href="mailto:monicalee@kakao.com" id="mail-link" onclick="event.preventDefault();navigator.clipboard.writeText('monicalee@kakao.com').then(()=>{const a=document.getElementById('mail-link');a.textContent='복사됨';setTimeout(()=>{a.textContent='Mail ↗'},1500)})">Mail ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © monicalee
+</footer>
+
+</body>
+</html>
