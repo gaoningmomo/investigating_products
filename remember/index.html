@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Remember 서비스 분석 및 개선안</title>
+<title>리멤버 분석 · 스카웃 라벨 가시화 제안</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
-  --navy:#1e3a5f; --navy-d:#16293f; --blue:#2563eb; --blue-l:#eaf1fd;
-  --red:#c44536; --red-l:#fdf0ee; --green:#1a7f5a; --green-l:#e9f7f1;
-  --amber:#b45309; --amber-l:#fef6e7;
-  --bg:#f4f6f9; --card:#ffffff; --border:#e3e8ef; --text:#1c2733; --muted:#66788c;
+  --navy:#1d1d1f; --navy-d:#000; --blue:#0071e3; --blue-l:#f0f6ff;
+  --red:#e11d48; --red-l:#fdf1f4; --green:#248a3d; --green-l:#eefaf1;
+  --amber:#b25000; --amber-l:#fdf3e7;
+  --bg:#ffffff; --card:#f5f5f7; --border:#e8e8ed; --text:#1d1d1f; --muted:#6e6e73;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family: 'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:15px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard Variable',Pretendard,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
 /* ── Header ── */
 .hdr{background:#fff;border-bottom:1px solid var(--border);padding:26px 32px 20px}
 .hdr-in{max-width:1080px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px}
@@ -22,6 +22,12 @@ body{font-family: 'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothi
 /* step badge */
 .step{display:flex;align-items:center;gap:9px}
 .step .step-no{background:var(--navy);color:#fff;font-size:11px;font-weight:800;padding:3px 11px;border-radius:9px;letter-spacing:.3px}
+/* decision rows */
+.dc{background:var(--card);border:none;border-radius:18px;padding:20px 22px;margin:12px 0 18px}
+.dc .dc-row{display:flex;gap:12px;margin-bottom:10px;font-size:13.5px;line-height:1.65}
+.dc .dc-row:last-child{margin-bottom:0}
+.dc .dc-k{flex:0 0 92px;font-size:11.5px;font-weight:800;padding:3px 0;text-align:center;border-radius:99px;height:fit-content;margin-top:2px}
+.dc .dc-k.k1{background:var(--navy);color:#fff} .dc .dc-k.k2{background:var(--blue-l);color:var(--blue)} .dc .dc-k.k3{background:#eef1f5;color:var(--muted)} .dc .dc-k.k4{background:var(--red-l);color:var(--red)} .dc .dc-k.k5{background:var(--green-l);color:var(--green)}
 /* As-Is / To-Be */
 .at{display:flex;gap:14px;align-items:flex-start;border-radius:14px;padding:16px 18px;margin:10px 0;border:1px solid var(--border)}
 .at.bad{background:var(--red-l);border-color:#eecfc9}
@@ -32,13 +38,12 @@ body{font-family: 'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothi
 .logo-sub{display:flex;align-items:center;gap:8px;margin-top:10px}
 .logo-sub .tag{background:#111;color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.3px}
 .logo-sub .t{color:var(--muted);font-size:13px}
-.hdr-meta{text-align:right;color:var(--muted);font-size:12.5px;line-height:1.5}
 .hdr-title{max-width:1080px;margin:18px auto 0}
-.hdr-title h1{font-size:22px;font-weight:800;letter-spacing:-.4px}
+.hdr-title h1{font-size:26px;font-weight:800;letter-spacing:-.5px}
 .hdr-title p{margin-top:6px;color:var(--muted);font-size:13.5px}
 .hdr-title p b{color:var(--navy)}
 /* ── Tabs ── */
-.tabs{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 4px rgba(20,40,70,.05)}
+.tabs{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
 .tabs-in{max-width:1080px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
 .tabs-in::-webkit-scrollbar{display:none}
 .tab-btn{flex:0 0 auto;background:none;border:none;font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);padding:14px 16px;cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;transition:.15s}
@@ -56,24 +61,24 @@ body{font-family: 'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothi
 .sec>.lead{color:var(--muted);font-size:14px;margin-bottom:18px}
 h3{font-size:16px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 h4{font-size:14px;font-weight:700;margin:18px 0 10px;color:var(--navy)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:16px}
+.card{background:var(--card);border:none;border-radius:18px;padding:22px 24px;margin-bottom:16px}
 .callout{border-left:4px solid var(--blue);background:var(--blue-l);border-radius:0 12px 12px 0;padding:16px 20px;margin:14px 0;font-size:14.5px}
 .callout.red{border-color:var(--red);background:var(--red-l)}
 .callout.green{border-color:var(--green);background:var(--green-l)}
 .callout.amber{border-color:var(--amber);background:var(--amber-l)}
 .callout b{color:var(--navy-d)}
-.quote{background:var(--navy);color:#fff;border-radius:14px;padding:22px 26px;margin:18px 0;font-size:15.5px;font-weight:600;line-height:1.8;letter-spacing:-.2px}
-.quote .src{display:block;margin-top:10px;font-size:12px;font-weight:400;opacity:.7}
+.quote{background:transparent;color:var(--text);border-left:3px solid var(--text);border-radius:0;padding:4px 0 4px 22px;margin:22px 0;font-size:17px;font-weight:700;line-height:1.75;letter-spacing:-.3px}
+.quote .src{display:block;margin-top:10px;font-size:12.5px;font-weight:400;color:var(--muted)}
 /* tables */
 table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-th{background:#f0f4f9;color:var(--navy);font-weight:700;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:10px 14px;border-bottom:1px solid #eef2f7;vertical-align:top}
+th{background:#fafafa;color:var(--muted);font-weight:600;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f2;vertical-align:top}
 tr:last-child td{border-bottom:none}
 td.hl,th.hl{background:var(--blue-l);color:var(--navy-d);font-weight:700}
 .num{font-variant-numeric:tabular-nums}
 /* stat grid */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
-.stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.stat{background:var(--card);border:none;border-radius:16px;padding:16px 18px}
 .stat .k{font-size:12px;color:var(--muted);font-weight:600}
 .stat .v{font-size:22px;font-weight:800;color:var(--navy);margin-top:4px;letter-spacing:-.5px}
 .stat .v.red{color:var(--red)} .stat .v.blue{color:var(--blue)} .stat .v.green{color:var(--green)}
@@ -95,7 +100,7 @@ td.hl,th.hl{background:var(--blue-l);color:var(--navy-d);font-weight:700}
 .flow .fbox.bad{border-color:var(--red);color:var(--red);background:var(--red-l)}
 .flow .fbox.good{border-color:var(--green);color:var(--green);background:var(--green-l)}
 .flow .ar{color:var(--muted);font-weight:800}
-footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text-align:center;color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--border);background:#f5f5f7;padding:26px 32px;text-align:center;color:var(--muted);font-size:12.5px}
 /* mindmap */
 .mindmap{display:flex;align-items:center;gap:22px}
 .mm-root{flex:0 0 auto;background:var(--navy);color:#fff;font-weight:800;text-align:center;border-radius:14px;padding:22px 20px;font-size:14.5px;line-height:1.5}
@@ -117,7 +122,7 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
 .dm-row{display:grid;grid-template-columns:170px 1fr 52px;align-items:center;gap:12px;font-size:13.5px}
 .dm-row .dm-name{font-weight:600}
 .dm-bar{height:22px;background:#eef1f5;border-radius:6px;overflow:hidden}
-.dm-fill{height:100%;background:#b8c6d9;border-radius:6px}
+.dm-fill{height:100%;background:#d2d2d7;border-radius:6px}
 .dm-row.top .dm-fill{background:var(--blue)}
 .dm-row.top .dm-name,.dm-row.top .dm-score{color:var(--blue);font-weight:800}
 .dm-score{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
@@ -134,14 +139,13 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
 .phone .ph-btn.sec{background:#fff;color:var(--muted)}
 .phone .ph-btn.opt{background:#fff;color:var(--navy);text-align:left;padding-left:14px}
 .phone .ph-label{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:99px;margin-bottom:8px}
-
 /* bullet list */
 .blist{margin:0;padding:0;list-style:none;font-size:13.5px}
 .blist li{position:relative;padding-left:15px;margin-bottom:7px;line-height:1.6}
 .blist li:last-child{margin-bottom:0}
 .blist li::before{content:"\2022";position:absolute;left:0;color:var(--blue);font-weight:700}
 /* ── figma-style diagrams ── */
-.fig.gray{background:#f1f2f4}
+.fig.gray{background:#f5f5f7}
 .fg-hd{display:flex;align-items:center;gap:12px;padding:2px 4px 14px;flex-wrap:wrap}
 .fg-hd h5{font-size:16px;font-weight:800;color:#1a1d29;letter-spacing:-.3px}
 .fg-hd .dv{width:1px;height:18px;background:#d5dae1}
@@ -199,7 +203,7 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
 .ch-step .box{background:#fff;border-radius:12px;border-top:4px solid #cbd5e1;box-shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);padding:18px 10px;text-align:center;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
 .ch-step .nb{width:26px;height:26px;border-radius:50%;background:#f1f5f9;color:#64748b;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
 .ch-step .nm{font-size:14.5px;font-weight:800;color:#1a1d29;line-height:1.3}
-.ch-step .pl{margin:10px auto 0;font-size:11.5px;color:#4b5563;background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:4px 12px;width:fit-content}
+.ch-step .pl{margin:10px auto 0;font-size:11.5px;color:#4b5563;background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:4px 12px;width:fit-content;text-align:center}
 .ch-step.focus .box{border-top-color:#3b82f6;background:#f8faff}
 .ch-step.focus .nb{background:#dbeafe;color:#2563eb}
 .ch-step.focus .nm{color:#1d4ed8}
@@ -240,33 +244,63 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
     </div>
   </div>
   <div class="hdr-title">
-    <h1>Remember 서비스 분석 및 프로덕트&플랫폼 균형 개선안</h1>
-    <p><b>한 줄 요약</b>: 리멤버는 옳은 방향(Platform 확장)으로 가고 있으나 실행 방식이 코어(Product)를 훼손 중이다. 이 포트폴리오는 그 균형을 되찾는 방법으로 <b>스카웃 라벨 가시화</b>를 심층 제안한다.</p>
+    <h1>리멤버 분석 · 스카웃 라벨 가시화 제안</h1>
+    <p><b>한 줄 요약</b>: 리멤버 수익의 원천은 사용자가 자발적으로 갱신하는 실명 데이터다. 그런데 지금의 수익화 방식이 그 원천을 침식하고 있다. 이 문서는 침식이 가장 급하게 진행되는 지점(스카웃 신뢰)을 리뷰 데이터로 특정하고, 복구 설계안 하나를 파일럿 기준까지 구체화한다.</p>
   </div>
 </header>
 
 <!-- ─────────── TABS ─────────── -->
 <nav class="tabs"><div class="tabs-in">
-  <button class="tab-btn on" data-t="t0"><span class="no">BMC</span>Overview</button>
-  <button class="tab-btn" data-t="t1"><span class="no">P1</span>서비스 개요·정체성</button>
-  <button class="tab-btn" data-t="t2"><span class="no">P2</span>핵심 문제 진단</button>
-  <button class="tab-btn" data-t="t3"><span class="no">P3</span>브레인스토밍 여정</button>
-  <button class="tab-btn" data-t="t4"><span class="no">P4</span>개선안</button>
-  <button class="tab-btn" data-t="t5"><span class="no">P5</span>이후 방향</button>
-  <button class="tab-btn" data-t="t6"><span class="no">P6</span>가설·검증 계획</button>
-  <button class="tab-btn" data-t="t7"><span class="no">P7</span>회고·출처</button>
+  <button class="tab-btn on" data-t="t0"><span class="no">P1</span>비즈니스 모델</button>
+  <button class="tab-btn" data-t="t1"><span class="no">P2</span>문제 진단</button>
+  <button class="tab-btn" data-t="t2"><span class="no">P3</span>결정 과정</button>
+  <button class="tab-btn" data-t="t3"><span class="no">P4</span>설계</button>
+  <button class="tab-btn" data-t="t4"><span class="no">P5</span>팩트·가설 분리</button>
+  <button class="tab-btn" data-t="t5"><span class="no">P6</span>이후 방향</button>
+  <button class="tab-btn" data-t="t6"><span class="no">P7</span>회고·출처</button>
 </div></nav>
 
 <main class="wrap">
 
-<!-- ═══════════ T0, OVERVIEW ═══════════ -->
+<!-- ═══════════ T0, PART 1 ═══════════ -->
 <section class="panel on" id="t0">
   <div class="sec">
-    <h2><span class="chip">Overview</span>비즈니스 모델 캔버스</h2>
-    <p class="lead">리멤버는 <b>다면 플랫폼</b>이다. 개인(공급·무료)이 '데이터·시간'으로 지불하고, 기업·광고주(수요·유료)가 그 데이터를 돈 주고 산다. 이 <b>교차보조</b>가 구조의 핵심이며, 돈 내는 쪽과 가치 받는 쪽이 다르다.</p>
+    <h2><span class="chip">Part 1</span>리멤버의 비즈니스 모델</h2>
+
+    <h3>1.1 가치의 발견 — "데이터가 언제 갱신되는가"</h3>
+    <p>리멤버를 이해하기 위해 경쟁 서비스와 나란히 놓고 비교했다. 기능 목록으로는 차이가 잡히지 않았다. 차이가 선명해진 건 질문을 바꿨을 때다: <b>"이 서비스의 인재 데이터는 언제 갱신되는가?"</b></p>
+    <table>
+      <tr><th></th><th>사람인·잡코리아</th><th>원티드</th><th>링크드인</th><th class="hl">리멤버</th></tr>
+      <tr><td>갱신 시점</td><td>구직할 때만</td><td>구직할 때만</td><td>상시 (한국 침투 실패)</td><td class="hl">상시</td></tr>
+      <tr><td>갱신 동기</td><td>이직</td><td>이직</td><td>셀프 브랜딩 (한국은 공개 기피)</td><td class="hl">명함·인맥 관리</td></tr>
+      <tr><td>신뢰 기반</td><td>이력서</td><td>이력서</td><td>실명</td><td class="hl">실명·검증</td></tr>
+    </table>
+    <p>리멤버만 유일하게 <b>구직과 무관한 동기(명함 관리)로 실명 경력 데이터가 상시 갱신</b>된다. 구직자가 아니라 재직자의 데이터, 그것도 본인이 스스로 최신화하는 데이터다. 회원 500만 · 누적 명함 4억 장이 이 방식으로 쌓였다.</p>
 
     <div class="fig gray">
-      <div class="fg-hd"><h5>리멤버 비즈니스 모델 캔버스</h5><span class="dv"></span><span class="sb">다면 플랫폼: 개인(무료·공급)이 데이터로 지불 ↔ 기업·광고주(유료·수요)가 구매</span></div>
+      <div class="fg-hd"><h5>경력직 채용 플랫폼 경쟁 포지셔닝</h5><span class="dv"></span><span class="sb">리멤버만 '지속 갱신 × 잠재 인재' 사분면을 단독 점유</span></div>
+      <div class="pos-card">
+        <div class="pos-plot">
+          <div class="pos-quad"></div>
+          <div class="pos-qlabel">지속 갱신 × 잠재 인재<br>(리멤버 단독)</div>
+          <div class="pos-midx"></div><div class="pos-midy"></div>
+          <div class="pos-ax"></div><div class="pos-ay"></div>
+          <div class="pos-xlabel">도달 대상: 활성 구직자 → 잠재 인재(비구직자)</div>
+          <div class="pos-ylabel">데이터 갱신도: 낮음 → 높음</div>
+          <div class="pos-dot gray" style="left:14%;top:80%"><div class="c"></div><div class="n">사람인·잡코리아</div></div>
+          <div class="pos-dot gray" style="left:28%;top:66%"><div class="c"></div><div class="n">로켓펀치</div></div>
+          <div class="pos-dot gray" style="left:48%;top:50%"><div class="c"></div><div class="n">원티드</div></div>
+          <div class="pos-dot gray" style="left:72%;top:44%"><div class="c"></div><div class="n">링크드인</div><div class="note">한국 침투 저조</div></div>
+          <div class="pos-dot hero" style="left:85%;top:14%"><div class="c"></div><div class="n">리멤버</div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>1.2 핵심 상품은 데이터다</h3>
+    <p>이 발견을 따라가면 비즈니스 모델이 드러난다. <b>리멤버는 명함앱이 아니라 데이터를 수익화하는 회사다.</b> 개인은 무료로 쓰는 대신 데이터와 시간으로 지불하고, 기업·헤드헌터·광고주가 그 데이터를 돈 주고 산다. 돈 내는 쪽과 가치 받는 쪽이 다른 교차보조 구조이며, 수익의 70~75%가 채용 솔루션, 20~25%가 B2B 광고·리서치다.</p>
+
+    <div class="fig gray">
+      <div class="fg-hd"><h5>리멤버 비즈니스 모델 캔버스</h5><span class="dv"></span><span class="sb">교차보조: 개인(무료·공급)이 데이터로 지불 ↔ 기업·광고주(유료·수요)가 구매</span></div>
       <div class="bmc-wrap"><div class="bmc">
         <div class="bmc-top">
           <div class="fg-card c-kp"><div class="t">🤝 핵심 파트너</div><ul>
@@ -307,192 +341,96 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
       </div></div>
     </div>
 
-    <div class="stats">
-      <div class="stat"><div class="k">핵심 자원 ★ 복제 불가 해자</div><div class="v blue">자발적 갱신 데이터</div><div class="d">실명·검증 직장인, 회원 500만, 누적 명함 4억</div></div>
-      <div class="stat"><div class="k">수익 구조 ①</div><div class="v">70~75%</div><div class="d">채용 솔루션</div></div>
-      <div class="stat"><div class="k">수익 구조 ②</div><div class="v">20~25%</div><div class="d">B2B 광고·리서치</div></div>
-      <div class="stat"><div class="k">수익 구조 ③</div><div class="v">5% 미만</div><div class="d">기타</div></div>
-    </div>
+    <div class="callout"><b>이 구조에서 개인 사용자는 이중 역할을 진다</b>: 데이터 공급자이면서, 동시에 광고·영업의 대상이다. 이 이중 역할이 Part 2 진단의 열쇠가 된다.</div>
 
-    <div class="callout"><b>이 문서가 겨냥하는 지점</b>: "핵심 자원(자발적 갱신 데이터)" ↔ "개인 세그먼트(공급)"의 관계. 수익화가 개인 관계를 해치면 핵심 자원이 마르고, 유료 면(채용·광고)의 원료도 함께 마른다.</div>
+    <h3>1.3 확장은 옳았나 — 근거 확인</h3>
+    <p>명함앱 → 채용 플랫폼 확장이 옳은 방향이었는지는 주장이 아니라 확인 가능한 사실로 판단했다.</p>
+    <div class="stats">
+      <div class="stat"><div class="k">① 지불 증거</div><div class="v green">58억 → 684억</div><div class="d">매출 '21→'24. 70~75%가 채용 솔루션 — 데이터 가치를 시장이 돈으로 인정</div></div>
+      <div class="stat"><div class="k">② 자본시장 베팅</div><div class="v">약 5,000억</div><div class="d">네이버 편입(2022) → EQT 인수(2025)</div></div>
+      <div class="stat"><div class="k">③ 구조적 필연</div><div class="v blue">수익화 불가피</div><div class="d">명함 관리 단독으로는 지불 의사 없음 → 데이터 수익화 없이는 존속 불가</div></div>
+    </div>
+    <div class="callout amber">단, 이 세 근거가 정당화하는 것은 <b>확장의 방향이지 실행 방식이 아니다.</b> 매출과 인수가는 "데이터가 팔린다"를 증명할 뿐, "지금처럼 팔아도 원료가 마르지 않는다"를 증명하지 않는다. 이 구분이 이 문서 전체의 논리 틀이다.</div>
   </div>
 </section>
 
-<!-- ═══════════ T1, PART 1 ═══════════ -->
+<!-- ═══════════ T1, PART 2 ═══════════ -->
 <section class="panel" id="t1">
   <div class="sec">
-    <h2><span class="chip">Part 1</span>서비스 개요와 정체성</h2>
+    <h2><span class="chip">Part 2</span>무엇이 잘못되고 있는가</h2>
 
-    <h3>1.1 서비스 개요</h3>
-    <p>리멤버는 (주)리멤버앤컴퍼니가 운영하는 명함관리 기반 직장인 플랫폼으로, 2013년 명함앱으로 출발해 약 500만 명이 쓰는 <b>실명 기반 프로페셔널 네트워크</b>로 확장했다. 실명·검증 경력 데이터 기반 <b>역방향 채용(기업이 비구직 인재에게 먼저 스카웃)</b>이 수익의 핵심이며, 2025년 글로벌 PEF EQT에 약 5,000억 원에 인수됐다.</p>
+    <h3>2.1 리뷰 7,900건 — 표면 지표 뒤의 균열</h3>
+    <div class="card">
+      <h4 style="margin-top:0">방법</h4>
+      <ul class="blist">
+        <li>구글 플레이스토어 + 앱스토어 리뷰 <b>7,900건</b> 직접 수집 (2014~2026.6)</li>
+        <li>Python(pandas) 키워드 사전 태깅, 부정 리뷰 = 평점 2 이하 (n=654), 언급률 집계</li>
+      </ul>
+    </div>
 
     <div class="stats">
-      <div class="stat"><div class="k">매출 성장</div><div class="v green">58억 → 684억</div><div class="d">'21→'24 (+73% YoY), '25 목표 1,200억</div></div>
-      <div class="stat"><div class="k">회원</div><div class="v">500만 명</div><div class="d">MAU 약 84만</div></div>
-      <div class="stat"><div class="k">누적 명함</div><div class="v">4억 장+</div><div class="d">자발적 갱신 데이터의 원천</div></div>
-      <div class="stat"><div class="k">기업가치</div><div class="v">약 5,000억</div><div class="d">2025 EQT 인수가 기준</div></div>
+      <div class="stat"><div class="k">표면 · 앱스토어 누적 평점</div><div class="v green">4.8</div><div class="d">문제 없어 보임</div></div>
+      <div class="stat"><div class="k">표면 · 회원 수</div><div class="v green">500만+</div><div class="d">계속 성장</div></div>
+      <div class="stat"><div class="k">균열 · 연도별 리뷰 평점</div><div class="v red">4.77 → 2.56</div><div class="d">'16 → '26 상반기 ('25년 2.84)</div></div>
     </div>
-
-    <h4>핵심 특징</h4>
-    <div class="card">
-      <p><span class="pill b">자발적 갱신 데이터</span> 구직과 무관하게 '명함·인맥 관리' 동기로 소속·직급이 상시 갱신. 사람인(구직 때만)도 링크드인(공개 기피로 한국 침투 실패)도 못 채운 지점</p>
-      <p style="margin-top:8px"><span class="pill g">수익 구조</span> 채용 솔루션 70~75% + 광고 20~25%</p>
-      <p style="margin-top:8px"><span class="pill a">확장</span> 비즈니스 SNS '커넥트', 억대 연봉 인증 '블랙', 헤드헌팅 자회사 인수</p>
-    </div>
-
-    <h4>한계·약점</h4>
-    <div class="card" style="border-left:4px solid var(--red)">
-      <p><b>저빈도 유틸리티의 숙명</b>: '가끔 여는 앱' 특성상 체류·수익화를 위해 콘텐츠를 계속 얹어야 하는 구조적 압력</p>
-      <p style="margin-top:8px"><b>이해 상충</b>: 개인 = 공급원이자 광고 대상. 무료 면을 수익화할수록 데이터 공급이 흔들림</p>
-      <p style="margin-top:8px"><b>정체성 경쟁 리스크</b>: 커넥트(≈링크드인)·공고(≈사람인)·가십(≈블라인드)로 수렴하며 '실명 신뢰' 차별점 희석 우려</p>
-    </div>
-
-    <h4>경쟁 구도</h4>
-    <table>
-      <tr><th>구분</th><th>사람인·잡코리아</th><th>원티드</th><th>블라인드</th><th class="hl">리멤버</th></tr>
-      <tr><td>데이터 갱신</td><td>구직 시에만</td><td>구직 시에만</td><td>익명</td><td class="hl">상시 (명함 계기)</td></tr>
-      <tr><td>신뢰 기반</td><td>이력서</td><td>이력서</td><td>익명</td><td class="hl">실명·검증</td></tr>
-      <tr><td>핵심 강점</td><td>공고 재고·규모</td><td>IT 매칭</td><td>익명 소통</td><td class="hl">자발적 갱신 그래프</td></tr>
-    </table>
 
     <div class="fig gray">
-      <div class="fg-hd"><h5>경력직 채용 플랫폼 경쟁 포지셔닝</h5><span class="dv"></span><span class="sb">리멤버만 '지속 갱신 × 잠재 인재' 사분면을 단독 점유</span></div>
-      <div class="pos-card">
-        <div class="pos-plot">
-          <div class="pos-quad"></div>
-          <div class="pos-qlabel">지속 갱신 × 잠재 인재<br>(리멤버 단독)</div>
-          <div class="pos-midx"></div><div class="pos-midy"></div>
-          <div class="pos-ax"></div><div class="pos-ay"></div>
-          <div class="pos-xlabel">도달 대상: 활성 구직자 → 잠재 인재(비구직자)</div>
-          <div class="pos-ylabel">데이터 갱신도: 낮음 → 높음</div>
-          <div class="pos-dot gray" style="left:14%;top:80%"><div class="c"></div><div class="n">사람인·잡코리아</div></div>
-          <div class="pos-dot gray" style="left:28%;top:66%"><div class="c"></div><div class="n">로켓펀치</div></div>
-          <div class="pos-dot gray" style="left:48%;top:50%"><div class="c"></div><div class="n">원티드</div></div>
-          <div class="pos-dot gray" style="left:72%;top:44%"><div class="c"></div><div class="n">링크드인</div><div class="note">한국 침투 저조</div></div>
-          <div class="pos-dot hero" style="left:85%;top:14%"><div class="c"></div><div class="n">리멤버</div></div>
-        </div>
-      </div>
-    </div>
-
-    <h3>1.2 정체성: Occasional Essential</h3>
-    <table>
-      <tr><th>유형</th><th>예시</th><th>특징</th></tr>
-      <tr><td>Daily Essential</td><td>카톡·뉴스·SNS</td><td>매일 여는 앱</td></tr>
-      <tr><td class="hl">Occasional Essential</td><td class="hl">리멤버·은행앱·신분증</td><td class="hl">매일 안 열지만 필요할 때 결정적</td></tr>
-    </table>
-    <div class="callout">CFC 리브랜딩(2022) 정의와 정합: <i>"essential app for professionals"</i>, <i>"커리어 성장의 기회가 열리는 순간"</i>. <b>Essential ≠ Daily.</b> 리멤버는 매일이 아닌 결정적 순간에 필수.</div>
-
-    <h3>1.3 한 문장 정체성</h3>
-    <div class="quote">"경력자에게, 매일 신경쓰지 않아도 성장의 기회가 나를 찾아오게 하는 도구"</div>
-    <table>
-      <tr><th>분해</th><th>의미</th></tr>
-      <tr><td>경력자에게</td><td>학생·구직 준비자 X, 재직 시니어·중간관리자</td></tr>
-      <tr><td>매일 신경쓰지 않아도</td><td>Occasional Essential 정체성</td></tr>
-      <tr><td>성장의 기회가</td><td>스카웃·프로젝트·강연·파트너십</td></tr>
-      <tr><td>나를 찾아오게</td><td>수동 수신 → 리멤버만의 심리 자산</td></tr>
-    </table>
-    <p style="color:var(--muted);font-size:13.5px">리멤버 ≠ 링크드인·원티드·사람인 (능동 지원 서비스).</p>
-
-    <h3>1.4 시장 tailwind: 왜 지금 리멤버가 결정적인가</h3>
-    <div class="stats">
-      <div class="stat"><div class="k">채용공고 중 경력 요구</div><div class="v blue">97.4%</div><div class="d">신입 전용 2.6%뿐</div></div>
-      <div class="stat"><div class="k">대기업 신입 채용</div><div class="v red">-43%</div><div class="d">AI 신입 대체</div></div>
-      <div class="stat"><div class="k">4~7년차 채용 집중</div><div class="v">49.7%</div><div class="d">리멤버 핵심층과 일치</div></div>
-      <div class="stat"><div class="k">MZ 이직 고려</div><div class="v">45.9%</div><div class="d">상시 스카웃 시장</div></div>
-      <div class="stat"><div class="k">청년 첫 직장 근속</div><div class="v">1.7년</div><div class="d">이직 상시화</div></div>
-    </div>
-    <div class="callout green"><b>함의</b>: 리멤버의 주 사용자층(재직 시니어·중간관리자)이 지금 채용 시장에서 가장 많이 찾는 대상이다. 이 좋은 시장 흐름을 활용하려면 서비스의 강점을 스스로 훼손하지 않아야 한다.</div>
-  </div>
-</section>
-
-<!-- ═══════════ T2, PART 2 ═══════════ -->
-<section class="panel" id="t2">
-  <div class="sec">
-    <h2><span class="chip">Part 2</span>핵심 문제 진단</h2>
-    <p class="lead">표면적 불만(광고·자동 소셜화·채용 위장·가십)은 하나의 구조적 원인으로 수렴한다: <b>"수익화가 자발적 갱신의 전제를 침식한 것."</b> 자발적 갱신은 사용자가 앱을 '나를 위한 도구·공간'으로 느낄 때만 일어나는데, 수익화가 사용자를 '수익화 대상'으로 재정의하면서 그 전제가 흔들리고 있다.</p>
-
-    <div class="card" style="background:#f8fafc">
-      <h4 style="margin-top:0">데이터 출처 & 방법론</h4>
-      <ul class="blist">
-        <li>개인 사용자: 구글 플레이스토어 + 앱스토어 리뷰 <b>7,900건</b>(구글 5,000 + 애플 2,900, 2014~2026.6) 직접 집계</li>
-        <li>B2B: 채용솔루션 전용 리뷰 채널이 없어 브런치·리멤버 커뮤니티·블라인드 후기글 수집 → 정성 참고</li>
-        <li>처리: Python(pandas) + 키워드 사전 태깅, 부정 리뷰 = 평점 2 이하(n=654), 연도별 언급률 집계</li>
-        <li>편향 통제: 리뷰어 = 극단 감정 사용자(셀렉션 바이어스) → '방향성'으로 해석</li>
-      </ul>
-    </div>
-
-    <h3>2.1 데이터로 본 증상: Silent Decline</h3>
-    <div class="two-col">
-      <div class="card">
-        <h4 style="margin-top:0">표면 지표 <span class="pill n">문제 없어 보이는 이유</span></h4>
-        <div class="stats" style="grid-template-columns:1fr 1fr">
-          <div class="stat"><div class="k">앱스토어 누적 평점</div><div class="v green">4.8</div></div>
-          <div class="stat"><div class="k">회원 수</div><div class="v green">500만+</div><div class="d">계속 성장</div></div>
-        </div>
-      </div>
-      <div class="card" style="border-color:var(--red)">
-        <h4 style="margin-top:0">심층 리뷰 데이터 <span class="pill r">감정 붕괴</span></h4>
-        <div class="stats" style="grid-template-columns:1fr 1fr">
-          <div class="stat"><div class="k">연도별 리뷰 평균 평점</div><div class="v red">4.77 → 2.56</div><div class="d">2016 → 2026</div></div>
-          <div class="stat"><div class="k">연도별 리뷰 수</div><div class="v red">1,718 → 45건</div><div class="d">약 40배 감소</div></div>
-        </div>
+      <div class="fg-hd"><h5>같은 데이터, 두 개의 읽기</h5><span class="dv"></span><span class="sb">누적 평점(표면)은 4.8로 평탄하지만, 연도별로 쪼개면 지속 하락</span></div>
+      <div style="background:#fff;border-radius:12px;padding:16px 12px;overflow-x:auto">
+        <svg viewBox="0 0 720 252" style="min-width:640px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+          <line x1="60" y1="40" x2="660" y2="40" stroke="#f0f0f2"/>
+          <line x1="60" y1="96.7" x2="660" y2="96.7" stroke="#f0f0f2"/>
+          <line x1="60" y1="153.3" x2="660" y2="153.3" stroke="#f0f0f2"/>
+          <line x1="60" y1="210" x2="660" y2="210" stroke="#e8e8ed"/>
+          <text x="50" y="44" font-size="10" fill="#6e6e73" text-anchor="end">5.0</text>
+          <text x="50" y="100.7" font-size="10" fill="#6e6e73" text-anchor="end">4.0</text>
+          <text x="50" y="157.3" font-size="10" fill="#6e6e73" text-anchor="end">3.0</text>
+          <text x="50" y="214" font-size="10" fill="#6e6e73" text-anchor="end">2.0</text>
+          <text x="60" y="230" font-size="10" fill="#6e6e73" text-anchor="middle">'16</text>
+          <text x="180" y="230" font-size="10" fill="#6e6e73" text-anchor="middle">'18</text>
+          <text x="300" y="230" font-size="10" fill="#6e6e73" text-anchor="middle">'20</text>
+          <text x="420" y="230" font-size="10" fill="#6e6e73" text-anchor="middle">'22</text>
+          <text x="540" y="230" font-size="10" fill="#6e6e73" text-anchor="middle">'24</text>
+          <text x="660" y="230" font-size="10" fill="#6e6e73" text-anchor="middle">'26*</text>
+          <line x1="60" y1="51.3" x2="660" y2="51.3" stroke="#248a3d" stroke-width="2.5" stroke-dasharray="7 5"/>
+          <text x="655" y="38" font-size="11.5" font-weight="700" fill="#248a3d" text-anchor="end">누적 평점 4.8 — 표면</text>
+          <path d="M60,53 L120,53 L180,70 L240,78.5 L300,100 L360,104.6 L420,106.9 L480,147.7 L540,133.5 L600,162.4 L660,178.3" fill="none" stroke="#e11d48" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="60" cy="53" r="4.5" fill="#e11d48"/>
+          <circle cx="600" cy="162.4" r="4.5" fill="#e11d48"/>
+          <circle cx="660" cy="178.3" r="6" fill="#e11d48"/>
+          <text x="72" y="76" font-size="11" font-weight="700" fill="#e11d48">연도별 평균 4.77</text>
+          <text x="596" y="152" font-size="10.5" fill="#e11d48" text-anchor="end">'25 2.84</text>
+          <text x="654" y="198" font-size="12" font-weight="800" fill="#e11d48" text-anchor="end">2.56</text>
+        </svg>
+        <div class="cap">연도별 리뷰 평균 평점 (자체 수집 7,900건 · *'26년은 상반기만). 초기 대량의 긍정 리뷰가 누적 평점을 4.8에 고정시켜 하락을 가린다</div>
       </div>
     </div>
 
     <table>
-      <tr><th>지표</th><th>추이</th></tr>
-      <tr><td>부정 리뷰 비중 (평점 2 이하)</td><td class="num"><b>53%</b></td></tr>
-      <tr><td>부정 리뷰 '광고' 언급률</td><td class="num">5% → <b style="color:var(--red)">23%</b></td></tr>
-      <tr><td>부정 리뷰 '채용' 언급률</td><td class="num">2% → <b style="color:var(--red)">15%</b> ('24년 3%→26% 급등)</td></tr>
-      <tr><td>부정 리뷰 '명함(핵심 기능)' 언급률</td><td class="num">48% → 30% <span class="pill n">하락</span></td></tr>
+      <tr><th>부정 리뷰 언급률</th><th>추이</th></tr>
+      <tr><td>'광고'</td><td class="num">3% ('14~'19) → <b style="color:var(--red)">23%</b> ('24~'26)</td></tr>
+      <tr><td>'채용'</td><td class="num">4% ('19~'23) → <b style="color:var(--red)">15%</b> ('24~'26) · 급등 시점 '24년</td></tr>
+      <tr><td>'명함(핵심 기능)'</td><td class="num">37% ('14~'19) → 25% ('24~'26) <span class="pill n">하락</span></td></tr>
     </table>
-    <div class="callout red"><b>핵심 관찰</b>: 명함 언급률은 하락. 불만의 성격이 "기능이 안 된다"에서 <b>"앱이 나를 영업·광고 대상으로 쓴다"</b>로 이동. 앱스토어 4.8 = 표면 성공 시그널 → 회사·외부가 문제 인식 못 함. <b>Silent Decline</b>: 표면 지표에 가려진 감정 붕괴.</div>
+    <p style="font-size:13px;color:var(--muted)"><b>표본 한계</b>: 최근 연도는 리뷰 수 자체가 적다(연 45~104건 · '26년은 상반기만 수집). 그래서 언급률은 연도 단위가 아니라 <b>구간 합산</b>으로 계산했고, 규모가 아닌 방향성으로만 해석한다.</p>
+    <div class="callout red"><b>핵심 관찰</b>: 명함(기능) 불만은 줄고 광고·채용 불만이 늘었다. 불만의 성격이 "기능이 안 된다"에서 <b>"앱이 나를 영업·광고 대상으로 쓴다"</b>로 이동했다.</div>
 
-    <h3>2.2 양쪽이 겪는 문제</h3>
-    <div class="two-col">
-      <div class="card">
-        <h4 style="margin-top:0">개인 사용자 <span class="pill b">공급자</span></h4>
-        <ul class="blist">
-        <li>진입 시 강제 자동재생 광고, 주요 화면 광고 노출</li>
-        <li>명함 저장 → 자동 팔로우·스팸. '인맥 관리'가 '마케팅 채널 구독'이 됨</li>
-        <li>커뮤니티 상단에 익명 가십(연봉·치정·사내 정치) 노출 → '비즈니스 네트워크' 정체성 희석</li>
-        <li>'1억 배지' = 지위 '과시' 형식 → 위화감·자괴감</li>
-        <li>AI 추천을 채용 제안처럼 위장, 헤드헌터 고스팅</li>
-      </ul>
-      </div>
-      <div class="card">
-        <h4 style="margin-top:0">기업·헤드헌터 <span class="pill a">수요자</span></h4>
-        <ul class="blist">
-        <li><b>본질 가치</b>: 데이터 신선도 = 상품 가치. 타 플랫폼과 중복 없는 독점 인재풀</li>
-        <li><b>후보 접근 제한</b>: 승인 전 연락처 비공개, 후보 고스팅 빈번 → 서칭 효율 저하</li>
-        <li><b>'제안' 이원화</b>: '공고 일괄 발송(홍보성)' vs '개별 진짜 제안'. 통과율 차이를 공식 계정도 인정</li>
-        <li><b>AI 추천 위장</b>: '포지션 제안'이 실제 스카웃이 아닌 AI 지원 유도인 경우 다수 → 구직자 착각 후 즉시 불합격 → 기업 브랜드 신뢰까지 훼손</li>
-      </ul>
-      </div>
+    <h3>2.2 단정을 철회한 기록 — "이탈 중"에서 "Silent Decline 가설"로</h3>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k4">처음 결론</span><span>"사용자가 이탈 중이다"</span></div>
+      <div class="dc-row"><span class="dc-k k3">충돌한 사실</span><span>회원 수는 성장 중이고, 누적 평점은 4.8이다. 이탈의 직접 증거가 없었다</span></div>
+      <div class="dc-row"><span class="dc-k k2">수정한 판단</span><span>단정을 철회하고, "감정 이탈이 먼저 진행되고 행동 이탈은 아직 지표에 잡히지 않은 상태"를 <b>Silent Decline이라는 가설</b>로 재정의했다. 검증 방법(내부 코호트 리텐션 분석)은 Part 5에 명시</span></div>
+      <div class="dc-row"><span class="dc-k k3">편향 통제</span><span>리뷰어는 극단 감정 사용자다(셀렉션 바이어스). 따라서 리뷰 데이터는 규모가 아니라 <b>방향성</b>으로만 해석했다</span></div>
     </div>
-    <div class="callout red"><b>양면 신뢰 훼손</b>: 일괄 발송·AI 위장은 구직자 신뢰↓ + 채용담당자 필터링 공수↑ + 기업 브랜드 신뢰↓로 수요·공급 양면을 동시에 갉아먹는다 → 매출 70~75%인 채용 상품의 '품질 인식' 자체가 흔들림.</div>
 
-    <h3>2.3 Product → Platform 확장 진단</h3>
-    <table>
-      <tr><th>시기</th><th>확장</th><th>사용 빈도</th></tr>
-      <tr><td>2013~2016</td><td>명함 앱 (순수 Product)</td><td>Occasional</td></tr>
-      <tr><td>2017~2019</td><td>+ 스카웃</td><td>Occasional</td></tr>
-      <tr><td>2020~2022</td><td>+ 커뮤니티·뉴스·콘텐츠</td><td>Daily 지향 시작</td></tr>
-      <tr><td>2022</td><td>네이버 편입 (자본시장 검증)</td><td>—</td></tr>
-      <tr><td class="hl">2023.5</td><td class="hl">AI 채용비서 출시, 결정적 전환점</td><td class="hl">Daily 강제 이행</td></tr>
-    </table>
+    <h3>2.3 원인 도출 — 구조와 증상을 겹치면</h3>
+    <p>원인은 두 사실을 겹치는 데서 도출된다.</p>
+    <ul class="blist">
+      <li><b>사실 1 (구조 · 1.2)</b>: 개인 사용자 = 데이터 공급자이자 광고·영업 대상이라는 이중 역할</li>
+      <li><b>사실 2 (증상 · 2.1)</b>: "영업 대상 취급" 계열 불만의 급증</li>
+    </ul>
+    <p style="margin-top:10px">자발적 갱신은 사용자가 앱을 '나를 위한 도구'로 느낄 때만 일어난다. 수익화가 사용자를 '수익화 대상'으로 재정의하는 순간, 수익의 원천인 데이터 공급 자체가 흔들린다:</p>
 
-    <h4>Product vs Platform 두 층의 충돌</h4>
-    <table>
-      <tr><th style="width:50%">Product 층 (코어)</th><th>Platform 층 (확장)</th></tr>
-      <tr><td>명함·인맥 아카이브</td><td>커뮤니티·뉴스</td></tr>
-      <tr><td>자동 최신화</td><td>광고 매출</td></tr>
-      <tr><td>성장 기회 수신 (스카웃)</td><td>콘텐츠 자극</td></tr>
-      <tr><td><b>Occasional, 저마찰, 신뢰</b></td><td><b>Daily, 체류, 노출</b></td></tr>
-    </table>
-    <div class="callout"><b>진단</b>: Platform 확장 방식이 Product 코어를 침식 중. 확장 자체는 시장이 인정한 옳은 방향, 문제는 <b>실행 방식</b>.</div>
-
-    <h3>2.4 시스템 악순환 루프</h3>
     <div class="fig gray">
       <div class="fg-hd"><h5>수익화 악순환 루프</h5><span class="dv"></span><span class="sb">체류·수익 장치가 핵심 자산인 '자발적 갱신 데이터'를 훼손하는 구조</span></div>
       <div class="loop-wrap">
@@ -507,75 +445,41 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
           </svg>
           <div class="lp-node" style="left:480px;top:70px"><span class="bdg">①</span><div class="tx">수익화 강화</div><div class="sbb">강제 광고·자극 콘텐츠</div></div>
           <div class="lp-node" style="left:794px;top:201px"><span class="bdg">②</span><div class="tx">사용자 = '수익화 대상'으로 재인식</div></div>
-          <div class="lp-node" style="left:674px;top:414px"><span class="bdg">③</span><div class="tx">핵심 공급자(A·B) 이탈·갱신 감소</div></div>
+          <div class="lp-node" style="left:674px;top:414px"><span class="bdg">③</span><div class="tx">갱신 감소·이탈</div></div>
           <div class="lp-node" style="left:286px;top:414px"><span class="bdg">④</span><div class="tx">데이터 신선도·정확도 하락</div></div>
-          <div class="lp-node" style="left:166px;top:201px"><span class="bdg">⑤</span><div class="tx">채용·B2B 가치 하락 → 매출 압력 ↑</div></div>
+          <div class="lp-node" style="left:166px;top:201px"><span class="bdg">⑤</span><div class="tx">채용·B2B 상품 가치 하락 → 매출 압력 ↑</div></div>
           <div class="lp-center">체류·수익 장치가<br>데이터 자산을 갉아먹음</div>
         </div>
       </div>
     </div>
 
-    <h3>2.5 HR 가치사슬 디커플링</h3>
-    <p>리멤버는 HR 가치사슬의 <b>① 프로필 형성·유지</b> 단계를 '구직'이 아니라 '명함'이라는 일상 맥락으로 떼어내 장악했다. 이 접근은 <b>'사용자가 자기 효용 때문에 데이터를 갱신한다'</b>는 자발성 위에 서 있다.</p>
-    <div class="fig gray">
-      <div class="fg-hd"><h5>HR 가치사슬 디커플링</h5><span class="dv"></span><span class="sb">리멤버는 비어 있던 ①단계를 '명함'으로 단독 점유</span></div>
-      <div class="chain-wrap"><div class="chain">
-        <div class="fg-callout">구직이 아니라 '명함·인맥 관리'라는<br>일상 맥락으로 진입</div>
-        <div class="fg-callout-arrow"></div>
-        <div class="chain-row">
-          <div class="ch-step focus"><div class="box"><div class="nb">①</div><div class="nm">프로필 형성·유지</div></div><div class="pl">빈 칸 → 리멤버</div></div>
-          <div class="ch-ar"><span>➜</span></div>
-          <div class="ch-step"><div class="box"><div class="nb">②</div><div class="nm">인재 발굴(소싱)</div></div><div class="pl">사람인·잡코리아</div></div>
-          <div class="ch-ar"><span>➜</span></div>
-          <div class="ch-step"><div class="box"><div class="nb">③</div><div class="nm">제안·스카웃</div></div><div class="pl">원티드·헤드헌터</div></div>
-          <div class="ch-ar"><span>➜</span></div>
-          <div class="ch-step"><div class="box"><div class="nb">④</div><div class="nm">평가·면접</div></div><div class="pl">ATS</div></div>
-          <div class="ch-ar"><span>➜</span></div>
-          <div class="ch-step"><div class="box"><div class="nb">⑤</div><div class="nm">입사 후 인사관리</div></div><div class="pl">ERP·더존</div></div>
-        </div>
-      </div></div>
-    </div>
-    <div class="callout green">따라서 해법의 방향은 '수익화를 멈추는 것'이 아니라 <b>자발성의 전제(도구로서의 효용, 공간으로서의 정체성)를 지키는 것</b>이어야 한다.</div>
+    <p>여기에 정체성 충돌이 겹친다. 리멤버는 <b>가끔 열어도, 없으면 안 되는 앱</b>이다 — 은행앱이나 신분증처럼 매일 열지 않지만 결정적 순간에 필요한 도구. 그런데 광고 매출은 매일 열게 만들기를 요구한다. 자동재생 광고, 가십 콘텐츠, 자동 팔로우 같은 Daily 체류 장치가 도구로서의 정체성을 훼손하는 이유다. 리멤버 스스로 정의한 "essential app for professionals"(2022 리브랜딩)와도 어긋난다 — <b>essential은 daily가 아니다.</b></p>
 
-    <h3>2.6 사용자 실증 가치: JTBD 프레임워크</h3>
-    <p style="font-size:13.5px;color:var(--muted)">프레임워크: JTBD + Value Proposition Canvas, 데이터: 앱스토어 리뷰 7,900건, 블라인드·브런치 실사용자 후기</p>
-    <table>
-      <tr><th>세그먼트</th><th>✅ Gain</th><th>❌ Pain</th></tr>
-      <tr><td><b>개인 사용자</b><br><span style="font-size:12px;color:var(--muted)">회원 500만+, 80% 대리~부장급</span></td><td>"다른 곳에서 못 받는 오퍼", "매력적이고 인상 깊은 개별 제안", 실명 신뢰</td><td>AI 위장 스카웃, 일괄 발송, 담당자 무응답</td></tr>
-      <tr><td><b>헤드헌터</b><br><span style="font-size:12px;color:var(--muted)">유료, 월 9만원+</span></td><td>국내 최대 실명 시니어 DB, 고급 검색, 성과 기반 요금</td><td>세부 경력 정보 얕음, 후보 응답률 낮음</td></tr>
-      <tr><td><b>기업</b><br><span style="font-size:12px;color:var(--muted)">성사 시 연봉 7%</span></td><td>재직자 데이터 접근, 팀 협업, 무료 진입</td><td>일괄 발송 vs 개별 스카웃 구분 부족</td></tr>
-    </table>
-    <div class="callout amber"><b>스코프 정직한 명시</b>: 헤드헌터·기업 정성 표본 부족 → <b>개선안은 개인 사용자 집중</b>. B2B 개선은 별도 리서치·인터뷰 이후 진행.</div>
+    <h3>2.4 질문 확정</h3>
+    <div class="quote">확장은 되돌릴 수 없다 — 자본·매출·시장 성장이 모두 확장을 요구한다.<br>따라서 질문은: "확장을 유지하면서, 코어(자발적 갱신)를 해치지 않는 실행 방식은 무엇인가?"</div>
   </div>
 </section>
 
-<!-- ═══════════ T3, PART 3 ═══════════ -->
-<section class="panel" id="t3">
+<!-- ═══════════ T2, PART 3 ═══════════ -->
+<section class="panel" id="t2">
   <div class="sec">
-    <h2><span class="chip">Part 3</span>브레인스토밍 여정</h2>
+    <h2><span class="chip">Part 3</span>무엇을 할지, 어떻게 결정했는가</h2>
+    <p class="lead">아래는 각 단계에서 무엇을, 어떤 사실을 근거로 결정했는지의 기록이다.</p>
 
-    <div class="card" style="background:#f8fafc">
-      <h4 style="margin-top:0">문제 정의: Part 2 진단 요약</h4>
-      <ul class="blist">
-        <li>리멤버는 Product(명함)에서 Platform(커리어)으로 확장: 시장이 인정한 옳은 방향 (네이버 편입)</li>
-        <li>그러나 확장 방식이 Product 코어를 침식 중</li>
-        <li><b>롤백 불가능</b>: 자본·매출·시장 성장이 다 확장 요구</li>
-      </ul>
-      <div class="quote" style="margin-bottom:0;margin-top:14px">핵심 질문: "Product 가치를 훼손하지 않으면서 Platform으로 확장하는 방향은?"</div>
-    </div>
-
-    <h3>방법론</h3>
     <div class="flow">
-      <span class="fbox">마인드맵</span><span class="ar">→</span>
-      <span class="fbox">AI 에이전트 다관점 브레인스토밍</span><span class="ar">→</span>
-      <span class="fbox">어피니티 다이어그램</span><span class="ar">→</span>
-      <span class="fbox">MVP 통합</span><span class="ar">→</span>
-      <span class="fbox">JTBD 필터링</span><span class="ar">→</span>
-      <span class="fbox good">결정 매트릭스</span>
+      <span class="fbox">아이디어 42개 발산</span><span class="ar">→</span>
+      <span class="fbox">문제 기준 6개 후보 통합</span><span class="ar">→</span>
+      <span class="fbox">근거 부족 1개 보류</span><span class="ar">→</span>
+      <span class="fbox"><b>MVP 후보 5개</b></span><span class="ar">→</span>
+      <span class="fbox good">1개 선정</span>
     </div>
 
-    <h4 class="step"><span class="step-no">Step 1</span>마인드맵 확장</h4>
-    <p style="font-size:13.5px">Part 2 악순환 루프의 4개 화살표를 브랜치로, 각 화살표를 끊는 아이디어 확장.</p>
+    <h4 class="step"><span class="step-no">3.1 발산</span>아이디어 42개 확보</h4>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k1">결정</span><span>발산은 6개 전문가 관점의 AI 에이전트 병렬 실행으로, 이후의 분류·선정 판단은 전부 직접</span></div>
+      <div class="dc-row"><span class="dc-k k2">근거</span><span>혼자 마인드맵을 돌리자 아이디어가 내 사용 경험(개인 UX 불만) 주변에만 몰렸다. 발산에는 다양성이 필요했고, 판단까지 AI에 맡기면 근거를 추적할 수 없다</span></div>
+      <div class="dc-row"><span class="dc-k k3">한계 인지</span><span>AI 다관점 ≠ 유저 리서치. 다양성 확보 수단일 뿐이다</span></div>
+    </div>
     <div class="fig gray">
       <div class="mindmap">
         <div class="mm-root">악순환 루프<br>끊기</div>
@@ -586,94 +490,55 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
           <div class="mm-b"><div class="mm-h b4">④→⑤ 신선도 하락 → 채용가치 하락</div><div class="mm-i">스카웃 신뢰 회복, 라벨 가시화, 응답 SLA</div></div>
         </div>
       </div>
-      <div class="cap">마인드맵: 악순환 루프의 각 화살표를 끊는 아이디어 발산 (HTML 재구성)</div>
+      <div class="cap">발산의 출발점: 악순환 루프의 각 화살표를 끊는 방향으로 아이디어 확장 (HTML 재구성)</div>
     </div>
 
-    <h4 class="step"><span class="step-no">Step 2</span>AI 에이전트 다관점 브레인스토밍</h4>
-    <p style="font-size:13.5px">편향 최소화를 위해 6개 전문가 페르소나를 AI 에이전트로 병렬 실행 → <b>총 42개 아이디어 수집</b> (평균 7개/에이전트)</p>
+    <h4 class="step"><span class="step-no">3.2 통합</span>42개를 문제 기준으로 6개 후보로</h4>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k1">결정</span><span>42개 아이디어를 '비슷한 기능'이 아니라 <b>'어떤 문제를 해결하는가'</b> 기준으로 묶었다. 여기서 문제란 2.3 악순환의 각 단계다. 같은 문제를 겨냥한 아이디어끼리 묶으니 6개 그룹이 나왔고, 각 그룹을 최소 단위 개선안(MVP 후보) 하나로 통합했다</span></div>
+      <div class="dc-row"><span class="dc-k k2">근거</span><span>기능이 비슷하다고 묶으면 "이게 무슨 문제를 푸는가"가 사라져서, 다음 단계인 우선순위 판단을 할 수 없게 된다</span></div>
+    </div>
     <table>
-      <tr><th>#</th><th>관점</th><th>담당 영역</th></tr>
-      <tr><td>①</td><td>Product Strategist</td><td>프로덕트 전략·MVP 우선순위</td></tr>
-      <tr><td>②</td><td>UX/Behavioral Designer</td><td>사용자 행동·동기 설계</td></tr>
-      <tr><td>③</td><td>Growth/Business Model</td><td>매출 다각화·수익 모델</td></tr>
-      <tr><td>④</td><td>HR Tech B2B Expert</td><td>기업·헤드헌터 페인</td></tr>
-      <tr><td>⑤</td><td>AI/GenAI Product</td><td>AI 활용 자동화</td></tr>
-      <tr><td>⑥</td><td>Career Coach</td><td>경력자 개인 니즈</td></tr>
+      <tr><th>겨냥하는 문제 (악순환의 단계)</th><th>통합된 MVP 후보</th></tr>
+      <tr><td class="hl">스카웃 신뢰 붕괴 → 이탈</td><td class="hl">스카웃 라벨 가시화</td></tr>
+      <tr><td>'수익화 대상 취급' 인식</td><td>통제권 모드</td></tr>
+      <tr><td>재방문할 이유 부재 → 갱신 감소</td><td>월간 시장 리포트</td></tr>
+      <tr><td>데이터 신선도 하락</td><td>커리어 자동 아카이빙</td></tr>
+      <tr><td>광고 매출 의존 → 수익화 압력</td><td>개인 프리미엄 구독</td></tr>
+      <tr><td>매출 다각화 (B2B)</td><td>B2B 데이터 상품 → 보류 (3.3)</td></tr>
     </table>
-
-    <h4 class="step"><span class="step-no">Step 3</span>어피니티 다이어그램</h4>
-    <p style="font-size:13.5px">42개를 유사성 기준 6개 클러스터로 그룹핑:</p>
     <div class="fig gray">
       <div class="affinity">
-        <div class="aff c1"><div class="aff-n">5</div><div class="aff-t">Occasional<br>재방문 트리거</div><div class="aff-r">→ 월간 시장 리포트</div></div>
-        <div class="aff c2"><div class="aff-n">7</div><div class="aff-t">저마찰 커리어<br>아카이빙</div><div class="aff-r">→ 커리어 자동 아카이빙</div></div>
         <div class="aff c3"><div class="aff-n">6</div><div class="aff-t">스카웃<br>신뢰 회복</div><div class="aff-r">→ ★ 스카웃 라벨 가시화</div></div>
-        <div class="aff c4"><div class="aff-n">7</div><div class="aff-t">개인 프리미엄<br>매출</div><div class="aff-r">→ 개인 프리미엄 구독</div></div>
-        <div class="aff c5"><div class="aff-n">12</div><div class="aff-t">B2B 데이터<br>상품</div><div class="aff-r">스코프 밖, 보류</div></div>
         <div class="aff c6"><div class="aff-n">3</div><div class="aff-t">정체성<br>회복</div><div class="aff-r">→ 통제권 모드</div></div>
+        <div class="aff c1"><div class="aff-n">5</div><div class="aff-t">재방문<br>트리거</div><div class="aff-r">→ 월간 시장 리포트</div></div>
+        <div class="aff c2"><div class="aff-n">7</div><div class="aff-t">저마찰 커리어<br>아카이빙</div><div class="aff-r">→ 커리어 자동 아카이빙</div></div>
+        <div class="aff c4"><div class="aff-n">7</div><div class="aff-t">개인 프리미엄<br>매출</div><div class="aff-r">→ 개인 프리미엄 구독</div></div>
+        <div class="aff c5"><div class="aff-n">12</div><div class="aff-t">B2B 데이터<br>상품</div><div class="aff-r">보류 (3.3)</div></div>
       </div>
-      <div class="cap">어피니티 다이어그램: 42개 아이디어 → 6개 클러스터 (HTML 재구성, 숫자 = 아이디어 수)</div>
+      <div class="cap">42개 아이디어 → 6개 클러스터 (숫자 = 아이디어 수)</div>
     </div>
 
-    <h4 class="step"><span class="step-no">Step 4~5</span>MVP 통합 + JTBD 기반 필터링</h4>
-    <p style="font-size:13.5px">정성 리서치 표본 편향 감안, <b>개인 사용자 대상만 유지</b>:</p>
-    <table>
-      <tr><th>남김 (5개)</th><th>보류 (1개)</th></tr>
-      <tr><td>스카웃 라벨 가시화, 통제권 모드, 월간 시장 리포트, 커리어 자동 아카이빙, 개인 프리미엄 구독</td><td>B2B 데이터 상품 (헤드헌터·기업 인터뷰 후 진행)</td></tr>
-    </table>
+    <h4 class="step"><span class="step-no">3.3 보류</span>B2B 데이터 상품 · MVP 후보 5개 확정</h4>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k1">결정</span><span>아이디어가 12개로 가장 많던 B2B 데이터 상품을 스코프에서 제외. 이로써 후보는 5개로 확정</span></div>
+      <div class="dc-row"><span class="dc-k k2">근거 사실</span><span>B2B 쪽 근거가 브런치·블라인드 후기 몇 건뿐, 채용담당자·헤드헌터 인터뷰 0건. 이 표본으로 설계하면 가설 위에 가설을 쌓게 된다</span></div>
+      <div class="dc-row"><span class="dc-k k4">버린 대안</span><span>"일단 설계하고 나중에 검증" — 검증 안 된 세그먼트에 가장 큰 베팅을 하는 꼴이라 기각. 인터뷰 이후 별도 프로젝트로</span></div>
+    </div>
 
-    <h4 class="step"><span class="step-no">Step 6</span>결정 매트릭스 기준</h4>
-    <table>
-      <tr><th>기준</th><th>가중치</th><th>근거 소스</th></tr>
-      <tr><td>User Impact</td><td class="num">25%</td><td>리멤버 리뷰·시장 설문</td></tr>
-      <tr><td>Revenue Impact</td><td class="num">20%</td><td>유사 상품 ARR·시장 크기</td></tr>
-      <tr><td>Competitive Moat</td><td class="num">20%</td><td>리멤버 자산 활용도</td></tr>
-      <tr><td>Feasibility</td><td class="num">15%</td><td>기술 성숙도·개발 사례</td></tr>
-      <tr><td>Risk (역방향)</td><td class="num">20%</td><td>규제·실패 사례</td></tr>
-    </table>
+    <h4 class="step"><span class="step-no">3.4 교차 검증</span>개인 경험을 근거로 쓰기 전에</h4>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k3">상황</span><span>직접 앱을 쓰다 스카웃에 질문을 남기고 무응답으로 방치되는 경험을 했다. 강한 페인이었지만 <b>n=1의 개인 경험</b>이다. 이대로 개선안의 근거로 쓰면 문서 전체가 개인 편향 위에 서게 된다</span></div>
+      <div class="dc-row"><span class="dc-k k5">교차 확인</span><span>① 리뷰 데이터에 '담당자 무응답·고스팅' 불만이 실재한다 ② 응답 UI가 이분법("수락합니다" / "다음 기회에")인 것은 스크린샷으로 확인되는 구조적 사실이다 ③ "당장 이직 의사 없음"을 선택하면 그냥 종료된다 — '나중에 관심' 시그널이 버려지는 것도 구조적 사실이다 ④ 질문은 수락 전에 보낼 수 있지만 그 질문이 담기는 대화창은 '수락하기'를 눌러야 열린다 — 질문 후 팔로업 경로가 없고 전달·읽음 상태도 표시되지 않는다 (직접 재현)</span></div>
+      <div class="dc-row"><span class="dc-k k2">가설로 분류</span><span>① 이 페인의 보편성 — "회사가 먼저 두드려놓고 응답하지 않으면, 능동 지원의 거절과 달리 심리적 계약 파기로 경험된다"는 해석 ② 발송자에게 질문 알림이 제대로 전달되는지 — 무응답의 원인이 태만이 아니라 시스템의 상태 전달 실패일 가능성. 둘 다 <b>가설</b>로 분류하고 검증 계획에 편입했다 (Part 5)</span></div>
+    </div>
 
-    <h3>결과 요약: 42 아이디어 → 6 클러스터 → 5 MVP → 3 Phase 로드맵</h3>
-    <table>
-      <tr><th>Phase</th><th>기간</th><th>실행 MVP</th><th>목표</th></tr>
-      <tr><td class="hl">1. 지혈</td><td>0~3M</td><td><b>스카웃 라벨 가시화</b> + 통제권 모드</td><td>사용자 이탈 원인 제거</td></tr>
-      <tr><td>2. 재방문·자산</td><td>3~9M</td><td>월간 시장 리포트 + 커리어 자동 아카이빙</td><td>Occasional 재방문 트리거</td></tr>
-      <tr><td>3. 매출 다각화</td><td>9~15M</td><td>개인 프리미엄 구독</td><td>광고 의존 완화</td></tr>
-    </table>
-
-    <h3>결정적 통찰</h3>
-    <div class="quote">"리멤버 스카웃은 심리적 계약이다. 회사가 먼저 두드린 순간 계약이 시작되고, 완결적으로 응답할 때 계약이 이행된다. 무응답은 계약 파기이며, Peak-End Rule에 의해 전체 리멤버 경험의 기억을 지배한다."<span class="src">개인 사용자 실사용 경험에서 도출. 이 통찰이 '스카웃 라벨 가시화'를 하이라이트로 만드는 이유 → Part 4 심층</span></div>
-
-    <div class="callout amber"><b>방법론의 정직한 한계</b>: AI 에이전트 다관점 ≠ 실제 유저 리서치 (편향은 축소, 인터뷰·정량 검증 필요), 어피니티 클러스터링에 주관 개입 가능, 결정 매트릭스 스코어는 벤치마크 기반, 리멤버 특유 상황은 파일럿 필요.</div>
-  </div>
-</section>
-
-<!-- ═══════════ T4, PART 4 ═══════════ -->
-<section class="panel" id="t4">
-  <div class="sec">
-    <h2><span class="chip">Part 4</span>개선안: 스카웃 라벨 가시화</h2>
-
-    <h3>4.1 4원칙: Product-Platform 균형</h3>
-    <p style="font-size:13.5px;color:var(--muted)">목적: 프로덕트를 해치지 않으면서 플랫폼을 지속가능하게 확장하는 가이드라인.</p>
-    <table>
-      <tr><th>#</th><th>원칙</th><th>무엇</th></tr>
-      <tr><td>1</td><td><b>코어 보호</b></td><td>명함·프로필·스카웃 화면에는 광고·자극 요소 금지</td></tr>
-      <tr><td>2</td><td><b>접점 통제</b></td><td>커뮤니티·광고는 유지하되 사용자가 켜고 끌 수 있게</td></tr>
-      <tr><td>3</td><td><b>매출-자산 정렬</b></td><td>매출을 늘리려다 데이터 신선도 훼손하는 방식은 금지</td></tr>
-      <tr><td>4</td><td><b>매출 다각화</b></td><td>광고 의존을 낮춰서 Daily 강제 유인 자체를 제거</td></tr>
-    </table>
-    <div class="callout">1·2번 = 프로덕트 지키기, 3·4번 = 플랫폼 자기부정 방지</div>
-
-    <h3>4.2 개선안 선정 과정</h3>
-    <table>
-      <tr><th>MVP 후보</th><th>겨냥하는 문제</th></tr>
-      <tr><td class="hl">스카웃 라벨 가시화</td><td class="hl">AI 위장·일괄 발송·응답 없음 → 스카웃 신뢰 붕괴</td></tr>
-      <tr><td>통제권 모드</td><td>광고·자동팔로우·1억배지 → 도구 인식 훼손</td></tr>
-      <tr><td>월간 시장 리포트</td><td>Occasional 앱의 재방문 이유 부재</td></tr>
-      <tr><td>커리어 자동 아카이빙</td><td>이력서 갱신 인식-행동 갭</td></tr>
-      <tr><td>개인 프리미엄 구독</td><td>광고 매출 의존</td></tr>
-    </table>
-
-    <h4>결정 매트릭스 결과</h4>
+    <h4 class="step"><span class="step-no">3.5 선정</span>5개 후보 중 스카웃 라벨 가시화 하나만 심층</h4>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k1">결정</span><span>5개 MVP 후보(스카웃 라벨 가시화 · 통제권 모드 · 월간 시장 리포트 · 커리어 자동 아카이빙 · 개인 프리미엄 구독) 중 스카웃 라벨 가시화 1개만 구체화</span></div>
+      <div class="dc-row"><span class="dc-k k2">근거 사실</span><span>① 부정 리뷰 '채용' 언급률이 '19~'23년 4% 수준에서 '24년 이후 15%로 급등 — 리뷰 데이터로 확인된 가장 급성 악화 지점 ② 나머지 4개는 스카웃 신뢰가 전제다 — 신뢰를 잃은 사용자는 리포트·아카이빙을 줘도 이탈한다. 스카웃 재설계 없이는 나머지가 사후약방문</span></div>
+      <div class="dc-row"><span class="dc-k k3">보조 검증</span><span>5기준 결정 매트릭스로 교차 확인(1위, 4.05). 단, 매트릭스는 결정의 근거가 아니라 점검 도구다 — 스코어는 벤치마크 기반 추정</span></div>
+    </div>
     <div class="fig">
       <div class="dm">
         <div class="dm-row top"><span class="dm-name">스카웃 라벨 가시화</span><div class="dm-bar"><div class="dm-fill" style="width:81%"></div></div><span class="dm-score">4.05</span></div>
@@ -682,86 +547,159 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
         <div class="dm-row"><span class="dm-name">월간 시장 리포트</span><div class="dm-bar"><div class="dm-fill" style="width:76%"></div></div><span class="dm-score">3.80</span></div>
         <div class="dm-row"><span class="dm-name">커리어 자동 아카이빙</span><div class="dm-bar"><div class="dm-fill" style="width:69%"></div></div><span class="dm-score">3.45</span></div>
       </div>
-      <div class="cap">결정 매트릭스: 5개 기준 가중합 (5점 만점, HTML 재구성)</div>
+      <div class="cap">보조 검증용 결정 매트릭스 (5점 만점 가중합 · 점검 도구)</div>
     </div>
+  </div>
+</section>
 
-    <h4>왜 스카웃 라벨 가시화가 1위인가</h4>
-    <div class="card">
-      <ul class="blist">
-        <li><b>User Impact 최고점 (5)</b>: 부정 리뷰 원인 1위 (채용 언급률 2%→15%, '24년 3%→26% 급등)</li>
-        <li><b>Competitive Moat 강함 (4)</b>: 리멤버의 재직자 프로필+명함 관계 그래프 활용도 최고</li>
-        <li><b>Feasibility 높음 (4)</b>: 기존 스카웃 파이프 재설계, 3~4개월 개발 가능</li>
-        <li><b>Revenue Impact 중상 (4)</b>: B2B 매출 방어, 개인화 아웃리치 답장률 3배 벤치마크</li>
-      </ul>
-    </div>
-    <div class="callout"><b>결정적 논리</b>: 다른 개선안(광고 통제·시장 리포트 등)은 이걸 안 하면 무의미. <b>스카웃 신뢰가 회복 안 되면 사용자는 어차피 이탈</b> → 다른 처방은 자산 파괴된 이후의 사후약방문. 스카웃 재설계가 <b>다른 모든 처방의 전제 조건</b>.</div>
-    <p style="font-size:13px;color:var(--muted)">이 포트폴리오의 스코프: 5개 중 1순위 스카웃 라벨 가시화만 심층 구체화. 나머지 4개는 Phase 2·3에서 순차 진행 (별도 프로젝트).</p>
+<!-- ═══════════ T3, PART 4 ═══════════ -->
+<section class="panel" id="t3">
+  <div class="sec">
+    <h2><span class="chip">Part 4</span>설계 — 확인된 사실에 1:1 대응</h2>
+    <p class="lead">설계 요소는 전부 3.4에서 확인된 사실, 또는 검증된 외부 벤치마크에 대응한다. 대응하는 사실이 없는 기능은 넣지 않았다.</p>
 
-    <h3>4.3 스카웃 라벨 가시화 심층</h3>
-    <p style="font-size:13.5px;color:var(--muted)">프레임워크: Customer Journey Map + Behavioral Psychology + Peak-End Rule + Implicit Contract Theory, 데이터: 실사용 관찰, 스크린샷, 리뷰 7,900건, 심리학 이론</p>
+    <h3>4.1 사실 → 설계 매핑</h3>
+    <table>
+      <tr><th style="width:50%">확인된 사실</th><th>설계 응답</th></tr>
+      <tr><td>발송 유형 구분 불가 — AI 추천이 채용 제안처럼 위장, 일괄 발송과 개별 제안 혼재</td><td><b>스카웃 라벨 4종</b>: 🟢 기업 직접 · 🔵 헤드헌터 개별 · 🟠 AI 추천 · ⚪ 일괄 발송</td></tr>
+      <tr><td>이분법 UI가 결정을 마비시킴 (수락=즉시 연락처 노출 부담 vs 거절=관계 종료)</td><td><b>응답 5옵션</b> — 이분법 해체</td></tr>
+      <tr><td>"이직 의사 없음" 시그널이 버려짐</td><td><b>⏰ 나중에 다시</b> 옵션 → 3~6개월 후 리마인드 큐</td></tr>
+      <tr><td>질문 후 무응답 방치 — 경험의 '끝'이 최악으로 남음</td><td><b>응답 SLA</b>: Day 1/3/5 발송자 리마인더 · 미준수 시 응답률 공개 하락·발송 자격 정지</td></tr>
+      <tr><td>질문·수락 트랙 분절 — 질문이 담긴 대화창이 '수락'에 잠김 · 전달·읽음 상태 비가시 (직접 재현)</td><td><b>질문 = 즉시 대화 스레드 시작</b> (수락과 분리, 연락처만 수락 시 공개) · 전달·읽음·응답 기한 D-day 상태 표시</td></tr>
+      <tr><td>'다음 기회에' 사유를 받고 그냥 종료 — 수집한 시그널 폐기</td><td><b>거절 사유 회수</b>: 원탭 사유 칩 (스킵 가능) → 조건 사유(시기·연봉·직무 핏)는 '발송자에게 알리기' 토글(기본 off) · 민감 사유는 익명 집계만</td></tr>
+      <tr><td>발송자 책임 부재</td><td>발송자 실명·응답률·평균 응답시간·성사 실적 <b>공개</b></td></tr>
+      <tr><td>상투구 일괄 발송 (개인화 시 답장률 3배 — Woodpecker)</td><td>컨텍스트 필수 30자+ · 상투구 자동 감지</td></tr>
+      <tr><td>홈 화면 제안 스팸</td><td>홈에서 제거, 별도 <b>제안 인박스</b> 격리</td></tr>
+    </table>
 
-    <h4>사용자 여정: 7단계 감정 곡선</h4>
+    <h3>4.2 유저 플로우 재설계 — 설계 단위는 화면이 아니라 '끝 상태'</h3>
+    <p>4.1의 요소들은 화면 개선처럼 보이지만, 실제 설계 단위는 유저 플로우의 <b>끝 상태</b>다. As-Is의 문제는 버튼이 두 개라는 게 아니라, <b>미완결 상태를 시스템이 허용한다</b>는 것이다.</p>
+
+    <h4>As-Is 플로우 — 4개 경로 중 3개가 나쁜 끝</h4>
     <div class="fig jy-wrap">
       <svg class="jy-svg" viewBox="0 0 720 258" xmlns="http://www.w3.org/2000/svg">
-        <line x1="42" y1="120" x2="690" y2="120" stroke="#e3e8ef" stroke-dasharray="4 4"/>
-        <text x="38" y="64" font-size="10" fill="#66788c" text-anchor="end">긍정</text>
-        <text x="38" y="188" font-size="10" fill="#66788c" text-anchor="end">부정</text>
-        <line x1="60" y1="97" x2="60" y2="206" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <line x1="160" y1="112" x2="160" y2="206" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <line x1="260" y1="142" x2="260" y2="206" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <line x1="360" y1="157" x2="360" y2="206" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <line x1="460" y1="132" x2="460" y2="206" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <line x1="560" y1="204" x2="560" y2="206" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <line x1="660" y1="212" x2="660" y2="216" stroke="#dfe5ec" stroke-dasharray="3 3"/>
-        <path d="M60,85 C100,78 128,89 160,100 C198,113 226,123 260,130 C300,138 324,143 360,145 C402,147 424,128 460,120 C500,111 528,152 560,192 C582,218 628,204 660,200" fill="none" stroke="#c44536" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="60" cy="85" r="6" fill="#2563eb"/><circle cx="160" cy="100" r="6" fill="#b45309"/><circle cx="260" cy="130" r="6" fill="#b45309"/><circle cx="360" cy="145" r="6" fill="#66788c"/><circle cx="460" cy="120" r="6" fill="#2563eb"/><circle cx="560" cy="192" r="8" fill="#c44536"/><circle cx="660" cy="200" r="6" fill="#c44536"/>
-        <text x="60" y="224" font-size="11" font-weight="700" fill="#1c2733" text-anchor="middle">① 알림 수신</text>
-        <text x="60" y="242" font-size="10" fill="#66788c" text-anchor="middle">호기심·기대</text>
-        <text x="160" y="224" font-size="11" font-weight="700" fill="#1c2733" text-anchor="middle">② 상세 진입</text>
-        <text x="160" y="242" font-size="10" fill="#66788c" text-anchor="middle">혼란·불안</text>
-        <text x="260" y="224" font-size="11" font-weight="700" fill="#1c2733" text-anchor="middle">③ 결정 시도</text>
-        <text x="260" y="242" font-size="10" fill="#66788c" text-anchor="middle">부담·회피</text>
-        <text x="360" y="224" font-size="11" font-weight="700" fill="#1c2733" text-anchor="middle">④ 무행동</text>
-        <text x="360" y="242" font-size="10" fill="#66788c" text-anchor="middle">방치 (Freeze)</text>
-        <text x="460" y="224" font-size="11" font-weight="700" fill="#1c2733" text-anchor="middle">⑤ 질문</text>
-        <text x="460" y="242" font-size="10" fill="#66788c" text-anchor="middle">다시 시도</text>
-        <text x="560" y="224" font-size="11" font-weight="800" fill="#c44536" text-anchor="middle">⑥ 무응답</text>
-        <text x="560" y="242" font-size="10" fill="#c44536" text-anchor="middle">좌절·굴욕 (Peak)</text>
-        <text x="660" y="224" font-size="11" font-weight="700" fill="#1c2733" text-anchor="middle">⑦ 다음 스카웃</text>
-        <text x="660" y="242" font-size="10" fill="#66788c" text-anchor="middle">냉소·무관심</text>
+        <line x1="42" y1="120" x2="690" y2="120" stroke="#e8e8ed" stroke-dasharray="4 4"/>
+        <text x="38" y="64" font-size="10" fill="#6e6e73" text-anchor="end">긍정</text>
+        <text x="38" y="188" font-size="10" fill="#6e6e73" text-anchor="end">부정</text>
+        <line x1="60" y1="97" x2="60" y2="206" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <line x1="160" y1="112" x2="160" y2="206" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <line x1="260" y1="142" x2="260" y2="206" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <line x1="360" y1="157" x2="360" y2="206" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <line x1="460" y1="132" x2="460" y2="206" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <line x1="560" y1="204" x2="560" y2="206" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <line x1="660" y1="212" x2="660" y2="216" stroke="#e8e8ed" stroke-dasharray="3 3"/>
+        <path d="M60,85 C100,78 128,89 160,100 C198,113 226,123 260,130 C300,138 324,143 360,145 C402,147 424,128 460,120 C500,111 528,152 560,192 C582,218 628,204 660,200" fill="none" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="60" cy="85" r="6" fill="#0071e3"/><circle cx="160" cy="100" r="6" fill="#b25000"/><circle cx="260" cy="130" r="6" fill="#b25000"/><circle cx="360" cy="145" r="6" fill="#6e6e73"/><circle cx="460" cy="120" r="6" fill="#0071e3"/><circle cx="560" cy="192" r="8" fill="#e11d48"/><circle cx="660" cy="200" r="6" fill="#e11d48"/>
+        <text x="60" y="224" font-size="11" font-weight="700" fill="#1d1d1f" text-anchor="middle">① 알림 수신</text>
+        <text x="60" y="242" font-size="10" fill="#6e6e73" text-anchor="middle">호기심·기대</text>
+        <text x="160" y="224" font-size="11" font-weight="700" fill="#1d1d1f" text-anchor="middle">② 상세 진입</text>
+        <text x="160" y="242" font-size="10" fill="#6e6e73" text-anchor="middle">정보 부족 · 혼란</text>
+        <text x="260" y="224" font-size="11" font-weight="700" fill="#1d1d1f" text-anchor="middle">③ 결정 시도</text>
+        <text x="260" y="242" font-size="10" fill="#6e6e73" text-anchor="middle">이분법 부담·회피</text>
+        <text x="360" y="224" font-size="11" font-weight="700" fill="#1d1d1f" text-anchor="middle">④ 무행동</text>
+        <text x="360" y="242" font-size="10" fill="#6e6e73" text-anchor="middle">방치</text>
+        <text x="460" y="224" font-size="11" font-weight="700" fill="#1d1d1f" text-anchor="middle">⑤ 질문</text>
+        <text x="460" y="242" font-size="10" fill="#6e6e73" text-anchor="middle">다시 시도</text>
+        <text x="560" y="224" font-size="11" font-weight="800" fill="#e11d48" text-anchor="middle">⑥ 무응답</text>
+        <text x="560" y="242" font-size="10" fill="#e11d48" text-anchor="middle">좌절 (최악의 끝)</text>
+        <text x="660" y="224" font-size="11" font-weight="700" fill="#1d1d1f" text-anchor="middle">⑦ 다음 스카웃</text>
+        <text x="660" y="242" font-size="10" fill="#6e6e73" text-anchor="middle">냉소·무관심</text>
       </svg>
-      <div class="cap">User Journey Map: 7단계 감정 곡선 (HTML 재구성). '끝'이 무응답이면 전체 기억이 부정으로 지배됨</div>
+      <div class="cap">직접 사용에서 관찰한 감정 흐름 (n=1 관찰 → 3.4에서 교차 검증). 경험의 '끝'이 무응답이면 전체 기억이 부정으로 남는다</div>
     </div>
     <table>
-      <tr><th>#</th><th>단계</th><th>감정</th><th>심리 원리</th></tr>
-      <tr><td>1</td><td>알림 수신</td><td>호기심·기대</td><td>Reciprocity (Cialdini)</td></tr>
-      <tr><td>2</td><td>상세 진입</td><td>혼란·불안</td><td>Choice Paralysis, Loss Aversion</td></tr>
-      <tr><td>3</td><td>결정 시도</td><td>부담·회피</td><td>Commitment Escalation 부재</td></tr>
-      <tr><td>4</td><td>무행동 (Freeze)</td><td>방치</td><td>Status Quo Bias</td></tr>
-      <tr><td>5</td><td>"물어보세요" 안내 따라 질문</td><td>다시 시도</td><td>Implicit Contract</td></tr>
-      <tr><td class="hl">6</td><td class="hl">무응답 (Ghosted)</td><td class="hl">좌절·굴욕</td><td class="hl">Learned Helplessness, Peak-End</td></tr>
-      <tr><td>7</td><td>다음 스카웃 도착</td><td>냉소·무관심</td><td>Confirmation Bias</td></tr>
+      <tr><th>경로</th><th>흐름</th><th>끝 상태</th></tr>
+      <tr><td><b>① 수락</b></td><td>연락처 즉시 노출 → 준비 안 된 만남으로 직행</td><td><span class="pill a">부담 완결</span></td></tr>
+      <tr><td><b>② 다음 기회에</b></td><td>사유 선택 → 즉시 종료. "당장 이직 의사 없음"도 여기로 흡수 → 시그널 폐기</td><td><span class="pill r">재접점 소멸</span></td></tr>
+      <tr><td><b>③ 무행동 (방치)</b></td><td>①도 ②도 부담 → 화면 이탈 → 제안 만료</td><td><span class="pill r">미완결</span></td></tr>
+      <tr><td><b>④ 질문</b></td><td>"궁금하면 물어보세요" 안내 → 질문 → 발송자가 무응답이어도 아무 일도 일어나지 않음</td><td><span class="pill r">미완결 · 최악의 끝</span></td></tr>
     </table>
 
-    <h4>심리 진단 3가지</h4>
-    <div class="card">
-      <ul class="blist">
-        <li><b>Choice Paralysis</b> (단계 2-3): 극단 이분법이 결정 마비 → 무행동</li>
-        <li><b>Broken Implicit Contract</b> (단계 5-6): 회사가 먼저 두드린 계약을 무응답으로 파기</li>
-        <li><b>Peak-End Rule 실패</b> (전체): 경험의 "끝"이 무응답이면 전체 기억 부정</li>
-      </ul>
+    <h4>④ 질문 경로의 세부 — 직접 재현</h4>
+    <div class="flow">
+      <span class="fbox">질문 전송</span><span class="ar">→</span>
+      <span class="fbox bad">상태 표시 없음<br><span style="font-weight:400;font-size:11.5px">전달됐나? 읽었나? 알림이 갔나?</span></span><span class="ar">→</span>
+      <span class="fbox bad">팔로업 수단 없음<br><span style="font-weight:400;font-size:11.5px">재질문·리마인드 불가</span></span><span class="ar">→</span>
+      <span class="fbox">'수락하기'를 눌러야 대화창 진입</span><span class="ar">→</span>
+      <span class="fbox bad">그 대화창에 내 질문이 이미 들어 있음</span>
+    </div>
+    <ul class="blist">
+      <li><b>트랙 분절</b>: 질문과 대화가 같은 스레드인데, 스레드 접근권이 '수락'에 묶여 있다. 질문한 사용자는 자기 질문의 행방을 추적할 수 없다</li>
+      <li><b>상태 비가시성</b>: 보낸 쪽도 받은 쪽도 현재 상태를 알 수 없다. 발송자에게 알림이 가는지도 확인 불가 — 무응답의 원인이 태만이 아니라 시스템의 전달 실패일 가능성 (가설 · Part 5)</li>
+      <li><b>이탈 메커니즘</b>: 사용자는 "무시당했다"로 해석한다. 실제 원인이 무엇이든 경험은 동일하게 파괴된다</li>
+    </ul>
+    <div class="callout red"><b>시스템 관점의 진단</b>: 어떤 경로도 완결을 강제받지 않는다. 특히 ④는 사용자가 시스템의 안내를 따랐는데도 방치되는 경로이며, 그 안에서도 질문·수락 트랙이 분절되고 상태가 숨겨져 있어 완결은커녕 진행 상황조차 보이지 않는다 — 3.4에서 교차 확인한 무응답·고스팅 불만이 여기서 만들어진다.</div>
+
+    <h4>To-Be 플로우 — 모든 경로에 완결 규칙</h4>
+    <div class="fig gray">
+      <div class="chain-wrap"><div class="chain">
+        <div class="fg-callout">어떤 경로도 '방치'로 끝나지 않는다<br>플로우 전 구간에 완결 규칙 부여</div>
+        <div class="fg-callout-arrow"></div>
+        <div class="chain-row">
+          <div class="ch-step focus"><div class="box"><div class="nb">①</div><div class="nm">발송 게이트</div></div><div class="pl">컨텍스트 30자+ · 라벨 4종 자동 부착</div></div>
+          <div class="ch-ar"><span>➜</span></div>
+          <div class="ch-step focus"><div class="box"><div class="nb">②</div><div class="nm">제안 인박스</div></div><div class="pl">홈 미노출 · 발송자 이력 표시</div></div>
+          <div class="ch-ar"><span>➜</span></div>
+          <div class="ch-step focus"><div class="box"><div class="nb">③</div><div class="nm">판단 지원</div></div><div class="pl">"왜 나에게?" · JD 핏 스코어</div></div>
+          <div class="ch-ar"><span>➜</span></div>
+          <div class="ch-step focus"><div class="box"><div class="nb">④</div><div class="nm">응답 5분기</div></div><div class="pl">수락 · 질문 · 저장 · 나중에 · 거절</div></div>
+          <div class="ch-ar"><span>➜</span></div>
+          <div class="ch-step focus"><div class="box"><div class="nb">⑤</div><div class="nm">완결 보장</div></div><div class="pl">SLA · D-day 표시 · 자동 종결</div></div>
+        </div>
+      </div></div>
+      <div class="cap">To-Be: 발송 전 게이트에서 끝 상태 보장까지 (HTML 재구성)</div>
+    </div>
+    <table>
+      <tr><th>단계</th><th>규칙</th><th>효과</th></tr>
+      <tr><td><b>① 발송 게이트</b> (보내기 전)</td><td>컨텍스트 30자+ 필수 · 상투구 자동 감지 · 라벨 4종 자동 부착 (🟢기업 직접 · 🔵헤드헌터 개별 · 🟠AI 추천 · ⚪일괄)</td><td>스팸성 발송이 플로우에 진입 불가</td></tr>
+      <tr><td><b>② 제안 인박스</b> (도착)</td><td>홈 미노출 격리 · 라벨 + 발송자 실명·응답률·평균 응답시간 표시</td><td>열기 전에 신뢰 수준 파악</td></tr>
+      <tr><td><b>③ 판단 지원</b> (열람)</td><td>"왜 나에게?" 근거 · JD 핏 스코어</td><td>정보 격차 해소 후 결정</td></tr>
+      <tr><td><b>④ 응답 5분기</b> (선택)</td><td>수락(대화 시작 · 연락처 비노출) · <b>질문(즉시 대화 스레드 시작 — 수락과 분리, SLA 발동)</b> · 관심 저장 · 나중에 · 거절(원탭 사유 칩 · 스킵 가능)</td><td>이분법 해체 · 트랙 분절 제거</td></tr>
+      <tr><td><b>⑤ 완결 보장</b> (끝)</td><td>모든 열린 상태에 전달·읽음·응답 기한 D-day 표시 · 질문 무응답 → Day 1/3/5 리마인더 → 기한 초과 시 자동 종결 통보 + 발송자 응답률 하락·자격 정지 · '나중에'는 3~6개월 후 재진입</td><td>어떤 경로도 '방치'로 남을 수 없음 · 상태가 항상 보임</td></tr>
+    </table>
+
+    <h4>To-Be 경로별 끝 상태</h4>
+    <table>
+      <tr><th>경로</th><th>흐름</th><th>끝 상태</th></tr>
+      <tr><td><b>수락</b></td><td>대화 → 응답 → 미팅 (3단 사다리)</td><td><span class="pill g">완결</span></td></tr>
+      <tr><td><b>질문</b></td><td>질문 즉시 스레드 열림 → 전달·읽음·D-day 표시 → 발송자 응답 또는 자동 종결 통보</td><td><span class="pill g">완결 보장 · 상태 추적</span></td></tr>
+      <tr><td><b>관심 저장</b></td><td>'관심층' 큐 → 발송자에게 시그널</td><td><span class="pill g">관리되는 열린 상태</span></td></tr>
+      <tr><td><b>나중에 다시</b></td><td>3~6개월 후 리마인드로 재진입</td><td><span class="pill g">시그널 보존</span></td></tr>
+      <tr><td><b>다음 기회에</b></td><td>원탭 사유 칩(스킵 가능) → 조건 사유는 사용자 동의 시 발송자 전달 · 민감 사유는 익명 집계 → 정중한 종결 통보</td><td><span class="pill g">완결 · 시그널 회수</span></td></tr>
+    </table>
+
+    <h4 class="step"><span class="step-no">결정</span>거절 사유 전달 방식</h4>
+    <div class="dc">
+      <div class="dc-row"><span class="dc-k k1">결정</span><span>하이브리드 + 사용자 통제 — 조건 사유(시기·연봉·직무 핏)만 사용자가 토글로 동의 시 발송자에게 전달(기본 off), 민감 사유(회사·발송자에 대한 평가)는 익명 집계만</span></div>
+      <div class="dc-row"><span class="dc-k k2">근거 사실</span><span>실명 기반 + 한국의 공개 기피 성향(1.1 — 링크드인 한국 침투 실패의 원인). 거절 사유가 상대에게 그대로 노출되면 솔직한 사유 대신 무난한 사유로 왜곡되고, 매칭 개선에 필요한 데이터의 진실성이 파괴된다</span></div>
+      <div class="dc-row"><span class="dc-k k4">버린 대안</span><span>개별 전달 전면 적용(매칭 효과 최대지만 사유 왜곡으로 목적을 스스로 훼손) · 익명 집계만(개별 재제안 개선 불가 — 시그널 폐기로 회귀)</span></div>
+      <div class="dc-row"><span class="dc-k k3">검증</span><span>조건 사유는 전달이 사용자에게도 이득(더 나은 재제안)이라 인센티브가 정렬된다. 효과는 가설 8로 검증 — 사유 입력률·전달 동의율·재제안 수락률</span></div>
     </div>
 
-    <h4>스카웃의 심리적 비대칭성</h4>
-    <table>
-      <tr><th>축</th><th>콜드콜 (후보→회사)</th><th>스카웃 (회사→후보)</th></tr>
-      <tr><td>접근 방향</td><td>내가 능동</td><td>상대가 능동</td></tr>
-      <tr><td>선택 주권</td><td>상대에게</td><td><b>나에게</b></td></tr>
-      <tr><td>무응답 시 심리</td><td>"그럴 수 있지"</td><td><b>"고백 안 했는데 차인 느낌"</b></td></tr>
-    </table>
-    <div class="callout">→ 스카웃 게임의 완결 책임은 회사에 있음. 리멤버의 역할은 이 계약이 완결되도록 시스템으로 강제.</div>
+    <div class="callout green"><b>설계 원칙</b>: 사용자의 어떤 선택도, 발송자의 어떤 태만도 '방치 상태'를 만들 수 없다. 무응답이라는 끝을 시스템이 구조적으로 제거하고, 거절조차 시그널로 회수하는 것이 이 설계의 본질이며, 5옵션 UI는 그 플로우가 드러나는 표면이다.</div>
 
-    <h4>현재 UX vs 개선 UX</h4>
+    <h4>사용자 여정 요약: As-Is → To-Be</h4>
+    <div class="at bad">
+      <span class="at-badge" style="background:var(--red)">AS-IS</span>
+      <div>
+        <div class="flow" style="margin:0">
+          <span class="fbox">알림</span><span class="ar">→</span><span class="fbox">상세</span><span class="ar">→</span><span class="fbox">딜레마</span><span class="ar">→</span><span class="fbox">질문</span><span class="ar">→</span><span class="fbox bad">무응답</span><span class="ar">→</span><span class="fbox bad">좌절</span><span class="ar">→</span><span class="fbox bad">이탈</span>
+        </div>
+        <p class="at-note">경험의 '끝'이 무응답. 실패가 반복될수록 스카웃 자체를 불신하게 됨</p>
+      </div>
+    </div>
+    <div class="at-arrow">↓ 스카웃 라벨 가시화 적용</div>
+    <div class="at good">
+      <span class="at-badge" style="background:var(--green)">TO-BE</span>
+      <div>
+        <div class="flow" style="margin:0">
+          <span class="fbox good">알림 (라벨)</span><span class="ar">→</span><span class="fbox good">상세 (핏 스코어)</span><span class="ar">→</span><span class="fbox good">5옵션 중 선택</span><span class="ar">→</span><span class="fbox good">상태 항상 표시</span><span class="ar">→</span><span class="fbox good">완결 보장</span><span class="ar">→</span><span class="fbox good">재사용</span>
+        </div>
+        <p class="at-note">어떤 선택을 해도 '완결된 끝'을 보장</p>
+      </div>
+    </div>
+
+    <h3>4.3 화면 반영 — 플로우가 UI로 드러나는 방식</h3>
     <div class="two-col">
       <div>
         <div class="phone">
@@ -781,236 +719,121 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
           <div class="ph-body"><b>담당자 메시지</b><br>"안녕하세요, 결제팀 리드를 찾고 있습니다. 회원님의 ○○ 결제 시스템 구축 경력을 보고 직접 제안드립니다."</div>
           <div class="ph-body" style="background:var(--blue-l)"><b>왜 나에게?</b> ○○ 프로젝트 이력 + 결제 도메인 경력, JD 핏 스코어 87%</div>
           <a class="ph-btn opt">수락하고 대화하기 (만남 아직 X)</a>
-          <a class="ph-btn opt">질문하기</a>
+          <a class="ph-btn opt">질문하기 → 즉시 스레드 · 읽음/D-day 표시</a>
           <a class="ph-btn opt">관심 저장</a>
           <a class="ph-btn opt">나중에 다시 (3~6개월)</a>
-          <a class="ph-btn opt">다음 기회에</a>
+          <a class="ph-btn opt">다음 기회에 (사유 칩 · 스킵 가능)</a>
         </div>
         <p style="text-align:center;font-size:12.5px;color:var(--green);margin-top:10px;font-weight:600">담당자 메시지는 그대로 살리고, 응답 방식만 5가지로 분리</p>
       </div>
     </div>
-    <div class="callout amber"><b>핵심 발견</b>: 현재 "당장은 이직 의사가 없습니다" 옵션이 있으나 그냥 종료 처리 → <b>낭비 중</b>. 이건 사실 "나중에 관심" 시그널.</div>
 
-    <h4>개선안 설계, 3층 구조</h4>
-    <div class="fig">
-      <div style="display:grid;gap:12px">
-        <div class="card" style="margin:0;border-left:4px solid var(--blue)">
-          <b style="color:var(--blue)">Layer 1, 신뢰 인프라</b>
-          <table style="margin-bottom:0">
-            <tr><th>요소</th><th>무엇</th><th>왜</th></tr>
-            <tr><td>가시화</td><td>스카웃 라벨 4종: 기업 직접, 헤드헌터 개별, AI 추천, 일괄 발송</td><td>사용자가 유형 즉시 구분</td></tr>
-            <tr><td>발송자 책임</td><td>실명·응답률·평균 응답시간·성사 실적 공개</td><td>발송자 책임 부여</td></tr>
-            <tr><td>품질 강제</td><td>컨텍스트 필수 30자+ (상투구 자동 감지)</td><td>발송자 대충 못 씀</td></tr>
-            <tr><td>노출 방식</td><td>홈에서 제거, 별도 "제안 인박스" 격리</td><td>스팸 폭탄 해체</td></tr>
-          </table>
-        </div>
-        <div class="card" style="margin:0;border-left:4px solid var(--green)">
-          <b style="color:var(--green)">Layer 2, 탐색·준비 지원</b>
-          <table style="margin-bottom:0">
-            <tr><th>요소</th><th>무엇</th><th>왜</th></tr>
-            <tr><td>응답 다층화</td><td>5개 옵션 (수락·질문·관심저장·나중에·거절)</td><td>이분법 함정 해체</td></tr>
-            <tr><td>이해 도구</td><td>"왜 나에게?", 회사 정보, 프로필 vs JD 핏 스코어</td><td>Info Gap 해소</td></tr>
-            <tr><td>저부담 대화</td><td>수락 ≠ 즉시 만남. 대화 → 응답 → 미팅 3단</td><td>Commitment Escalation 사다리</td></tr>
-          </table>
-        </div>
-        <div class="card" style="margin:0;border-left:4px solid var(--red)">
-          <b style="color:var(--red)">Layer 3, 응답 완결성 강제</b>
-          <table style="margin-bottom:0">
-            <tr><th>요소</th><th>무엇</th><th>왜</th></tr>
-            <tr><td>응답 SLA, 담당자 리마인더</td><td>Day 1/3/5 발송자 자동 알림, 미준수 시 응답률 하락·발송 자격 정지</td><td>심리적 계약 완결 강제</td></tr>
-          </table>
-        </div>
-      </div>
-      <div class="cap">스카웃 라벨 가시화 설계 구조도 (HTML 재구성)</div>
-    </div>
-
-    <h4>응답 옵션 재설계 상세</h4>
+    <h4>응답 5옵션 상세</h4>
     <table>
-      <tr><th>옵션</th><th>사용자 심리</th><th>발송자 시그널</th></tr>
-      <tr><td><b>수락</b></td><td>"대화 나누고 싶어요"</td><td>대화 시작 (만남 아직 X)</td></tr>
-      <tr><td><b>질문하기</b></td><td>"궁금한 게 있어요"</td><td>대화 시작</td></tr>
-      <tr><td><b>관심 저장</b></td><td>"관심 있는데 결정 못하겠어요"</td><td>"관심층" 큐</td></tr>
-      <tr><td><b>나중에 다시</b></td><td>"3~6개월 후 관심"</td><td>시간 후 리마인드</td></tr>
-      <tr><td><b>다음 기회에</b></td><td>"관심 없음"</td><td>부드러운 거절</td></tr>
+      <tr><th>옵션</th><th>사용자 심리</th><th>발송자에게 가는 시그널</th></tr>
+      <tr><td>🟢 <b>수락</b></td><td>"대화 나누고 싶어요"</td><td>대화 시작 (만남 아님 — 대화→응답→미팅 3단)</td></tr>
+      <tr><td>💬 <b>질문하기</b></td><td>"궁금한 게 있어요"</td><td>대화 시작 + SLA 발동</td></tr>
+      <tr><td>📌 <b>관심 저장</b></td><td>"관심 있는데 결정 못하겠어요"</td><td>'관심층' 큐</td></tr>
+      <tr><td>⏰ <b>나중에 다시</b></td><td>"3~6개월 후에"</td><td>시점 리마인드</td></tr>
+      <tr><td>✕ <b>다음 기회에</b></td><td>"관심 없음"</td><td>부드러운 거절 + 조건 사유(동의 시)</td></tr>
     </table>
 
-    <h4>사용자 여정 재설계: As-Is → To-Be</h4>
-    <div class="at bad">
-      <span class="at-badge" style="background:var(--red)">AS-IS</span>
-      <div>
-        <div class="flow" style="margin:0">
-          <span class="fbox">알림</span><span class="ar">→</span><span class="fbox">상세</span><span class="ar">→</span><span class="fbox">딜레마</span><span class="ar">→</span><span class="fbox">질문</span><span class="ar">→</span><span class="fbox bad">무응답</span><span class="ar">→</span><span class="fbox bad">좌절, 학습된 무력감</span><span class="ar">→</span><span class="fbox bad">이탈</span>
-        </div>
-        <p class="at-note">경험의 '끝'이 무응답. 실패 사이클이 반복될수록 스카웃 자체를 불신하게 됨</p>
-      </div>
-    </div>
-    <div class="at-arrow">↓ 스카웃 라벨 가시화 적용</div>
-    <div class="at good">
-      <span class="at-badge" style="background:var(--green)">TO-BE</span>
-      <div>
-        <div class="flow" style="margin:0">
-          <span class="fbox good">알림 (라벨)</span><span class="ar">→</span><span class="fbox good">상세 (핏 스코어)</span><span class="ar">→</span><span class="fbox good">5옵션 중 선택</span><span class="ar">→</span><span class="fbox good">질문 시 SLA 강제</span><span class="ar">→</span><span class="fbox good">완결 응답</span><span class="ar">→</span><span class="fbox good">재사용</span>
-        </div>
-        <p class="at-note">어떤 선택을 해도 '완결된 끝'을 보장. Peak-End 기억이 긍정으로 뒤집힘</p>
-      </div>
-    </div>
-
-    <h4>성공 지표</h4>
+    <h3>4.4 성공 지표</h3>
     <table>
-      <tr><th>North Star 지표</th><th>현재 추정</th><th>목표</th><th>근거</th></tr>
-      <tr><td class="hl">스카웃 답장률</td><td class="num">5~10%</td><td class="num hl">15~20%+</td><td>LinkedIn InMail 18~25% 벤치마크</td></tr>
-      <tr><td>발송자 응답 SLA 준수율</td><td>—</td><td class="num">90%+</td><td>실패 경험 방지</td></tr>
-      <tr><td>후보 질문 무응답률</td><td>—</td><td class="num">&lt;10%</td><td>학습된 무력감 예방</td></tr>
+      <tr><th>지표</th><th>현재 추정</th><th>목표</th><th>근거</th></tr>
+      <tr><td class="hl">스카웃 답장률 (North Star)</td><td class="num">5~10% (가설 · Part 5)</td><td class="num hl">15~20%+</td><td>LinkedIn InMail 18~25% 벤치마크</td></tr>
+      <tr><td>발송자 SLA 준수율</td><td>—</td><td class="num">90%+</td><td>무응답 경험 차단</td></tr>
+      <tr><td>후보 질문 무응답률</td><td>—</td><td class="num">&lt;10%</td><td>최악의 '끝' 경험 예방</td></tr>
     </table>
-    <p style="font-size:13px;color:var(--muted)"><b>Input Metrics</b>: 컨텍스트 필드 평균 길이, 5옵션 클릭 분포, 상세 페이지 체류 시간 &nbsp;·&nbsp; <b>Guardrail</b>: 발송자 이탈률, B2B 매출 (-20% 이내), 스카웃 발송량</p>
+    <p style="font-size:13px;color:var(--muted)"><b>Guardrail</b>: 발송자 이탈률 · B2B 매출 (-20% 이내) · 스카웃 발송량</p>
 
-    <h4>파일럿 설계</h4>
+    <h3>4.5 파일럿 · 리스크</h3>
     <table>
       <tr><th>항목</th><th>내용</th></tr>
       <tr><td>기간</td><td>12주 (준비 4 + 실행 8)</td></tr>
-      <tr><td>규모</td><td>후보자 20%, 발송자 전체</td></tr>
-      <tr><td>대조군</td><td>나머지 80% (기존 시스템 유지)</td></tr>
-      <tr><td>의사결정 기준</td><td>답장률 15%+ 달성 시 전체 롤아웃</td></tr>
+      <tr><td>규모</td><td>후보자 20% 실험군 vs 80% 대조군</td></tr>
+      <tr><td>의사결정 기준</td><td>답장률 15%+ → 전체 롤아웃 · 미달 → 롤백 후 원인 분석</td></tr>
     </table>
-
-    <h4>리스크·완화</h4>
     <table>
       <tr><th>리스크</th><th>완화</th></tr>
       <tr><td>B2B 매출 단기 감소</td><td>프리미엄 티어 단가 인상</td></tr>
-      <tr><td>헤드헌터 이탈 (SLA 부담)</td><td>응답률 상위에게 노출 우선 인센티브</td></tr>
-      <tr><td>AI 채용비서 자산 손실</td><td>개인 지원 도구로 재포지셔닝</td></tr>
+      <tr><td>헤드헌터 이탈 (SLA 부담)</td><td>응답률 상위 발송자에게 노출 우선 인센티브</td></tr>
       <tr><td>컨텍스트 필수화로 발송 급감</td><td>발송자용 AI 컨텍스트 생성 지원</td></tr>
     </table>
   </div>
 </section>
 
-<!-- ═══════════ T5, PART 5 ═══════════ -->
-<section class="panel" id="t5">
+<!-- ═══════════ T4, PART 5 ═══════════ -->
+<section class="panel" id="t4">
   <div class="sec">
-    <h2><span class="chip">Part 5</span>이후 방향</h2>
-    <p class="lead"><b>포지셔닝</b>: 스카웃 라벨 가시화(Phase 1)를 시작점으로, 이후 진행할 방향의 큰 그림. 세부 스펙은 별도 프로젝트로 분리.</p>
+    <h2><span class="chip">Part 5</span>팩트와 가설의 분리</h2>
+    <p class="lead">이 문서의 논리 중 무엇이 확인된 사실이고 무엇이 검증 대상인지 분리한다.</p>
 
-    <h3>Phase 2: 재방문·자산 축적 (3~9M)</h3>
-    <p style="font-size:13.5px;color:var(--muted)">목표: Occasional 정체성에 맞는 재방문 트리거 확보, 저마찰 자산 축적</p>
-    <table>
-      <tr><th>후보 개선안</th><th>원칙</th><th>벤치마크</th></tr>
-      <tr><td>월간 시장 리포트</td><td>코어 보호</td><td>Glassdoor Know Your Worth (연봉 2.4% 상승 검증)</td></tr>
-      <tr><td>커리어 자동 아카이빙</td><td>코어 보호</td><td>Teal $29/월, Huntr $40/월 시장 존재</td></tr>
-    </table>
-
-    <h3>Phase 3: 매출 다각화 (9~15M)</h3>
-    <p style="font-size:13.5px;color:var(--muted)">목표: 광고 매출 의존 완화, Occasional 지불축 확보</p>
-    <table>
-      <tr><th>후보 개선안</th><th>원칙</th><th>벤치마크</th></tr>
-      <tr><td>개인 프리미엄 구독 (Career+)</td><td>매출 다각화</td><td>LinkedIn Premium 175M 구독자, $2B ARR</td></tr>
-      <tr><td>B2B 데이터 상품</td><td>매출-자산 정렬</td><td>SeekOut $15K~$50K/seat/년</td></tr>
-    </table>
-
-    <h3>공통 원칙</h3>
-    <div class="card">
-      <ul class="blist">
-        <li><b>Occasional Essential 정체성 유지</b>: Daily 강제 시도 금지</li>
-        <li><b>매일 안 열려도 팔 수 있는 상품</b>: 필요 순간의 결정적 가치</li>
-        <li><b>4원칙 준수</b>: 코어 보호, 접점 통제, 매출-자산 정렬, 매출 다각화</li>
-      </ul>
-    </div>
-
-    <div class="callout amber"><b>스코프 명시</b>: 이 포트폴리오는 Phase 1(스카웃 라벨 가시화) 심층 구체화에 집중. Phase 2·3의 각 개선안은 별도 프로젝트로 진행. B2B 데이터 상품은 헤드헌터·기업 인터뷰 이후 진행 (표본 부족으로 이번 스코프에서 제외).</div>
-  </div>
-</section>
-
-<!-- ═══════════ T6, PART 6 ═══════════ -->
-<section class="panel" id="t6">
-  <div class="sec">
-    <h2><span class="chip">Part 6</span>미검증 가설, 검증 계획</h2>
-    <p class="lead">이 포트폴리오에서 사용한 논리 중 팩트와 가설을 분리해서 명시. 각 가설별 검증 방법 매핑.</p>
-
-    <h3>팩트 <span class="pill g">실증 확인, 근거 명확</span></h3>
+    <h3>팩트 <span class="pill g">실증 확인</span></h3>
     <table>
       <tr><th>#</th><th>팩트</th><th>근거</th></tr>
-      <tr><td>1</td><td>리멤버 리뷰 평균 평점 급락 (2016 4.77 → 2026 2.56)</td><td>자체 수집 7,900건 분석</td></tr>
-      <tr><td>2</td><td>부정 리뷰 원인 = 광고·자동팔로우·1억배지·AI 위장 스카웃</td><td>키워드 태깅 (Python pandas)</td></tr>
-      <tr><td>3</td><td>채용 시장의 경력직 지배 (97.4%), 신입 채용 감소 (-43%)</td><td>인크루트·잡코리아·정부 통계</td></tr>
-      <tr><td>4</td><td>LinkedIn InMail 응답률 벤치마크 (18~25%)</td><td>Sales So, EngageKit, Belkins</td></tr>
-      <tr><td>5</td><td>이력서 갱신 인식-행동 갭 (75.2% vs 16.7%)</td><td>잡코리아 조사</td></tr>
-      <tr><td>6</td><td>컬처핏 채용 확산 (500대 기업 61%)</td><td>고용노동부·한국고용정보원</td></tr>
-      <tr><td>7</td><td>개인화·컨텍스트 아웃리치 답장률 3배</td><td>Woodpecker 통계</td></tr>
-      <tr><td>8</td><td>리멤버 회원 500만+, 80% 대리~부장급</td><td>리멤버 공식 자료</td></tr>
+      <tr><td>1</td><td>연도별 리뷰 평점 급락 (4.77 '16 → 2.84 '25)</td><td>자체 수집 7,900건</td></tr>
+      <tr><td>2</td><td>부정 리뷰 원인: 광고·자동팔로우·AI 위장 스카웃 · '채용' 언급률 '24년 이후 급등</td><td>키워드 태깅 (pandas) · 구간 합산</td></tr>
+      <tr><td>3</td><td>이분법 응답 UI · '이직 의사 없음' 시그널 폐기</td><td>앱 스크린샷</td></tr>
+      <tr><td>4</td><td>일괄 발송 vs 개별 제안 통과율 차이</td><td>리멤버 공식 계정 인정</td></tr>
+      <tr><td>5</td><td>LinkedIn InMail 응답률 18~25%</td><td>Sales So · Belkins</td></tr>
+      <tr><td>6</td><td>개인화 아웃리치 답장률 3배</td><td>Woodpecker</td></tr>
+      <tr><td>7</td><td>매출 58억→684억 · 채용 솔루션 70~75% · EQT 5,000억 인수</td><td>공시·보도</td></tr>
     </table>
 
-    <h3>가설 <span class="pill r">미검증, 검증 필요</span></h3>
+    <h3>가설 <span class="pill r">미검증 · 검증 방법 매핑</span></h3>
     <table>
       <tr><th>#</th><th>가설</th><th>검증 방법</th></tr>
-      <tr><td>1</td><td>리멤버 스카웃 응답률이 실제로 5~10% 수준</td><td>리멤버 내부 데이터 필요, 정황 종합 추정만 가능</td></tr>
-      <tr><td>2</td><td>스카웃 라벨 가시화로 답장률 15~20%+ 달성</td><td>12주 파일럿, A/B 테스트 (후보 20% vs 대조군 80%)</td></tr>
-      <tr><td>3</td><td>5개 응답 옵션이 이분법보다 유의미하게 사용됨</td><td>UX 사용성 테스트 (10~15명) + 파일럿 클릭 분포</td></tr>
-      <tr><td>4</td><td>응답 SLA 강제 시 헤드헌터 이탈 최소</td><td>헤드헌터 인터뷰 (10명+), 파일럿 이탈률</td></tr>
-      <tr><td>5</td><td>학습된 무력감(silent attrition) 실제로 존재</td><td>코호트 리텐션 분석 (내부 데이터), 인터뷰</td></tr>
-      <tr><td>6</td><td>사용자가 개인화된 컨텍스트를 실제로 신뢰 요인으로 인식</td><td>정성 인터뷰, 파일럿 후 NPS</td></tr>
+      <tr><td>1</td><td>Silent Decline — 감정 이탈이 행동 이탈에 선행 중</td><td>내부 코호트 리텐션 분석</td></tr>
+      <tr><td>2</td><td>스카웃 무응답이 '심리적 계약 파기'로 경험된다 (보편성)</td><td>사용자 인터뷰 10~15명</td></tr>
+      <tr><td>3</td><td>현재 스카웃 답장률 5~10% 수준</td><td>내부 데이터 확인</td></tr>
+      <tr><td>4</td><td>라벨 가시화로 답장률 15~20%+ 달성</td><td>12주 파일럿 A/B</td></tr>
+      <tr><td>5</td><td>5옵션이 이분법보다 유의미하게 사용됨</td><td>사용성 테스트 + 파일럿 클릭 분포</td></tr>
+      <tr><td>6</td><td>SLA 강제해도 헤드헌터 이탈 최소</td><td>헤드헌터 인터뷰 10명 + 파일럿 이탈률</td></tr>
+      <tr><td>7</td><td>후보의 질문이 발송자에게 알림으로 제대로 전달되지 않는다 (전달 실패가 무응답의 한 원인)</td><td>발송자 계정 테스트 · 알림 로그 · 헤드헌터 인터뷰</td></tr>
+      <tr><td>8</td><td>조건 사유 전달이 재제안 수락률을 높인다</td><td>파일럿: 사유 입력률 · 전달 동의율 · 재제안 수락률 측정</td></tr>
     </table>
 
-    <div class="two-col">
-      <div>
-        <h3>사용된 프레임의 한계</h3>
-        <table>
-          <tr><th>프레임</th><th>한계</th></tr>
-          <tr><td>Customer Journey Map</td><td>개인 정성 통찰 기반, 페르소나 세부 차이 미반영</td></tr>
-          <tr><td>Peak-End, Implicit Contract</td><td>학술 검증됐으나 리멤버 특유 검증은 파일럿 필요</td></tr>
-          <tr><td>JTBD + Value Prop Canvas</td><td>실사용자 후기 기반, 정량 코호트 분석 미실행</td></tr>
-          <tr><td>결정 매트릭스</td><td>벤치마크 기반, 리멤버 특유 상황 파일럿 필요</td></tr>
-          <tr><td>AI 에이전트 브레인스토밍</td><td>실제 유저 리서치·인터뷰 아님</td></tr>
-        </table>
-      </div>
-      <div>
-        <h3>데이터 소스의 한계</h3>
-        <table>
-          <tr><th>데이터</th><th>한계</th></tr>
-          <tr><td>리뷰 7,900건</td><td>극단 감정 셀렉션 편향 (평점 2 이하 n=654 심층)</td></tr>
-          <tr><td>리뷰 수 급감 (1,718→45)</td><td>방향성 신호로만 해석, 절대 규모 판단 부적합</td></tr>
-          <tr><td>B2B 정성 후기</td><td>표본 작음 → B2B 개선안은 스코프 제외</td></tr>
-          <tr><td>시장 tailwind</td><td>반박 존재 (McKinsey 등), 방향성만 유효</td></tr>
-        </table>
-      </div>
+    <h3>검증 순서</h3>
+    <div class="flow">
+      <span class="fbox">파일럿 <b>전</b>: 가설 2·3·6·7<br><span style="font-weight:400;font-size:12px;color:var(--muted)">인터뷰·내부 데이터·사용성 테스트·발송자 계정 테스트</span></span><span class="ar">→</span>
+      <span class="fbox">파일럿<b>에서</b>: 가설 1·4·5·8</span><span class="ar">→</span>
+      <span class="fbox good">결과에 따라 Phase 2·3 방향 조정</span>
     </div>
-
-    <h3>검증 우선순위</h3>
-    <table>
-      <tr><th>시점</th><th>검증 항목</th></tr>
-      <tr><td><b>Phase 1 파일럿 실행 전</b></td><td>응답률 현황 (내부 데이터 확보), 헤드헌터 이탈 리스크 (인터뷰 10명), 5옵션 사용성 (사용성 테스트 10명)</td></tr>
-      <tr><td><b>Phase 1 파일럿에서</b></td><td>답장률 15%+ 달성, Silent attrition 실재 여부, 컨텍스트-신뢰 상관</td></tr>
-      <tr><td><b>Phase 2·3 진행 전</b></td><td>위 결과에 따라 방향 조정</td></tr>
-    </table>
   </div>
 </section>
 
-<!-- ═══════════ T7, PART 7 ═══════════ -->
-<section class="panel" id="t7">
+<!-- ═══════════ T5, PART 6 ═══════════ -->
+<section class="panel" id="t5">
+  <div class="sec">
+    <h2><span class="chip">Part 6</span>이후 방향</h2>
+    <p class="lead">스카웃 라벨 가시화(Phase 1 · 0~3M)가 신뢰 지혈이라면, 이후는 재방문과 매출 구조다. 세부 스펙은 별도 프로젝트로 분리한다.</p>
+
+    <table>
+      <tr><th>Phase</th><th>기간</th><th>후보</th><th>벤치마크</th></tr>
+      <tr><td><b>2 · 재방문·자산</b></td><td>3~9M</td><td>월간 시장 리포트 · 커리어 자동 아카이빙</td><td>Glassdoor Know Your Worth · Teal $29/월</td></tr>
+      <tr><td><b>3 · 매출 다각화</b></td><td>9~15M</td><td>개인 프리미엄 구독 · B2B 데이터 상품(인터뷰 후)</td><td>LinkedIn Premium $2B ARR · SeekOut</td></tr>
+    </table>
+
+    <div class="callout green"><b>공통 원칙</b>: '가끔 열어도 없으면 안 되는 앱' 정체성 유지 — Daily 강제 금지, 매일 안 열려도 팔리는 상품으로 광고 의존을 낮춘다.</div>
+  </div>
+</section>
+
+<!-- ═══════════ T6, PART 7 ═══════════ -->
+<section class="panel" id="t6">
   <div class="sec">
     <h2><span class="chip">Part 7</span>회고</h2>
-    <p class="lead">이 프로젝트를 통해 얻은 배움들.</p>
 
-    <div class="card"><h4 style="margin-top:0">1. 프레임은 도구지 답이 아니다</h4>
-    <p style="font-size:14px">처음엔 매슬로 욕구 위계로 사용자 가치를 정리했다. 그럴듯해 보였지만 결국 "리멤버는 존중 욕구를 자극한다"는 서사에 사용자 경험을 끼워 맞추게 됐다. 편향이었다. JTBD와 Value Proposition Canvas로 바꾸고 실사용자 후기·리뷰 데이터로 채우니 훨씬 정확한 진단이 나왔다. <b>프레임을 먼저 정하고 데이터를 끼워 맞추는 게 아니라, 질문에 맞는 프레임을 골라야 한다.</b></p></div>
+    <div class="card"><h4 style="margin-top:0">1. 데이터에 없는 페인은 직접 사용에서 나온다 — 단, n=1은 검증을 거쳐야 근거가 된다</h4>
+    <p style="font-size:14px">리뷰 7,900건에도 안 잡히던 스카웃 무응답 페인을 직접 쓰면서 발견했다. 하지만 그 경험을 그대로 근거로 쓰지 않고 리뷰·스크린샷으로 교차 확인한 뒤, 남는 해석은 가설로 분류했다. 이 절차가 없었다면 문서 전체가 개인 편향 위에 섰을 것이다.</p></div>
 
-    <div class="card"><h4 style="margin-top:0">2. 정량 데이터로는 안 보이는 페인이 있다</h4>
-    <p style="font-size:14px">리뷰 7,900건과 시장 벤치마크로도 잘 드러나지 않은 UX 페인이, 실제로 앱을 써보면서 발견됐다. 스카웃 상세 페이지에서 "수락"과 "다음 기회에" 앞에서 결정을 못한 그 순간이 그것이다. 무응답 방치 경험은 <b>"고백 안 했는데 차인 느낌"</b>이라는 표현으로 정리됐다. 정량 데이터는 문제의 규모를 보여주지만 감정과 결(質)까지 담기는 어렵다. 리서치를 보완하는 관점으로 <b>직접 사용해보는 과정</b>이 함께 필요하다.</p></div>
+    <div class="card"><h4 style="margin-top:0">2. 사실 앞에서 주장을 수정할 것</h4>
+    <p style="font-size:14px">"사용자 이탈 중"이라는 단정은 회원 성장이라는 사실과 충돌했고, 철회했다. 가설로 재정의하고 검증 계획을 붙이자 진단이 오히려 강해졌다. 확신을 자제하고 "이건 가설이다"라고 말하는 것이 진단의 신뢰를 만든다.</p></div>
 
-    <div class="card"><h4 style="margin-top:0">3. 가설을 팩트로 착각하지 않을 용기</h4>
-    <p style="font-size:14px">처음엔 "리멤버 사용자가 이탈 중"이라고 단정했다. 근데 회원 수는 오히려 성장 중이었다. 이탈의 직접 증거는 없었다. 정직하게 "silent decline"이라는 <b>가설</b>로 재정의하고 검증 계획을 붙이니 오히려 진단이 강해졌다. <b>확신을 자제하고 "이건 가설이다"라고 말할 수 있어야 진짜 PM이다.</b></p></div>
+    <div class="card"><h4 style="margin-top:0">3. 좁힐수록 강해진다</h4>
+    <p style="font-size:14px">5개 개선안 전부 → 개인 사용자만 → 스카웃 라벨 가시화 하나. 표본이 부족한 영역(B2B)을 인정하고 잘라낼 때마다 남은 서사가 단단해졌다.</p></div>
 
-    <div class="card"><h4 style="margin-top:0">4. 반박이 진짜 발견을 만든다</h4>
-    <p style="font-size:14px">콜드콜 시스템화 → "접근 마찰이 없어지면 스팸이 된다" 반박 → 폐기. 평점 하락 서사 → "그건 4.8이잖아" 반박 → Silent decline이라는 더 정교한 진단. 매슬로 프레임 → "너무 편향적" 반박 → JTBD 전환. 콜드콜 재도전 → "고백 안 했는데 차인 느낌" 통찰. <b>스스로에게 반박할 수 있어야 한다. 확신은 발견을 막는다.</b></p></div>
-
-    <div class="card"><h4 style="margin-top:0">5. 스코프 규율이 완성도를 만든다</h4>
-    <p style="font-size:14px">처음엔 5개 개선안을 다 구체화하려 했다. 헤드헌터·기업 표본 부족을 인정하고 개인 사용자만 남겼고, 다시 좁혀 <b>스카웃 라벨 가시화 하나만 심층</b>으로 갔다. 역설적으로 좁힐수록 서사가 강해졌다. <b>다 하려다 아무것도 안 되는 것보다, 하나를 깊이 파는 게 낫다.</b></p></div>
-
-    <div class="card"><h4 style="margin-top:0">6. AI는 발산, 인간은 수렴</h4>
-    <p style="font-size:14px">6명 전문가 페르소나를 AI 에이전트로 병렬 실행해 42개 아이디어를 확보했다. 혼자서는 못 낼 다양성이었다. 하지만 어피니티 클러스터링·결정 매트릭스·최종 판단은 결국 인간의 일이었다. <b>AI는 발산(다양성 확보)에 강하고, 판단(수렴)은 인간이 해야 한다.</b></p></div>
-
-    <div class="card"><h4 style="margin-top:0">7. 표면 지표는 속인다</h4>
-    <p style="font-size:14px">앱스토어 총점 4.8만 보면 리멤버는 문제 없는 앱이다. 그런데 최근 연도별 리뷰 평균은 2.56이고, 리뷰 수 자체가 40배 감소했다. 초기 대량 긍정이 총점을 유지시켜 문제를 감추고 있었다. <b>lagging 지표(누적 평점)와 leading 지표(최근 리뷰 감정)의 갭이 가장 위험한 신호다.</b></p></div>
-
-    <div class="quote">리멤버는 훌륭한 서비스다. 이 프로젝트는 "리멤버가 틀렸다"가 아니라 "옳은 방향으로 확장하려다 실행에서 균형을 잃었다"는 진단이다. Product를 훼손하지 않으면서 Platform으로 확장하기: 이 균형을 잡는 순간 리멤버는 시장 순풍을 온전히 활용할 수 있다. 그 첫 걸음이 스카웃 라벨 가시화다.</div>
+    <div class="quote">리멤버는 훌륭한 서비스다. 이 프로젝트의 진단은 "리멤버가 틀렸다"가 아니라 "옳은 방향으로 확장하다 실행에서 균형을 잃었다"이며, 그 균형 회복의 첫 걸음으로 스카웃 라벨 가시화를 제안한다.</div>
 
     <h3>출처</h3>
     <div class="card" style="font-size:13px">
@@ -1021,31 +844,16 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
         <li><a href="https://community.rememberapp.co.kr/post/142822" target="_blank">헤드헌터 vs 직접지원 (리멤버 커뮤니티)</a></li>
         <li><a href="https://community.rememberapp.co.kr/post/141966" target="_blank">헤드헌팅 믿을만한가 (리멤버 커뮤니티)</a></li>
         <li><a href="https://brunch.co.kr/@ung2daily/4" target="_blank">'포지션 제안' 문구의 함정 (브런치)</a></li>
-        <li><a href="https://brunch.co.kr/@beautyinsight/100" target="_blank">사람인·리멤버·원티드 비교 (브런치)</a></li>
         <li><a href="https://hr.rememberapp.co.kr/" target="_blank">리멤버 채용솔루션 공식</a></li>
       </ul>
 
-      <p style="margin-top:14px"><b>시장·벤치마크 데이터</b></p>
+      <p style="margin-top:14px"><b>벤치마크</b></p>
       <ul class="blist" style="font-size:13px;margin-top:6px">
-        <li><a href="https://insight.goover.ai/report/202603/go-public-report-ko-36252d08-c501-49b9-9264-92100e9eea4c-0-0.html" target="_blank">2026년 채용시장 분석, 경력 우대 강화</a></li>
-        <li><a href="https://www.khan.co.kr/article/202509180600001" target="_blank">AI가 공격하는 건 경력 아닌 '신입' (경향신문)</a></li>
         <li><a href="https://salesso.com/blog/linkedin-inmail-response-rate-statistics/" target="_blank">LinkedIn InMail 응답률 벤치마크 (Sales So)</a></li>
         <li><a href="https://techcrunch.com/2025/01/29/linkedin-passes-2b-in-premium-revenues-in-12-months-with-overall-revenues-up-9-on-the-year/" target="_blank">LinkedIn Premium $2B revenue (TechCrunch)</a></li>
         <li><a href="https://www.glassdoor.com/blog/kyw-power-of-transparency/" target="_blank">Glassdoor Know Your Worth Impact</a></li>
         <li><a href="https://www.tealhq.com/pricing" target="_blank">Teal HQ Pricing</a></li>
-        <li><a href="https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20061" target="_blank">직장인 75.2% 이력서 수시 업데이트 (잡코리아)</a></li>
-        <li><a href="https://www.news1.kr/economy/employment-labor/5719979" target="_blank">HR트렌드는 컬처핏 (뉴스1)</a></li>
-      </ul>
-
-      <p style="margin-top:14px"><b>심리학·UX 이론</b></p>
-      <ul class="blist" style="font-size:13px;margin-top:6px">
-        <li>Peak-End Rule (Kahneman)</li>
-        <li>Learned Helplessness (Seligman)</li>
-        <li>Choice Paralysis (Iyengar &amp; Lepper)</li>
-        <li>Implicit Contract Theory (Rousseau)</li>
-        <li>Loss Aversion (Kahneman &amp; Tversky)</li>
-        <li>Reciprocity (Cialdini)</li>
-        <li>Hicks Law, Status Quo Bias</li>
+        <li>Woodpecker 개인화 아웃리치 통계</li>
       </ul>
 
       <p style="margin-top:14px;color:var(--muted)">시장 규모 데이터는 top-down 추정으로 실제 수치는 검증 필요.</p>
@@ -1055,7 +863,7 @@ footer{border-top:1px solid var(--border);background:#fff;padding:26px 32px;text
 
 </main>
 
-<footer>Remember 서비스 분석 및 개선안 | 데이터: 앱 리뷰 7,900건 직접 수집·집계 외</footer>
+<footer>리멤버 분석 · 스카웃 라벨 가시화 제안 | 데이터: 앱 리뷰 7,900건 직접 수집·집계 외</footer>
 
 <script>
 document.querySelectorAll('.tab-btn').forEach(b=>{
