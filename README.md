@@ -9,6 +9,7 @@
 | # | 프로덕트 | 한 줄 요약 | 링크 |
 |---|---|---|---|
 | 01 | 리멤버 (Remember) | 옳은 방향(Platform 확장)으로 가고 있으나 실행이 코어(Product)를 훼손 중. 균형을 되찾는 '스카웃 라벨 가시화' 제안 | [보러 가기](https://gaoningmomo.github.io/investigating_products/remember/) |
+| 02 | 클럽하우스, BeReal, 셋로그 | 정점에서 무너진 세 SNS의 흥망을 '시대의 결핍' 프레임으로 해부하고, 여론조사 데이터로 검증해 AI 시대의 3부작 서비스를 제안 | [보러 가기](https://gaoningmomo.github.io/investigating_products/nextaiproduct/) |
 
 ## 각 분석의 구성
 
