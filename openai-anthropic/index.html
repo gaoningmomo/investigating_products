@@ -36,18 +36,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretend
 .ladder .rel{font-size:12.5px;color:var(--muted)}
 
 /* ── Header ── */
-.hdr{background:#fff;border-bottom:1px solid var(--border);padding:30px 32px 26px}
-.hdr-in{max-width:1080px;margin:0 auto}
-.logo-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hdr{background:#fff;border-bottom:1px solid var(--border);padding:26px 32px 20px}
+.hdr-in{max-width:1080px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{font-weight:800;font-size:36px;letter-spacing:-1.5px;color:#111;line-height:1.15}
+.logo-sub{display:flex;align-items:center;gap:8px;margin-top:10px}
 .logo-sub .tag{background:#111;color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.3px}
 .logo-sub .t{color:var(--muted);font-size:13px}
-.logo-sub .back{margin-left:auto;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
-.logo-sub .back:hover{color:var(--navy)}
-.hdr h1{font-size:27px;font-weight:800;letter-spacing:-.6px;margin-top:16px;line-height:1.35}
-.hdr .sum{margin-top:12px;color:var(--muted);font-size:14.5px;max-width:860px;line-height:1.8}
-.hdr .sum b{color:var(--navy);font-weight:700}
-.hdr .sum b{color:var(--navy)}
-.hdr .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.home-link{font-size:13px;color:var(--muted);text-decoration:none}
+.home-link:hover{color:var(--text)}
+.hdr-title{max-width:1080px;margin:18px auto 0}
+.hdr-title h1{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.hdr-title p{margin-top:6px;color:var(--muted);font-size:13.5px}
+.hdr-title p b{color:var(--navy)}
 
 /* ── Tabs ── */
 .tabs{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
@@ -301,21 +301,15 @@ footer{border-top:1px solid var(--border);background:var(--card);padding:26px 32
 
 <header class="hdr">
   <div class="hdr-in">
-    <div class="logo-sub">
-      <span class="tag">PM PORTFOLIO</span>
-      <span class="tag">CASE 02</span>
-      <a class="back" href="../index.html">← 메인으로</a>
+    <div>
+      <div class="logo">OpenAI · Anthropic</div>
+      <div class="logo-sub"><span class="tag">CASE 02</span><span class="t">릴리스 186건으로 찾은, 아직 없는 기능</span></div>
     </div>
+    <a class="home-link" href="../index.html">← 메인으로</a>
+  </div>
+  <div class="hdr-title">
     <h1>OpenAI와 Anthropic이 아직 만들지 않은 기능</h1>
-    <p class="sum">AI 기능은 <b>회사가 신입사원을 성장시키는 순서</b>를 닮아 왔다. 도구를 쥐여주고, 일을 맡기고, 중간보고를 받고, 팀과 예산까지 줬다. 그런데 사람이라면 <b>처음에 반드시 받는 단 하나의 가이드</b>가 빠져 있다. "무엇을 성공이라 부를지" 먼저 맞추는 <b>온보딩</b>이다. 두 회사의 릴리스 <b>186건 중 0건.</b><br>출시된 기능과 실제 페인포인트(독립 자료 3종)를 교차해 이 빈칸을 찾아내고, 다음에 나올 기능을 예측한 뒤 직접 설계했다.</p>
-    <div class="meta">
-      <span class="pill k">데이터셋 186행 · v2.1</span>
-      <span class="pill b">관찰 / 해석 분리</span>
-      <span class="pill n">run-rate ≠ 실현 매출</span>
-      <span class="pill a">tier 3 = 재검증 대상</span>
-      <span class="pill g">자기수정 로그 보존</span>
-      <span class="pill v">코드북 공개</span>
-    </div>
+    <p>AI 기능은 <b>회사가 신입사원을 성장시키는 순서</b>를 닮아 왔다. 도구를 쥐여주고, 일을 맡기고, 중간보고를 받고, 팀과 예산까지 줬다. 그런데 사람이라면 <b>처음에 반드시 받는 단 하나의 가이드</b>가 빠져 있다. "무엇을 성공이라 부를지" 먼저 맞추는 <b>온보딩</b>이다. 두 회사의 릴리스 <b>186건 중 0건.</b><br>출시된 기능과 실제 페인포인트(독립 자료 3종)를 교차해 이 빈칸을 찾아내고, 다음에 나올 기능을 예측한 뒤 직접 설계했다.</p>
   </div>
 </header>
 
