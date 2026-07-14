@@ -3,172 +3,1240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Investigating Products</title>
+<title>OpenAI와 Anthropic이 아직 만들지 않은 기능 | 릴리스 186건 분석</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
-  --text:#1d1d1f; --muted:#6e6e73; --blue:#0071e3; --card:#f5f5f7; --border:#e8e8ed;
+  --navy:#1d1d1f; --navy-d:#000; --blue:#0071e3; --blue-l:#f0f6ff;
+  --red:#e11d48; --red-l:#fdf1f4; --green:#248a3d; --green-l:#eefaf1;
+  --amber:#b25000; --amber-l:#fdf3e7; --violet:#6d28d9; --violet-l:#f4f0fd;
+  --bg:#ffffff; --card:#f5f5f7; --border:#e8e8ed; --text:#1d1d1f; --muted:#6e6e73;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard','Malgun Gothic',sans-serif;background:#fff;color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;word-break:keep-all;text-wrap:pretty}
-.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
-.nav-in{max-width:920px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
-.nav .brand{font-size:14.5px;font-weight:700;letter-spacing:-.2px}
-.nav a{color:var(--muted);text-decoration:none;font-size:13px}
-.nav a:hover{color:var(--text)}
-.hero{max-width:920px;margin:0 auto;padding:96px 24px 72px;text-align:center}
-.hero .eyebrow{display:inline-block;font-size:12.5px;font-weight:700;color:var(--blue);background:#f0f6ff;padding:5px 14px;border-radius:99px;margin-bottom:22px;letter-spacing:.2px}
-.hero h1{font-size:52px;font-weight:800;letter-spacing:-1.8px;line-height:1.12}
-.hero p{margin:20px auto 0;max-width:560px;font-size:17px;color:var(--muted);letter-spacing:-.2px}
-.sec{max-width:920px;margin:0 auto;padding:0 24px 84px}
-.sec h2{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:22px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:680px){.grid{grid-template-columns:1fr}.hero h1{font-size:38px}}
-.pcard{display:block;background:var(--card);border-radius:22px;padding:30px 30px 26px;text-decoration:none;color:var(--text);transition:transform .25s ease,box-shadow .25s ease}
-.pcard:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(0,0,0,.10)}
-.pcard .no{font-size:12.5px;font-weight:800;color:var(--muted);letter-spacing:.6px}
-.pcard h3{font-size:23px;font-weight:800;letter-spacing:-.5px;margin:8px 0 10px}
-.pcard .desc{font-size:14px;color:var(--muted);line-height:1.65;min-height:70px}
-.pcard .go{display:inline-block;margin-top:16px;font-size:14.5px;font-weight:600;color:var(--blue)}
-.pcard.soon{border:1.5px dashed #d2d2d7;background:#fff;cursor:default}
-.pcard.soon:hover{transform:none;box-shadow:none}
-.pcard.soon .desc{min-height:70px}
-.timeline{position:relative;background:var(--card);border-radius:22px;padding:34px 38px 28px 64px}
-.timeline::before{content:"";position:absolute;left:39px;top:44px;bottom:40px;width:2px;background:#d2d2d7}
-.tl-item{position:relative;padding-bottom:26px}
-.tl-item:last-child{padding-bottom:0}
-.tl-item .dot{position:absolute;left:-37px;top:0;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--card)}
-.tl-item h4{font-size:15.5px;font-weight:750;letter-spacing:-.3px;line-height:1.5}
-.tl-item h4 span{font-size:12.5px;font-weight:500;color:var(--muted);margin-left:8px}
-.tl-item .q{margin-top:2px;font-size:13px;color:var(--muted)}
-.tl-item .q b{color:var(--blue);font-weight:700}
-@media(max-width:680px){.timeline{padding:28px 24px 24px 56px}.timeline::before{left:33px}}
-.prins{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-@media(max-width:680px){.prins{grid-template-columns:1fr}}
-.prin{background:var(--card);border-radius:18px;padding:24px 26px}
-.prin h4{font-size:17px;font-weight:800;letter-spacing:-.4px}
-.prin p{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.65}
-.subhead{font-size:14px;font-weight:700;color:var(--muted);margin:34px 0 14px;letter-spacing:.3px;text-transform:uppercase}
-footer{background:var(--card);border-top:1px solid var(--border);padding:30px 24px;text-align:center;color:var(--muted);font-size:12.5px}
-footer a{color:var(--muted)}
-/* about */
-.about{background:var(--card);border-radius:22px;padding:40px 44px}
-.about h3{font-size:26px;font-weight:800;letter-spacing:-.6px}
-.about h3 span{font-size:14px;font-weight:600;color:var(--muted);margin-left:10px;letter-spacing:0}
-.about .role{margin-top:6px;font-size:15px;font-weight:600;color:var(--blue)}
-.about .otw{display:inline-block;font-size:11.5px;font-weight:700;color:#248a3d;background:#eefaf1;border-radius:99px;padding:3px 11px;margin-left:8px;vertical-align:2px}
-.about .bio{margin-top:14px;font-size:14.5px;color:var(--muted);line-height:1.75;max-width:640px}
-.about .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.about .chips span{font-size:12.5px;font-weight:600;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:99px;padding:6px 14px}
-.about .ships-title{margin-top:24px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.3px}
-.about .ships{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:10px}
-.about .ship{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px 16px;text-decoration:none;transition:box-shadow .2s ease,transform .2s ease}
-.about .ship:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
-.about .ship img{width:54px;height:54px;border-radius:13px;object-fit:cover;flex:0 0 auto;border:1px solid var(--border);background:#f5f5f7}
-.about .ship b{display:block;font-size:14.5px;font-weight:750;color:var(--text);letter-spacing:-.2px;margin-top:4px}
-.about .ship .plat{display:inline-block;font-size:10.5px;font-weight:700;color:var(--blue);background:#f0f6ff;border-radius:99px;padding:2px 9px;white-space:nowrap}
-.about .ship .d{display:block;margin-top:3px;font-size:12px;color:var(--muted);line-height:1.5}
-.about .links{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px}
-.about .links a{font-size:14px;font-weight:600;color:var(--blue);text-decoration:none}
-.about .links a:hover{text-decoration:underline}
-@media(max-width:680px){.about{padding:30px 26px}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard Variable',Pretendard,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.68;font-size:15px;-webkit-font-smoothing:antialiased;word-break:keep-all;text-wrap:pretty}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+
+/* ── 먼저 알아둘 것 카드 ── */
+.remember{background:linear-gradient(0deg,#fffbe9,#fffbe9);border:1px solid #f0e0a8;border-radius:14px;padding:14px 18px;margin:0 0 22px;display:flex;gap:12px;align-items:flex-start}
+.remember .ico{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:#b25000;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.remember .rb{font-size:11px;font-weight:800;color:#8a5b00;letter-spacing:.4px;display:block;margin-bottom:3px}
+.remember .rb .nn{font-style:normal;opacity:.55;margin-left:5px}
+.remember .rt{font-size:14.5px;font-weight:650;color:#3d2c00;line-height:1.6}
+/* ── 온보딩 성장 단계 ── */
+.ladder{display:grid;grid-template-columns:1fr 1.35fr 62px;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:16px 0}
+.ladder>div{background:#fff;padding:13px 15px;font-size:13px;line-height:1.6}
+.ladder .lh{background:#fafafa;font-weight:800;font-size:11.5px;color:var(--muted);letter-spacing:.3px;text-align:left}
+.ladder .lh.c{text-align:center}
+.ladder .cnt{text-align:center;font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.ladder .s0{background:var(--red-l)}
+.ladder .s0 b{color:var(--red)}
+.ladder .s0.cnt{color:var(--red);font-size:17px}
+.ladder .hum b{display:block;font-weight:750;color:var(--navy);margin-bottom:2px}
+.ladder .rel{font-size:12.5px;color:var(--muted)}
+
+/* ── Header ── */
+.hdr{background:#fff;border-bottom:1px solid var(--border);padding:30px 32px 26px}
+.hdr-in{max-width:1080px;margin:0 auto}
+.logo-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.logo-sub .tag{background:#111;color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.3px}
+.logo-sub .t{color:var(--muted);font-size:13px}
+.hdr h1{font-size:27px;font-weight:800;letter-spacing:-.6px;margin-top:16px;line-height:1.35}
+.hdr .sum{margin-top:12px;color:var(--muted);font-size:14.5px;max-width:860px;line-height:1.8}
+.hdr .sum b{color:var(--navy);font-weight:700}
+.hdr .sum b{color:var(--navy)}
+.hdr .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+
+/* ── Tabs ── */
+.tabs{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
+.tabs-in{max-width:1080px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;padding:0 20px}
+.tabs-in::-webkit-scrollbar{display:none}
+.tab-btn{flex:0 0 auto;background:none;border:none;font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);padding:14px 14px;cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;transition:.15s}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-btn .no{font-size:10.5px;font-weight:800;opacity:.55;margin-right:5px}
+.tab-btn:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+
+/* ── Layout ── */
+.wrap{max-width:1080px;margin:0 auto;padding:34px 32px 90px}
+.panel{display:none}
+.panel.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec{margin-bottom:44px}
+.sec>h2{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sec>h2 .chip{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-l);padding:3px 9px;border-radius:99px;letter-spacing:.2px}
+.sec>.lead{color:var(--muted);font-size:14px;margin-bottom:18px}
+h3{font-size:16px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
+h4{font-size:14px;font-weight:700;margin:18px 0 10px;color:var(--navy)}
+p{margin:0 0 14px;font-size:14.5px}
+p:last-child{margin-bottom:0}
+.card{background:var(--card);border:none;border-radius:18px;padding:22px 24px;margin-bottom:16px}
+.callout{border-left:4px solid var(--blue);background:var(--blue-l);border-radius:0 12px 12px 0;padding:16px 20px;margin:14px 0;font-size:14px;line-height:1.7}
+.callout.red{border-color:var(--red);background:var(--red-l)}
+.callout.green{border-color:var(--green);background:var(--green-l)}
+.callout.amber{border-color:var(--amber);background:var(--amber-l)}
+.callout.gray{border-color:#b9bcc4;background:#f4f5f7}
+.callout b{color:var(--navy-d)}
+.callout .ct{display:block;font-size:12px;font-weight:800;letter-spacing:.3px;margin-bottom:6px}
+.quote{background:transparent;color:var(--text);border-left:3px solid var(--text);border-radius:0;padding:4px 0 4px 22px;margin:22px 0;font-size:16.5px;font-weight:700;line-height:1.75;letter-spacing:-.3px}
+.quote .src{display:block;margin-top:8px;font-size:12.5px;font-weight:400;color:var(--muted)}
+
+/* tables */
+.tw{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+th{background:#fafafa;color:var(--muted);font-weight:600;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f2;vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.hl,tr.hl td{background:var(--red-l)}
+td b{color:var(--navy-d)}
+.num{font-variant-numeric:tabular-nums}
+.tcap{font-size:12.5px;color:var(--muted);margin:-4px 0 16px;padding:0 2px}
+
+/* stat grid */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.stat{background:var(--card);border:none;border-radius:16px;padding:16px 18px}
+.stat .k{font-size:12px;color:var(--muted);font-weight:600}
+.stat .v{font-size:22px;font-weight:800;color:var(--navy);margin-top:4px;letter-spacing:-.5px}
+.stat .v.red{color:var(--red)} .stat .v.blue{color:var(--blue)} .stat .v.green{color:var(--green)}
+.stat .d{font-size:11.5px;color:var(--muted);margin-top:3px}
+
+/* pills */
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-right:4px;vertical-align:1px;white-space:nowrap}
+.pill.g{background:var(--green-l);color:var(--green)} .pill.b{background:var(--blue-l);color:var(--blue)}
+.pill.r{background:var(--red-l);color:var(--red)} .pill.a{background:var(--amber-l);color:var(--amber)}
+.pill.n{background:#eef1f5;color:var(--muted)} .pill.v{background:var(--violet-l);color:var(--violet)}
+.pill.rd{border:1.5px dashed var(--red);color:var(--red);background:#fff}
+.pill.k{background:var(--navy);color:#fff}
+
+/* decision rows */
+.dc{background:var(--card);border:none;border-radius:18px;padding:20px 22px;margin:12px 0 18px}
+.dc .dc-row{display:flex;gap:12px;margin-bottom:10px;font-size:13.5px;line-height:1.65}
+.dc .dc-row:last-child{margin-bottom:0}
+.dc .dc-k{flex:0 0 92px;font-size:11.5px;font-weight:800;padding:3px 0;text-align:center;border-radius:99px;height:fit-content;margin-top:2px}
+.dc .dc-k.k1{background:var(--navy);color:#fff} .dc .dc-k.k2{background:var(--blue-l);color:var(--blue)} .dc .dc-k.k3{background:#eef1f5;color:var(--muted)} .dc .dc-k.k4{background:var(--red-l);color:var(--red)} .dc .dc-k.k5{background:var(--green-l);color:var(--green)}
+.dc .from{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--red)}
+
+/* bullet list */
+.blist{margin:0 0 14px;padding:0;list-style:none;font-size:13.5px}
+.blist li{position:relative;padding-left:15px;margin-bottom:8px;line-height:1.65}
+.blist li:last-child{margin-bottom:0}
+.blist li::before{content:"\2022";position:absolute;left:0;color:var(--blue);font-weight:700}
+
+/* fig canvas */
+.fig{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0}
+.fig.gray{background:var(--card);border:none}
+.fig .cap{text-align:center;font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.6}
+.fg-hd{display:flex;align-items:center;gap:12px;padding:2px 4px 14px;flex-wrap:wrap}
+.fg-hd h5{font-size:16px;font-weight:800;color:#1a1d29;letter-spacing:-.3px}
+.fg-hd .dv{width:1px;height:18px;background:#d5dae1}
+.fg-hd .sb{font-size:12.5px;color:#4b5563}
+.fg-card{background:#fff;border-radius:12px;border-top:4px solid #3b82f6;box-shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);padding:14px 16px}
+.fg-card .t{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#1a1d29;margin-bottom:9px}
+.fg-card ul{margin:0;padding:0}
+.fg-card li{list-style:none;font-size:12px;color:#4b5563;line-height:1.55;margin-bottom:7px}
+.fg-card li:last-child{margin-bottom:0}
+.fg-card li b{color:#1a1d29}
+
+/* ── V5 · 수익 엔진 버터플라이 ── */
+:root{--oa:#1a1d29;--oa-l:#e8eaef;--an:#c2600e;--an-l:#faeadb}
+.bfly{margin:6px 0 4px}
+.bfly-hd{display:grid;grid-template-columns:1fr 170px 1fr;gap:0;margin-bottom:10px}
+.bfly-hd .co{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+.bfly-hd .co.l{justify-content:flex-end;color:var(--oa)}
+.bfly-hd .co.r{color:var(--an)}
+.bfly-hd .co .sw{width:12px;height:12px;border-radius:4px}
+.bfly-hd .co.l .sw{background:var(--oa)} .bfly-hd .co.r .sw{background:var(--an)}
+.bfly-row{display:grid;grid-template-columns:1fr 170px 1fr;align-items:center;margin-bottom:14px}
+.bfly-row:last-child{margin-bottom:0}
+.bfly-cat{text-align:center;padding:0 10px}
+.bfly-cat .cn{font-size:13px;font-weight:800;color:var(--navy);line-height:1.4}
+.bfly-cat .cd{font-size:11px;color:var(--muted)}
+.bfly-cell{display:flex;align-items:center;gap:10px;min-height:44px}
+.bfly-cell.l{flex-direction:row-reverse}
+.bfly-bar{height:34px;border-radius:8px;position:relative;transition:width .5s ease}
+.bfly-cell.l .bfly-bar{background:var(--oa);border-radius:8px}
+.bfly-cell.r .bfly-bar{background:var(--an)}
+.bfly-bar.dim{opacity:.22}
+.bfly-val{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bfly-cell.l .bfly-val{color:var(--oa)} .bfly-cell.r .bfly-val{color:var(--an)}
+.bfly-cell .sub{font-size:11px;color:var(--muted);font-weight:500;display:block;line-height:1.35}
+.bfly-cell.l .lab{text-align:right}
+.bfly-axis{border-top:1.5px dashed #d2d2d7;position:relative;grid-column:2;height:0}
+.bfly-row.win .bfly-bar{box-shadow:0 2px 8px rgba(16,24,40,.18)}
+.bfly-tag{display:inline-block;font-size:10px;font-weight:800;color:#fff;border-radius:5px;padding:1px 7px;margin-left:6px;vertical-align:2px}
+@media(max-width:700px){
+  .bfly-hd,.bfly-row{grid-template-columns:1fr}
+  .bfly-hd .co.l{justify-content:flex-start}
+  .bfly-cat{text-align:left;padding:10px 0 4px}
+  .bfly-cell.l{flex-direction:row}
+  .bfly-cell.l .lab{text-align:left}
+}
+
+/* ── V5 · 9블록 키워드 대조표 ── */
+.cmp-wrap{overflow-x:auto}
+.cmp{min-width:640px;width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--border);font-size:13px}
+.cmp th{background:#fafafa;padding:10px 14px;border-bottom:1px solid var(--border);font-size:12.5px}
+.cmp th.oa{color:var(--oa);font-weight:800} .cmp th.an{color:var(--an);font-weight:800}
+.cmp td{padding:11px 14px;border-bottom:1px solid #f0f0f2;vertical-align:top;line-height:1.55}
+.cmp tr:last-child td{border-bottom:none}
+.cmp .bk{font-size:11.5px;font-weight:800;color:var(--muted);white-space:nowrap;width:92px}
+.cmp .kw{font-size:13.5px;font-weight:800;color:var(--navy);display:block;line-height:1.45}
+.cmp .kq{font-size:12px;color:var(--muted);display:block;margin-top:1px}
+.cmp .dtl{display:none;font-size:12px;color:#4b5563;margin-top:7px;padding-top:7px;border-top:1px dashed #e8e8ed;line-height:1.6}
+.cmp-x.expanded .dtl{display:block}
+.cmp-toggle{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:12.5px;font-weight:700;color:var(--blue);background:var(--blue-l);border:none;border-radius:99px;padding:6px 14px;cursor:pointer}
+.cmp-toggle:hover{filter:brightness(.97)}
+.cmp-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.cmp td.win{background:#fbfbfd;box-shadow:inset 3px 0 0 var(--blue)}
+
+/* ── V1 matrix ── */
+.mx-wrap{overflow-x:auto}
+.matrix{min-width:640px;display:grid;grid-template-columns:minmax(220px,1.3fr) 1fr 1fr;gap:0;background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.matrix .mh{font-size:12px;font-weight:700;color:var(--muted);background:#fafafa;padding:10px 14px;border-bottom:1px solid var(--border)}
+.matrix .axis{grid-column:1/-1;font-size:12px;font-weight:800;letter-spacing:.3px;color:var(--navy);background:#f0f1f3;padding:8px 14px;border-bottom:1px solid var(--border)}
+.matrix .axis.hot{color:var(--red);background:var(--red-l)}
+.matrix .concept{padding:12px 14px;border-bottom:1px solid #f0f0f2;font-size:13px;font-weight:700;color:var(--navy)}
+.matrix .concept .en{display:block;font-size:11.5px;color:var(--muted);font-weight:500}
+.matrix .cell{border-bottom:1px solid #f0f0f2;border-left:1px solid #f0f0f2;padding:10px 12px;display:flex;align-items:center}
+.matrix .cell button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;padding:4px 11px;border-radius:99px;line-height:1.4;transition:.12s}
+.matrix .cell button:hover{filter:brightness(.96)}
+.matrix .cell button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.matrix .st-full button{background:var(--green-l);color:var(--green)}
+.matrix .st-part button{background:var(--amber-l);color:var(--amber)}
+.matrix .st-empty{background:repeating-linear-gradient(-45deg,transparent,transparent 6px,rgba(225,29,72,.045) 6px,rgba(225,29,72,.045) 7px)}
+.matrix .st-empty button{border:1.5px dashed var(--red);color:var(--red);background:#fff}
+.matrix .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.st-full .dot{background:var(--green)} .st-part .dot{background:var(--amber)} .st-empty .dot{background:var(--red)}
+#matrix-detail{background:var(--card);border-radius:12px;padding:16px 20px;margin-top:10px;font-size:13.5px;display:none}
+#matrix-detail.open{display:block;animation:fade .2s ease}
+#matrix-detail .dt{font-weight:800;color:var(--navy);margin-bottom:8px;font-size:13.5px}
+#matrix-detail ul{list-style:none;margin:0;padding:0}
+#matrix-detail li{padding:6px 0;border-bottom:1px dashed #e3e3e8;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;font-size:13px}
+#matrix-detail li:last-child{border-bottom:none}
+#matrix-detail .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;flex:none;width:84px}
+#matrix-detail .note{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+.mx-legend{display:flex;gap:16px;flex-wrap:wrap;margin:0 2px 12px;font-size:12.5px;color:var(--muted)}
+.mx-legend span{display:inline-flex;align-items:center;gap:6px}
+.mx-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── V2 quadrant ── */
+.quad{display:grid;grid-template-columns:auto 1fr 1fr;max-width:660px;margin:0 auto;gap:10px}
+.quad .xl{text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+.quad .yl{writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+.quad .qc{border-radius:14px;padding:18px;min-height:120px;font-size:13.5px;line-height:1.6;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04)}
+.quad .qc .h{font-weight:800;font-size:12px;color:var(--muted);display:block;margin-bottom:7px}
+.quad .qc.ok{border-top:4px solid #10b981}
+.quad .qc.hit{border:2px solid var(--red);background:var(--red-l);position:relative}
+.quad .qc.hit .h{color:var(--red)}
+.quad .qc.hit::after{content:"★ 예측의 근거";position:absolute;top:-11px;right:12px;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;padding:2px 10px;border-radius:99px}
+.quad .qc.dim{background:var(--card);box-shadow:none;color:var(--muted)}
+
+/* ── V3 ladder ── */
+.ladder{position:relative;padding-left:44px}
+.ladder::before{content:"";position:absolute;left:14px;top:14px;bottom:14px;width:2px;background:var(--border)}
+.rung{position:relative;padding-bottom:22px}
+.rung:last-child{padding-bottom:0}
+.rung .no{position:absolute;left:-44px;top:0;width:29px;height:29px;border-radius:50%;background:var(--navy);color:#fff;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.rung.ghost .no{background:#fff;color:var(--red);border:1.5px dashed var(--red)}
+.rung .stage{font-size:11.5px;font-weight:800;letter-spacing:.3px;color:var(--muted)}
+.rung .human{font-size:15px;font-weight:800;color:var(--navy);margin:2px 0 5px;letter-spacing:-.2px}
+.rung.ghost .human{color:var(--red)}
+.rung .rel{font-size:12.5px;color:#4b5563;line-height:1.7}
+.rung .rel .d{color:var(--muted);font-size:11.5px}
+
+/* ── V4 timeline ── */
+.tlw{overflow-x:auto}
+.tl{min-width:600px}
+.tl-head{display:grid;grid-template-columns:1fr 130px 1fr;padding-bottom:10px;border-bottom:2px solid var(--navy)}
+.tl-head div{font-size:13px;font-weight:800}
+.tl-head .a{text-align:right;padding-right:18px}
+.tl-head .b{padding-left:18px}
+.tl-row{display:grid;grid-template-columns:1fr 130px 1fr;align-items:center;padding:15px 0;border-bottom:1px solid #f0f0f2}
+.tl-row:last-child{border-bottom:none}
+.tl-ev{font-size:13px;line-height:1.55}
+.tl-ev .f{font-weight:700;color:var(--navy);font-size:13.5px}
+.tl-ev .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;display:block}
+.tl-ev.l{text-align:right;padding-right:18px}
+.tl-ev.r{padding-left:18px}
+.tl-mid{text-align:center;position:relative}
+.tl-mid::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--border)}
+.tl-mid .gap{position:relative;background:var(--navy);color:#fff;font-size:11px;font-weight:800;padding:3px 11px;border-radius:99px;white-space:nowrap}
+.tl-mid .gap.rev{background:var(--red)}
+
+/* ── V6 flow ── */
+.flowv{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.flowv .fbox{flex:1;min-width:170px;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);border-top:4px solid #3b82f6;padding:12px 14px}
+.flowv .fbox.p2{border-top-color:#d2d2d7;background:#fbfbfd}
+.flowv .fbox .fn{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--blue-l);color:var(--blue);font-size:11.5px;font-weight:800;align-items:center;justify-content:center;margin-bottom:7px}
+.flowv .fbox.p2 .fn{background:#eef1f5;color:var(--muted)}
+.flowv .fbox .ft{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:5px;line-height:1.4}
+.flowv .fbox .fd{font-size:12px;color:#4b5563;line-height:1.6}
+.flowv .ar{align-self:center;color:var(--muted);font-weight:800;font-size:14px}
+@media(max-width:760px){.flowv{flex-direction:column}.flowv .ar{transform:rotate(90deg);align-self:center}}
+
+/* medium bridge */
+.mb{display:flex;gap:12px;align-items:flex-start;border:1.5px dashed var(--border);border-radius:12px;padding:13px 16px;margin:20px 0 0;font-size:12.5px;color:var(--muted);line-height:1.65}
+.mb .m{flex:none;font-weight:800;font-size:10.5px;letter-spacing:.5px;color:var(--muted);background:#eef1f5;border-radius:6px;padding:3px 8px;margin-top:1px}
+
+/* ── dataset ── */
+#ds-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 10px}
+#ds-controls select,#ds-controls input{font:inherit;font-size:13px;padding:8px 13px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text)}
+#ds-controls input{flex:1;min-width:170px}
+#ds-controls select:focus,#ds-controls input:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:var(--blue)}
+#ds-count{font-size:12.5px;color:var(--muted);margin-bottom:8px;font-variant-numeric:tabular-nums}
+#ds-tablewrap{max-height:540px;overflow:auto;border:1px solid var(--border);border-radius:12px}
+#ds-table{border:none;border-radius:0;min-width:760px}
+#ds-table th{position:sticky;top:0;z-index:2}
+#ds-table td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted);font-size:12.5px}
+#ds-more{display:block;width:100%;border:1px solid var(--border);border-radius:12px;background:var(--card);font:inherit;font-size:13px;font-weight:700;color:var(--navy);padding:11px;cursor:pointer;margin-top:10px}
+#ds-more:hover{background:#ececf0}
+
+footer{border-top:1px solid var(--border);background:var(--card);padding:26px 32px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+@media(max-width:760px){.hdr,.wrap{padding-left:18px;padding-right:18px}.hdr h1{font-size:22px}}
 </style>
 </head>
 <body>
 
-<nav class="nav"><div class="nav-in">
-  <span class="brand">Investigating Products</span>
-  <a href="https://github.com/gaoningmomo/investigating_products" target="_blank">GitHub ↗</a>
-</div></nav>
-
-<header class="hero">
-  <span class="eyebrow">Product Analysis Archive</span>
-  <h1>프로덕트를 하나씩,<br>깊게 뜯어봅니다.</h1>
-  <p>즐겨 쓰거나 궁금했던 서비스를 골라 비즈니스 모델부터 사용자 경험까지 직접 데이터를 모아 분석하고, 개선안을 제안하는 기록입니다.</p>
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="logo-sub">
+      <span class="tag">PM PORTFOLIO</span>
+    </div>
+    <h1>OpenAI와 Anthropic이 아직 만들지 않은 기능</h1>
+    <p class="sum">AI 기능은 <b>회사가 신입사원을 성장시키는 순서</b>를 닮아 왔다. 도구를 쥐여주고, 일을 맡기고, 중간보고를 받고, 팀과 예산까지 줬다. 그런데 사람이라면 <b>처음에 반드시 받는 단 하나의 가이드</b>가 빠져 있다. "무엇을 성공이라 부를지" 먼저 맞추는 <b>온보딩</b>이다. 두 회사의 릴리스 <b>186건 중 0건.</b><br>출시된 기능과 실제 페인포인트(독립 자료 3종)를 교차해 이 빈칸을 찾아내고, 다음에 나올 기능을 예측한 뒤 직접 설계했다.</p>
+    <div class="meta">
+      <span class="pill k">데이터셋 186행 · v2.1</span>
+      <span class="pill b">관찰 / 해석 분리</span>
+      <span class="pill n">run-rate ≠ 실현 매출</span>
+      <span class="pill a">tier 3 = 재검증 대상</span>
+      <span class="pill g">자기수정 로그 보존</span>
+      <span class="pill v">코드북 공개</span>
+    </div>
+  </div>
 </header>
 
-<section class="sec">
-  <h2>분석 아카이브</h2>
-  <div class="grid">
-    <a class="pcard" href="remember/index.html">
-      <span class="no">CASE 01</span>
-      <h3>리멤버 (Remember)</h3>
-      <p class="desc">옳은 방향(Platform 확장)으로 가고 있으나 실행이 코어(Product)를 훼손 중. 균형을 되찾는 '스카웃 라벨 가시화'를 심층 제안합니다.</p>
-      <span class="go">보러 가기 →</span>
-    </a>
-    <a class="pcard" href="nextaiproduct/index.html">
-      <span class="no">CASE 02</span>
-      <h3>클럽하우스, BeReal, 셋로그</h3>
-      <p class="desc">클럽하우스, 비리얼, 셋로그는 왜 정점에서 무너졌나. 시대의 결핍이라는 프레임으로 흥망을 해부하고, 여론조사 데이터로 검증해 AI 시대의 3부작 서비스를 제안합니다.</p>
-      <span class="go">보러 가기 →</span>
-    </a>
-    <div class="pcard soon">
-      <span class="no">CASE 03</span>
-      <h3>다음 프로덕트</h3>
-      <p class="desc">다음 분석을 준비하고 있습니다. 한 번에 하나의 프로덕트를 깊게 파는 것을 원칙으로 합니다.</p>
+<nav class="tabs" aria-label="목차">
+  <div class="tabs-in" role="tablist">
+    <button class="tab-btn on" data-p="p1" role="tab"><span class="no">01</span>정체성·직관</button>
+    <button class="tab-btn" data-p="p2" role="tab"><span class="no">02</span>사업 모델</button>
+    <button class="tab-btn" data-p="p3" role="tab"><span class="no">03</span>문제 진단</button>
+    <button class="tab-btn" data-p="p4" role="tab"><span class="no">04</span>개선안 도출</button>
+    <button class="tab-btn" data-p="p5" role="tab"><span class="no">05</span>심층 설계</button>
+    <button class="tab-btn" data-p="p6" role="tab"><span class="no">06</span>가설·검증</button>
+    <button class="tab-btn" data-p="p7" role="tab"><span class="no">07</span>회고</button>
+    <button class="tab-btn" data-p="p8" role="tab"><span class="no">착지</span>격차</button>
+    <button class="tab-btn" data-p="pd" role="tab"><span class="no">DATA</span>186행</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════ P1 사업 모델 ═══════ -->
+<div class="panel on" id="p1">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">01</i></span><span class="rt">"AI는 인간처럼 진화한다"는 아직 직관이다 — 가치관이 다른 두 회사를 관측점 삼아, 뒤에서 데이터로 가린다.</span></div></div>
+<div class="sec">
+  <h2>정체성과 직관 <span class="chip">무엇을 보고, 왜 예측하려 했나</span></h2>
+
+  <h3>왜 예측하려 했나</h3>
+  <div class="quote">모두가 AI를 말한다. 그런데 아무도 그 끝을 모른다. 견디는 것의 반대는 예측이다 — 앞이 조금이라도 보이면, 불안은 준비로 바뀐다.<span class="src">이 글 전체의 출발점. 착지 장(격차)에서 이 불안이 '구조적 이유'와 함께 되돌아온다 — 수미상관.</span></div>
+
+  <h3>직관 — AI는 인간을 닮았다 <span class="pill v">검증 전 직관</span></h3>
+  <p>시작은 사소한 관찰이었다. AI를 설명하려고 특성을 적었는데 — 아는 척한다, 상사와 싱크가 맞지 않는다, 역할을 받고도 제 방식으로 돌아간다 — 그 문장들이 그대로 <b>사람을 설명하는 문장</b>이기도 했다. LLM은 인간의 언어를 학습했고, 그 언어에는 인간의 사고방식과 약점이 함께 담겨 있으니까.</p>
+  <p>여기서 직관이 따라 나왔다. <b>AI가 인간을 닮았다면, 회사가 신입사원을 성장시키는 방식으로 그 기능도 진화하지 않았을까.</b> 그렇다면 인간의 문제 해결 방식 중 아직 기능이 되지 않은 자리가, 다음에 나올 기능일 것이다.</p>
+  <div class="callout red"><span class="ct" style="color:var(--red)">이 직관의 위험</span>
+  매력적이지만 <b>가장 위험한 종류의 생각</b>이다. "AI가 인간을 닮았다"는 워낙 넓은 틀이라 거의 모든 것을 끼워 맞출 수 있다. 그래서 결론이 아니라 <b>아직 검증되지 않은 직관</b>으로 두고, 뒤 절반(03·06)에서 이것이 뇌피셜인지 아닌지를 데이터로 가린다.</div>
+
+  <h3>두 관측점 — 가치가 다른데, 같은 곳으로?</h3>
+  <p>이 글의 주인공은 특정 회사가 아니라 <b>AI 그 자체</b>다. OpenAI와 Anthropic은 "AI가 어디까지 왔나"를 읽는 두 개의 관측점이며, 목적은 승자 가리기가 아니라 <b>독립된 두 관측점이 같은 방향을 가리키는지</b> 보는 것이다.</p>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>OpenAI</th><th>Anthropic</th></tr></thead>
+    <tbody>
+      <tr><td><b>출발</b></td><td>2015년 비영리 — "AGI가 인류 전체에 이롭게"</td><td>2020년 말 — OpenAI의 방향·안전관에 이견을 가진 출신들이 분리 창업</td></tr>
+      <tr><td><b>구조 변화</b></td><td>'공개(open)' 이상은 GPT-3 폐쇄형 API(2020년경)로 사실상 접힘 → 2019 capped-profit(수익 상한) → 2025 PBC 전환, 소비자 구독 중심 상업 기업</td><td>처음부터 공익기업(PBC) — <b>즉 OpenAI의 가치에 동의하지 않은 사람들이 만든 회사</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout green"><span class="ct" style="color:var(--green)">차이는 약점이 아니라 강점</span>
+  <b>서로 다른 두 관측점이 같은 값을 낸다면, 그 값의 신뢰도는 오히려 올라간다.</b> 가치관과 사업 모델이 다른 두 회사가 같은 방향으로 기능을 진화시킨다면, 그것은 개별 회사의 취향을 넘어선 AI 자체의 방향이라는 뜻이다. 차이는 수렴을 더 놀랍게 만든다.</div>
+  <p>직관은 여기까지다. 인상을 판단으로 바꾸려면 두 가지를 데이터로 물어야 한다 — 회사들이 <b>실제로 무엇을 출시했는가</b>(출시된 기능 → 03·06), 사람들이 <b>실제로 겪고 있는 페인포인트인가</b>(실제 페인포인트 → 03). 논문도 로드맵도 아닌, 이 둘이 예측의 유일한 객관적 근거다.</p>
+  <p class="tcap">출처(정체성): OpenAI 공식, CNBC·TIME·Britannica·Wikipedia(2025–26) / Anthropic 공개 보도. "가치가 제품을 규정한다"는 인과는 <span class="pill r">해석</span>이며 06에서 기능 단위로 따로 검증.</p>
+</div>
+</div>
+
+<!-- ═══════ P3 문제 진단 ═══════ -->
+<div class="panel" id="p2">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">02</i></span><span class="rt">딱 두 가지 — 수익 엔진은 반대(시트 vs 토큰), 고객은 79% 겹친다. 이 둘이 04 "기능은 수렴, 표면은 분기" 예측의 재료다.</span></div></div>
+<div class="sec">
+  <h2>비즈니스 모델 캔버스 <span class="chip">Q. 두 회사는 각각 어떤 구조로 돈을 버는가</span></h2>
+  <p class="lead">같은 프런티어 지능을 팔지만, 수익화의 엔진은 정반대다 — OpenAI는 시트(구독), Anthropic은 토큰(API).</p>
+
+  <div class="callout amber"><span class="ct">⚠ 데이터 주의 — run-rate ≠ 실현 매출</span>
+  아래 수치는 대부분 <b>연환산 run-rate</b>(최근 월 매출 × 12)로 실제 회계 인식 매출과 다르다. 두 회사 모두 비상장이라 대부분 추정·유출·언론 보도 기반이며, Anthropic 매출은 2026년 상반기에 월 단위로 크게 변동했다(2월 ~$14B → 5월 ~$47B run-rate, Q1 실현 매출은 ~$4.8B 보도). Anthropic은 클라우드 리셀러 매출을 총액(gross)으로 계상해 top-line이 부풀려지는 점도 감안해야 한다.</div>
+
+  <h3>V5-a · 수익 엔진 — 매출 구성이 좌우로 갈린다</h3>
+  <div class="fig gray">
+    <div class="fg-hd"><h5>수익 구성 대비</h5><span class="dv"></span><span class="sb">막대의 길이 = 매출에서 차지하는 비중. 두 회사의 무게중심이 정반대다</span></div>
+    <div class="bfly">
+      <div class="bfly-hd">
+        <div class="co l"><span>OpenAI</span><span class="sw"></span></div>
+        <div></div>
+        <div class="co r"><span class="sw"></span><span>Anthropic</span></div>
+      </div>
+      <div class="bfly-row win">
+        <div class="bfly-cell l">
+          <div class="bfly-bar" style="width:70%"></div>
+          <div class="lab"><span class="bfly-val">~70%</span><span class="sub">Plus·Pro + Team·Ent 시트<br>기업 시트가 전체의 40%+</span></div>
+        </div>
+        <div class="bfly-cat"><div class="cn">구독 — 시트(Seat)</div><div class="cd">사람 수만큼 판다</div></div>
+        <div class="bfly-cell r">
+          <div class="bfly-bar dim" style="width:16%"></div>
+          <div class="lab"><span class="bfly-val" style="opacity:.55">소수</span><span class="sub">Claude for Work 등<br>(전체 매출에서 부차적)</span></div>
+        </div>
+      </div>
+      <div class="bfly-row win">
+        <div class="bfly-cell l">
+          <div class="bfly-bar dim" style="width:25%"></div>
+          <div class="lab"><span class="bfly-val" style="opacity:.55">~25%</span><span class="sub">API 플랫폼</span></div>
+        </div>
+        <div class="bfly-cat"><div class="cn">API — 토큰(Usage)</div><div class="cd">쓴 만큼 판다</div></div>
+        <div class="bfly-cell r">
+          <div class="bfly-bar" style="width:82%"></div>
+          <div class="lab"><span class="bfly-val">~80–85%</span><span class="sub">직접 API + Bedrock + Vertex<br>Claude Code 계약 run-rate ~$8B 추정</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">OpenAI: 구독 ~70% · API ~25% · 기타 ~5%(광고 파일럿·인챗 커머스) / Anthropic: 기업·API ~80–85%, 소비자는 소수 — 원문 표기 그대로. 진한 막대 = 각 사의 엔진. <b>같은 기술, 반대 엔진</b>이 이 그림의 전부다.</div>
+  </div>
+
+  <h3>V5-b · 엔진의 결과 — 2026년의 반전</h3>
+  <div class="fig gray">
+    <div class="fg-hd"><h5>엔터프라이즈 LLM 지출 점유율 이동</h5><span class="dv"></span><span class="sb">'23 → '25/26 · Menlo Ventures enterprise survey</span></div>
+    <div class="bfly">
+      <div class="bfly-row">
+        <div class="bfly-cell l">
+          <div class="bfly-bar dim" style="width:27%"></div>
+          <div class="lab"><span class="bfly-val">27%</span><span class="sub">'23년 50% → 하락 ↓</span></div>
+        </div>
+        <div class="bfly-cat"><div class="cn">기업 지출 점유율</div><div class="cd">지금 기업의 돈은<br>어디로 가는가</div></div>
+        <div class="bfly-cell r">
+          <div class="bfly-bar" style="width:40%"></div>
+          <div class="lab"><span class="bfly-val">40%</span><span class="sub">'24년 24% → 상승 ↑</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">소비자를 지배한 쪽이 아니라 <b>엔터프라이즈에 집중한 쪽이 매출·밸류에이션·흑자 시점에서 앞섰다</b> — 위 수익 엔진 그림의 결과. 단 "MAU당 매출" 비교는 수익 구조가 달라 무효(자기수정 로그 참조).</div>
+  </div>
+
+  <h3>V5-c · 나머지 7블록 — 키워드 대조 <button class="cmp-toggle" id="cmp-btn" type="button" aria-expanded="false">+ 상세 근거 펼치기</button></h3>
+  <div class="cmp-wrap"><table class="cmp cmp-x" id="cmp">
+    <thead><tr><th></th><th class="oa">OpenAI — 시트(Seat)의 세계</th><th class="an">Anthropic — 토큰의 세계</th></tr></thead>
+    <tbody>
+      <tr><td class="bk">고객</td>
+        <td><span class="kw">개인 소비자 ~9억 WAU</span><span class="kq">유료 5천만+ · F500의 92%</span><span class="dtl">무료 ~9억 WAU / 유료 5천만+. 팀·중소·대기업, 개발자(API)까지 포괄하지만 무게중심은 개인.</span></td>
+        <td><span class="kw">기업·개발자 30만+</span><span class="kq">$100만+ 고객 500+ · Fortune 10 중 8곳</span><span class="dtl">비즈니스 고객이 매출의 ~80–85%. 소비자 앱은 부차적(웹 MAU ~1,900만).</span></td></tr>
+      <tr><td class="bk">가치 제안</td>
+        <td><span class="kw">만능 어시스턴트</span><span class="kq">일상·업무에 직접</span><span class="dtl">소비자엔 만능 어시스턴트, 기업엔 생산성, 개발자엔 임베드 가능한 모델.</span></td>
+        <td><span class="kw">정확·신뢰의 지능</span><span class="kq">규제 산업·프로덕션 코딩 · Claude Code = 카테고리 리더</span><span class="dtl">규제 산업·복잡 문서·프로덕션 코딩처럼 정확도·신뢰가 중요한 환경에 강함.</span></td></tr>
+      <tr><td class="bk">채널</td>
+        <td><span class="kw">자사 앱 + Microsoft</span><span class="kq">ChatGPT 앱·웹·데스크톱 · Azure·Copilot 유통</span><span class="dtl">ChatGPT 앱·웹·데스크톱, API 플랫폼, Microsoft(Azure·Copilot)를 통한 유통.</span></td>
+        <td><span class="kw">API + 3대 클라우드</span><span class="kq">Bedrock·Vertex·Azure · Code·Cowork</span><span class="dtl">API 직접 + AWS Bedrock·Google Vertex·Azure, Claude 앱, Claude Code, Cowork, Partner Network.</span></td></tr>
+      <tr><td class="bk">고객 관계</td>
+        <td><span class="kw">셀프서브 구독</span><span class="kq">+ 엔터프라이즈 영업 · 개발자 커뮤니티</span><span class="dtl">셀프서브 구독을 기본으로 엔터프라이즈 영업과 개발자 커뮤니티를 병행.</span></td>
+        <td class="win"><span class="kw">랜드앤익스팬드 NRR ~500%</span><span class="kq">단일 use case 진입 → 조직 확장 (보도 기준)</span><span class="dtl">한 번 들어온 고객이 조직 전체로 소비를 늘림. 파트너 네트워크·기술 인증, 엔터프라이즈 영업.</span></td></tr>
+      <tr><td class="bk">핵심 자원</td>
+        <td><span class="kw">브랜드 + 피드백 루프</span><span class="kq">가장 유명한 AI 제품 · GPT-5.x · 대규모 컴퓨트</span><span class="dtl">프런티어 모델(GPT-5.x), 세계에서 가장 유명한 AI 제품 브랜드, 대규모 컴퓨트, 사용자 피드백 루프.</span></td>
+        <td><span class="kw">코딩·에이전트 우위</span><span class="kq">Opus/Sonnet · 안전 평판 · 하드웨어 다양화</span><span class="dtl">프런티어 모델, 코딩·에이전트 우위, 안전 평판, AWS Trainium·Google TPU·NVIDIA GPU로 다양화된 하드웨어.</span></td></tr>
+      <tr><td class="bk">핵심 활동<br>· 파트너</td>
+        <td><span class="kw">소비자 제품화 · Microsoft 축</span><span class="kq">Stargate 인프라 · SoftBank·NVIDIA·Amazon</span><span class="dtl">모델 학습·개선, 소비자 제품화, 안전 연구, 인프라 구축(Stargate). 파트너: Microsoft(컴퓨트·유통), SoftBank, NVIDIA, Amazon, Stargate 컨소시엄.</span></td>
+        <td><span class="kw">엔터프라이즈 통합 · Amazon-Google 축</span><span class="kq">에이전트·코딩 제품화 · 컴플라이언스</span><span class="dtl">모델 학습·개선, 에이전트·코딩 제품화, 안전 연구, 엔터프라이즈 통합·컴플라이언스. 파트너: Amazon(투자+Bedrock+Trainium), Google(투자 최대 $40B+Vertex+TPU), Microsoft, NVIDIA.</span></td></tr>
+      <tr><td class="bk">비용 구조</td>
+        <td><span class="kw">무료 서빙 비용 floor ~$7.5B/년</span><span class="kq">추정 · 2026년 ~$14B 적자 전망</span><span class="dtl">추론·학습 컴퓨트가 최대 비용. 무료 사용자 비용 floor(단일 모델링 추정치)가 구조적 짐.</span></td>
+        <td class="win"><span class="kw">floor 없음 → 마진 우위</span><span class="kq">그로스 마진(매출총이익률) ~65% 회복(추정) · 2026–27 흑자 전망</span><span class="dtl">무료 소비자 비용 floor가 없어 마진 우위(SemiAnalysis 추정). 공익기업(PBC) 구조.</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="tcap">수익원 블록은 위 V5-a 차트가 대신한다. 파란 하이라이트 = 해당 블록에서 구조적 이점이 데이터로 확인된 쪽. 출처: OpenAI 공식(CFO Sarah Friar, 2026.1)·Sacra·The Information/Reuters·Value Add VC / Anthropic 공식(Series G·H)·Sacra·Reuters·SemiAnalysis — 모든 수치는 발행 전 1차 출처 재검증 대상.</p>
+
+  <h3>핵심 수치 스냅샷 (2026 상반기)</h3>
+  <div class="stats">
+    <div class="stat"><div class="k">매출 run-rate · OpenAI</div><div class="v num">~$25B</div><div class="d">월 ~$2B, 2월/중순 기준</div></div>
+    <div class="stat"><div class="k">매출 run-rate · Anthropic</div><div class="v num">~$47B</div><div class="d">5월 Series H 기준 · 변동성 큼</div></div>
+    <div class="stat"><div class="k">밸류에이션</div><div class="v num">$852B vs $965B</div><div class="d">OpenAI 2026.3 / Anthropic 2026.5</div></div>
+    <div class="stat"><div class="k">유료 고객 중복</div><div class="v blue num">~79%</div><div class="d">Ramp 결제 데이터 — 둘 다 쓴다</div></div>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>지표</th><th>OpenAI</th><th>Anthropic</th></tr></thead>
+    <tbody>
+      <tr><td>공식 매출 궤적</td><td class="num">$2B('23) → $6B('24) → $20B+('25)</td><td class="num">~$1B('24.12) → ~$9B('25말) → 급증</td></tr>
+      <tr><td>매출 구성</td><td>구독 ~70%(기업이 전체의 40%+) / API ~25% / 기타 ~5%</td><td>기업·API ~80–85% / 소비자 소수</td></tr>
+      <tr><td>사용자</td><td>~10억 MAU · ~9억 WAU · 유료 5천만+ · 업무 시트 700만+</td><td>비즈니스 고객 30만+ · 웹 MAU ~1,900만</td></tr>
+      <tr><td>수익성</td><td>2026 ~$14B 적자 · 흑자 ~2029–30 전망</td><td>2026–27 영업흑자 전망(더 이름)</td></tr>
+      <tr><td>상장</td><td>S-1 비공개 제출 · ~9월 IPO 목표</td><td>S-1 비공개 제출(6/1) · ~10월 IPO 목표</td></tr>
+      <tr><td>엔터프라이즈 LLM 지출 점유율</td><td class="num">~27% ('23년 50%에서 하락)</td><td class="num">~40% ('24년 24%에서 상승)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tcap">점유율: Menlo Ventures 2025 enterprise survey</p>
+
+  <h3>이 단계의 답 — 같은 기술, 반대 사업 모델</h3>
+  <p>OpenAI의 엔진은 <b>소비자 구독(시트)</b> — 9억 사용자를 유료로 전환하고 시트를 팀·엔터프라이즈로 확장한다. Anthropic의 엔진은 <b>엔터프라이즈 API(토큰)</b> — 쓴 만큼 과금하고, 들어온 고객이 조직 전체로 소비를 늘린다. 이 차이는 두 회사가 무엇을 만드는지와 정합적이다: OpenAI는 개인 맥락·협업·소비자 기능(Memory, Projects, 공유, 커머스, 광고)에, Anthropic은 코딩·에이전트·조직 배포(Claude Code, Cowork, Skills)에 힘을 싣는다.</p>
+  <div class="callout"><span class="ct" style="color:var(--blue)">관찰과 해석의 구분</span>
+  <span class="pill b">관찰</span> 사업 모델과 제품 강조점이 서로 맞물린다는 것은 데이터로 보인다. <span class="pill r">해석</span> 그러나 "사업 모델 <b>때문에</b> 그 기능을 만들었다"는 인과까지 증명하지는 않는다 — 개별 기능이 정말 그 동기에서 나왔는지는 06의 기능 단위 역추적으로 따로 검증한다.</div>
+  <p>그리고 2026년의 반전 — <b>소비자를 지배한 쪽(OpenAI)이 아니라 엔터프라이즈에 집중한 쪽(Anthropic)이 매출·밸류에이션·흑자 시점에서 앞섰다.</b> Anthropic의 매출은 소비자가 아니라 기업 워크로드에서 나오기 때문이다. 소비자 규모는 OpenAI에 브랜드와 도달을 주지만, 무료 사용자 비용 부담(~$7.5B/년 추정, 단일 모델링 추정치)이라는 구조적 짐도 함께 준다.</p>
+
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k4">자기수정</span><div><span class="from">"시트 확장이 곧 매출"</span> → 2026년 데이터는 시트(구독)보다 <b>토큰(기업 워크로드)</b>이 더 빠르고 마진 좋은 수익화 경로였음을 보여줬다. 단 현재 run-rate 기준 관찰이며, 장기 우세는 판정 불가.</div></div>
+    <div class="dc-row"><span class="dc-k k4">철회</span><div><span class="from">"MAU당 매출 8배" 비교</span> → Anthropic 매출은 애초에 그 MAU에서 나오지 않아 비교 자체가 오해를 부른다. 정확한 대비는 '사용자당'이 아니라 '수익 구조'. 그래서 뺐다.</div></div>
+    <div class="dc-row"><span class="dc-k k2">덧붙임</span><div>이 둘은 배타적 시장이 아니다 — 유료 고객 <b>~79% 중복</b>(Ramp). 이 사실이 04 "기능은 수렴, 표면은 분기" 예측의 토대가 된다.</div></div>
+  </div>
+  <div class="mb"><span class="m">미디엄 ↔ 상세</span><span>미디엄에선 이 장을 "가치관도 사업 구조도 다른 두 관측점" 한 단락으로 요약 — 여기서는 9블록 캔버스·수치 스냅샷·run-rate 한계 표기까지 전체를 펼쳤다.</span></div>
+</div>
+</div>
+
+<!-- ═══════ P2 정체성·직관 ═══════ -->
+<div class="panel" id="p3">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">03</i></span><span class="rt">릴리스 186건(출시된 기능)과 독립 소스 3종(실제 페인포인트)을 교차하니, '시작 축의 성공 기준 맞추기'만 실제 페인포인트가 가장 강하고, 출시된 기능은 0건이었다.</span></div></div>
+<div class="sec">
+  <h2>문제 진단 <span class="chip">Q. 이 마찰은 내 경험일 뿐인가, 실재하는 수요인가</span></h2>
+  <p class="lead">출시된 기능 186건과 실제 페인포인트 3개 독립 소스를 교차해, '시작' 축의 빈 칸을 특정한다.</p>
+
+  <h3>방법 — 출시된 기능 수집 · 실제 페인포인트 삼각검증</h3>
+  <div class="stats">
+    <div class="stat"><div class="k">데이터셋 v2</div><div class="v num">186행</div><div class="d">Anthropic 전수 · OpenAI 공식 원문</div></div>
+    <div class="stat"><div class="k">tier 1 (원문 확인)</div><div class="v green num">175행</div><div class="d">tier 3(재검증 대상) 8행</div></div>
+    <div class="stat"><div class="k">실제 페인포인트 독립 소스</div><div class="v num">3계열</div><div class="d">근무 서베이 · 앱 리뷰 · 연구 문헌</div></div>
+  </div>
+  <ul class="blist">
+    <li><b>출시된 기능 측(공급)</b>: 공식 릴리스 노트 수집 → 협업 축·개념으로 태깅. <b>데이터를 보기 전에 코드북(판정 규칙·신뢰도 등급)을 고정</b>했고, 모델 폐기·요금·지역 확장·UI 소소 변경·모델 마이너 업데이트은 사전 규칙으로 두 회사에 <b>대칭 제외</b>(하단 병합 로그).</li>
+    <li><b>실제 페인포인트 측(수요)</b>: 이미 나온 기능을 앵커로 그 마찰의 실재성을 <b>역추적</b>하고, 이해관계가 겹치지 않는 3개 소스로 <b>삼각검증</b> — ① Asana·Atlassian 근무 실태 서베이(각 1만~1.3만 명) ② Otter·Fireflies·Fathom·Fellow 등 회의록 AI 앱 리뷰 ③ Standish·IBM·Jama·NASA·CMU 요구사항·재작업 문헌.</li>
+  </ul>
+  <div class="callout"><span class="ct" style="color:var(--blue)">사전 판정 기준 — 데이터를 보기 전에 고정</span>
+  ① 한 마찰이 <b>3개 이상 독립 소스</b>에서 반복 관찰되면 '실재', 1개뿐이면 '약함' 보류 ② 유도형 질문 배제, 자발적 호소만 채택 ③ 사전 등록 질문 — <b>"만약 '성공 기준 불일치·재작업' 신호가 약하게 나오면, 04의 1순위 예측을 데이터대로 교체한다."</b></div>
+
+  <h3>V1 · 매핑 결과 — 채워진 축과 빈 축 <span class="pill b">INTERACTIVE</span></h3>
+  <p>10개 협업 개념에 실제 릴리스를 대보니 채워진 축과 빈 축이 갈렸다. <b>이 매트릭스가 분석 전체의 헤드라인이다</b> — 셀을 누르면 근거 릴리스가 열린다.</p>
+  <div class="mx-legend">
+    <span><i style="background:var(--green)"></i>채워짐</span>
+    <span><i style="background:var(--amber)"></i>부분</span>
+    <span><i style="background:var(--red)"></i>빈 칸 — 이 페이지의 주인공</span>
+  </div>
+  <div class="mx-wrap"><div class="matrix" id="matrix"></div></div>
+  <div id="matrix-detail" aria-live="polite"></div>
+  <p class="tcap" style="margin-top:10px">상태 판정: 03·06 문서의 매핑 결과. 셀 상세의 릴리스는 v2 데이터셋(186행)에서 해당 개념의 근거로 인용된 실제 행. '시작' 축은 두 회사 모두 대응 릴리스가 없어 빈 칸.</p>
+
+  <h3>실제 페인포인트 증거 — 마찰 축별</h3>
+  <div class="tw"><table>
+    <thead><tr><th>협업 축 (개념)</th><th>실제 페인포인트 증거 (독립 소스)</th><th>강도</th><th>공급</th></tr></thead>
+    <tbody>
+      <tr class="hl">
+        <td><b>시작 — 기대·의도 얼라인</b><br><span style="font-size:12px;color:var(--muted)">성공 기준 맞추기 · Intent Inference</span></td>
+        <td>프로젝트 실패의 <b>80%</b>가 요구사항 문제(Standish) · 재작업의 <b>40~85%</b>가 불명확한 요구사항에서(IBM·Jama) · 명확한 목표로 시작하는 프로젝트는 <b>4%</b>뿐 · 재작업의 <b>78%</b>가 '시작 전 공유 이해의 격차'에서 발생 · 서베이: 야근의 주된 이유가 '목표·책임의 불명확'</td>
+        <td><b style="color:var(--red)">★ 강</b></td><td><span class="pill rd">없음</span></td>
+      </tr>
+      <tr><td><b>전달 — 인수인계·정렬</b><br><span style="font-size:12px;color:var(--muted)">Handoff · Alignment</span></td><td>"전사(transcript)는 제품이 아니다 — 결정·맥락을 앞으로 넘기는 게 문제" · 수동 인수인계마다 정보 유실 · "노트가 앱 안에서 무덤이 된다" · "의도가 인수인계를 견딜 만큼 명시적이지 않아 각자 다르게 메운다"</td><td>강</td><td><span class="pill a">부분 (기기·세션만)</span></td></tr>
+      <tr><td><b>진행 — 실행·점검</b><br><span style="font-size:12px;color:var(--muted)">Live Progress · Follow-through</span></td><td>액션 아이템이 앞으로 안 넘어감 · "실제로 이행됐는지 팔로업" 요구 반복 · 승인·업데이트 쫓기가 야근 사유</td><td>중~강</td><td><span class="pill g">채워짐 (양사)</span></td></tr>
+      <tr><td><b>축적 — 조직 지식</b><br><span style="font-size:12px;color:var(--muted)">Project Brain · Org Memory</span></td><td>F500 정보 검색에 연 240억 시간 낭비(Atlassian) · "digital amnesia" · 신입은 기존 직원의 2배를 중복작업에(Asana)</td><td>강</td><td><span class="pill g">채워짐</span></td></tr>
+      <tr><td>반복 설명<br><span style="font-size:12px;color:var(--muted)">Personal Memory · 사람↔AI</span></td><td>이 소스군에선 직접 증거 약함 — 사람↔AI 마찰이라 근무 서베이·회의록 리뷰에 잘 안 잡힘</td><td>약</td><td><span class="pill g">채워짐</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="tcap">배경 규모(Asana Anatomy of Work): 지식노동자는 시간의 약 60%를 '일에 관한 일'에 소모 — 연간 중복작업 ~209시간 · "일 얘기" ~352시간 · 불필요한 회의 ~103시간. 협업 마찰은 측정 가능한 조직 비용이다.</p>
+
+  <h3>V2 · 실제 페인포인트 × 출시된 기능 — 진단의 핵심</h3>
+  <div class="fig gray">
+    <div class="fg-hd"><h5>페인포인트 × 출시된 기능 사분면</h5><span class="dv"></span><span class="sb">'시작' 축 = 페인포인트 최강 · 출시 기능 공백 — 04 예측의 근거</span></div>
+    <div class="quad">
+      <div></div><div class="xl">출시된 기능 있음</div><div class="xl">출시된 기능 없음</div>
+      <div class="yl">페인포인트 강함</div>
+      <div class="qc ok"><span class="h">검증됨</span><b>전달 · 진행 · 축적</b><br>회사들이 실재하는 문제를 옳게 겨냥했다</div>
+      <div class="qc hit"><span class="h">놓친 자리</span><b>시작 — 기대·의도 얼라인</b><br>실패 80% · 재작업 78%로 실제 페인포인트가 가장 강한데, 어느 회사도 제품화하지 않음</div>
+      <div class="yl">페인포인트 약함</div>
+      <div class="qc dim"><span class="h">—</span>(해당 적음)</div>
+      <div class="qc dim"><span class="h">—</span>—</div>
     </div>
   </div>
-</section>
 
-<section class="sec">
-  <h2>모든 분석은 같은 뼈대를 따릅니다</h2>
-
-  <p class="subhead">Process</p>
-  <div class="timeline">
-    <div class="tl-item"><div class="dot">01</div><h4>Overview<span>비즈니스 모델 캔버스</span></h4><p class="q"><b>Q.</b> 이 서비스는 어떤 구조로 돈을 버는가?</p></div>
-    <div class="tl-item"><div class="dot">02</div><h4>개요·정체성<span>시장 포지셔닝</span></h4><p class="q"><b>Q.</b> 이 서비스의 본질은 무엇이고, 시장 어디에 서 있는가?</p></div>
-    <div class="tl-item"><div class="dot">03</div><h4>문제 진단<span>데이터 직접 수집·분석</span></h4><p class="q"><b>Q.</b> 데이터가 말하는 진짜 문제는 무엇인가?</p></div>
-    <div class="tl-item"><div class="dot">04</div><h4>개선안 도출<span>발산 → 수렴 → 우선순위</span></h4><p class="q"><b>Q.</b> 가능한 해법 중 무엇을 가장 먼저 해야 하는가?</p></div>
-    <div class="tl-item"><div class="dot">05</div><h4>심층 설계<span>1순위 개선안 구체화</span></h4><p class="q"><b>Q.</b> 그 해법을 어떻게 설계하고, 성공을 무엇으로 측정하는가?</p></div>
-    <div class="tl-item"><div class="dot">06</div><h4>가설·검증<span>팩트와 가설의 분리</span></h4><p class="q"><b>Q.</b> 내 주장 중 무엇이 팩트고 무엇이 가설인가?</p></div>
-    <div class="tl-item"><div class="dot">07</div><h4>회고<span>배움의 기록</span></h4><p class="q"><b>Q.</b> 이 과정에서 무엇을 배웠는가?</p></div>
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k1">결과</span><div>사전 등록 질문의 답 — '성공 기준 불일치·재작업' 신호는 약하기는커녕 <b>세 소스 중 가장 강하게</b> 나왔다. 04의 1순위 예측(성공 기준 맞추기)을 교체하지 않고 <b>유지</b>.</div></div>
+    <div class="dc-row"><span class="dc-k k5">의미</span><div>이제 그 근거는 '내 경험'이 아니라 <b>독립적으로 정량화된 실제 페인포인트</b>다. 진단이 통찰을 승격시켰다 — 우선순위가 내 머릿속에서 데이터로 옮겨졌다.</div></div>
   </div>
 
-  <p class="subhead">Principles</p>
-  <div class="prins">
-    <div class="prin"><h4>확신보다 가설.</h4><p>검증 안 된 주장은 가설이라고 명시합니다.</p></div>
-    <div class="prin"><h4>프레임은 도구다.</h4><p>프레임에 데이터를 끼워 맞추지 않고, 질문에 맞는 프레임을 고릅니다.</p></div>
-    <div class="prin"><h4>데이터 × 직접 사용.</h4><p>정량 데이터와 실사용 경험을 함께 봐야 문제의 결이 보입니다.</p></div>
-    <div class="prin"><h4>좁게, 깊게.</h4><p>다 하려다 아무것도 안 되는 것보다, 한 번에 하나를 깊이 팝니다.</p></div>
-  </div>
-</section>
+  <div class="callout gray"><span class="ct">한계 (정직하게)</span>
+  1차 설문이 아니라 2차 자료의 삼각검증이다. ① Asana·Atlassian은 협업 도구 벤더 발행 — '마찰이 크다'는 결론에 유리한 편향 가능 ② 앱 리뷰는 이미 문제를 자각한 사용자의 목소리 — 자기선택 편향 ③ 요구사항 문헌은 소프트웨어 중심 — 지식노동 전반 일반화 주의. 커뮤니티(Reddit·Blind·디스콰이엇) 체계 수집은 v2 보강 과제. 따라서 주장은 "1등 문제 증명"이 아니라 <b>"여러 독립 소스에서 반복 관찰되므로 실재하며, '시작' 축은 실제 페인포인트가 강한데 출시된 기능이 비어 있다"</b>까지다.</div>
 
-<section class="sec">
-  <h2>About</h2>
-  <div class="about">
-    <h3>이가원 <span>Monica Gawon Lee</span></h3>
-    <p class="role">프로덕트 매니저가 되기 위해 준비하고 있습니다 <span class="otw">Open to Work</span></p>
-    <p class="bio">콘텐츠·영상 산업에서 5년간 해외 작품의 투자·수입·배급과 글로벌 인더스트리 행사를 운영하다, 스토리텔링과 기술의 교차점에서 일하고 싶어 프로덕트의 세계로 넘어왔습니다. 영상 생성 AI 스타트업에서 크로스 펑셔널 TF를 리드하며 신규 서비스를 기획했습니다. 이 아카이브는 좋은 프로덕트를 직접 뜯어보며 PM의 시야를 벼리는 훈련의 기록입니다.</p>
-    <div class="chips">
-      <span>콘텐츠·영상 산업 5년 → AI PM</span>
-      <span>Junction Asia 2025 Upstage Track 2위</span>
+  <h3>데이터 처리 투명성 — v1→v2 병합 로그 요약</h3>
+  <p style="font-size:13.5px">2026-07-10, help.openai.com 원문(tier 1)으로 기존 OpenAI 행 <b>29건의 tier·날짜 교정</b>(삭제 없음) + 기능 단위 <b>신규 49건 추가</b>, 중복 스킵 0건. 아래 버킷은 '기능 단위'가 아니라 판단해 <b>대칭 제외</b>(Anthropic API 기준과 동일): 모델 폐기(deprecation)·지원 종료 / 요금·플랜·크레딧 / 지역·플랫폼 확장 / UI 소소 변경·버그픽스 / 모델 마이너 업데이트. 규칙 변경 시 스크립트 재실행으로 반영 가능.</p>
+  <div class="mb"><span class="m">미디엄 ↔ 상세</span><span>미디엄에선 "186개 데이터셋 + 삼각검증 + 사전 규칙 고정"으로 요약 — 여기서는 매핑 매트릭스(V1)·사분면(V2)·수요 증거 표·병합 로그·186행 원본 표(DATA 탭)까지 전부 공개한다.</span></div>
+</div>
+</div>
+
+<!-- ═══════ P4 개선안 도출 ═══════ -->
+<div class="panel" id="p4">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">04</i></span><span class="rt">빈 칸이라서가 아니라, 그 칸을 채울 전제(장기 위임·예산·저장소)가 2025~26년에야 갖춰졌기 때문에 — 다음은 성공 기준 맞추기다.</span></div></div>
+<div class="sec">
+  <h2>개선안 도출 과정 <span class="chip">Q. 궤적이 맞다면, 다음에 무엇을 만들 것인가</span></h2>
+  <p class="lead">예측은 감이 아니라 빈 칸에서 나와야 한다 — 실제 페인포인트는 강한데 출시된 기능은 없는 자리. 단, 빈 칸이 곧 예측이 되려면 "왜 비어 있는가"부터 답해야 한다.</p>
+
+  <p>매핑(V1)에서 <b>진행(26건)·전달(12건)·축적(40건)</b> 축은 채워졌고 <b>시작 축의 성공 기준 맞추기는 186행 중 0건</b>이었다. 그리고 이 빈 축은 실제 페인포인트가 가장 강하게 정량화되는 자리다(03). 그런데 빈자리는 하나가 아니었다 — '시작' 단계의 후보가 여럿이었고, 무엇을 먼저 낼지 골라야 했다. 기준은 두 가지: <b>실제 페인포인트가 숫자로 확인되는가, 정말로 비어 있는가.</b></p>
+
+  <h3>후보 → 우선순위 판단</h3>
+  <div class="tw"><table>
+    <thead><tr><th>빈자리 후보</th><th>실제 페인포인트인가</th><th>출시된 기능 (186행 중)</th><th>판단</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>성공 기준 맞추기</b><br><span style="font-size:12px;color:var(--muted)">무엇을 성공이라 부를지 맞추는 일</span></td><td><b>강</b> — 숫자로 확인 (실패 80% · 재작업 78%)</td><td><b>0건</b></td><td><span class="pill r">★ 1순위</span></td></tr>
+      <tr><td>이해 얼라인 확인<br><span style="font-size:12px;color:var(--muted)">Alignment Check</span></td><td>중</td><td><b>0건</b></td><td><span class="pill n">2순위</span></td></tr>
+      <tr><td>의도 추론<br><span style="font-size:12px;color:var(--muted)">Intent Inference</span></td><td>약</td><td><b>0건</b></td><td><span class="pill n">보류</span></td></tr>
+      <tr><td>협업 스타일 학습<br><span style="font-size:12px;color:var(--muted)">Collaboration Profile</span></td><td>약</td><td>2건 (OpenAI만)</td><td><span class="pill n">후순위</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k1">결정</span><div>1순위 = <b>성공 기준 맞추기</b> — 일을 시작하기 전에 "무엇을 만들면 성공인지"를 맞추는 기능. 05에서 직접 설계한다.</div></div>
+    <div class="dc-row"><span class="dc-k k2">근거</span><div>실제 페인포인트는 세 소스에서 가장 뚜렷(실패 80%·재작업 78%), 출시된 기능은 186행 중 0건. 사람은 이미 잘하는 방식(좋은 온보딩·성공 기준 정의·30-60-90 브리핑)이 있는데 AI 제품에는 없다.</div></div>
+    <div class="dc-row"><span class="dc-k k3">보류 이유</span><div>'의도 추론'은 빈자리이지만 일부러 뒤로 뺐다 — AI가 의도를 <b>대신</b> 추론하는 것은 '판단의 근거는 사람 몫'이라는 선(07·착지)을 넘을 위험이 크기 때문.</div></div>
+  </div>
+
+
+  <h3>왜 이 자리는 아직 비어 있는가</h3>
+  <p>"실제 페인포인트가 가장 강한데 출시된 기능이 없다"는 관찰에는 당연한 반문이 따라온다. <b>어렵거나, 이유가 있어서 안 만든 것 아닌가?</b> 이 반문을 피하면 예측은 소거법("남은 칸이 이것뿐이니까")에 머문다. 그래서 빈 이유를 정면으로 분해한다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>어려움의 층</th><th>실제로 어려운가</th><th>판정 근거</th></tr></thead>
+    <tbody>
+      <tr><td><b>모델 능력</b><br><span style="font-size:12px;color:var(--muted)">질문으로 기대를 끌어내기</span></td><td><span class="pill g">낮음</span></td><td>Deep Research는 이미 착수 전에 명확화 질문을 던지고, 에이전트의 계획 승인 플로우도 존재한다. "물어보기"는 기술적으로 이미 된다</td></tr>
+      <tr><td><b>제품 인센티브</b><br><span style="font-size:12px;color:var(--muted)">가치보다 질문이 먼저 오는 UX</span></td><td><span class="pill r">높음</span></td><td>두 회사 모두 "말하면 바로 해준다"는 첫 경험으로 경쟁해 왔다. 온보딩은 첫 가치까지의 시간을 늦춘다 — 만들기 어려운 게 아니라 <b>내놓기 꺼려지는</b> 기능</td></tr>
+      <tr><td><b>워크플로우</b><br><span style="font-size:12px;color:var(--muted)">여러 이해관계자의 기대 수집</span></td><td><span class="pill r">높음</span></td><td>"대표 60점 vs 디자이너 95점"을 모으려면 위임자 아닌 사람들의 입력이 필요하다. 멀티유저 협업 제품의 문제고, 두 회사가 이 기반(공유 프로젝트·워크스페이스)을 갖춘 건 최근이다</td></tr>
+      <tr class="hl"><td><b>저장할 곳</b><br><span style="font-size:12px;color:var(--muted)">맞춘 성공 기준이 살아남을 자리</span></td><td><span class="pill a">높았다가 해소됨</span></td><td>아래 별도 논증 — <b>이 빈 칸의 가장 구조적인 이유</b></td></tr>
+      <tr><td><b>경제성</b><br><span style="font-size:12px;color:var(--muted)">온보딩이 수지 맞는 위임의 등장</span></td><td><span class="pill a">최근에야 성립</span></td><td>재생성이 거의 공짜인 짧은 태스크에서 온보딩은 낭비다(05 반문 ②). 위임이 길고 비싸져야 시작 전 정렬이 남는 장사가 된다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><span class="ct">저장할 곳 — 이 빈 칸의 가장 구조적인 이유</span>
+    회사에서 온보딩이 의미 있는 이유는, 새로 합류한 사람이 그때 들은 내용을 기억하고 다음 일의 기준으로 삼기 때문이다. 처음에는 당연히 리소스가 든다. 무엇을 하면 성공인지, 어디까지 해도 되는지, 누구의 기대를 기준으로 삼아야 하는지 하나씩 맞춰야 한다. 하지만 한 번 성공 기준이 싱크되면 같은 설명을 계속 반복하지 않아도 된다. 그 사람은 그 기준을 목표로 두고 움직이기 시작한다. <b>온보딩은 좋은 시작 의식이 아니라, 반복 설명 비용을 줄이고 성공 기준을 목표로 바꾸는 장치다.</b>
+    <br><br>반면 초기의 AI는 이게 안 됐다. 아무리 공들여 가이드를 줘도 세션이 끝나면 컨텍스트가 사라졌다. 다음 작업을 맡길 때는 다시 설명해야 했다. 그러니 온보딩에 리소스를 써도 그 리소스가 줄어들지 않았다. 매번 다시 들어갔다. 그래서 사람의 성장은 온보딩, 즉 처음 주어지는 가이드에서 시작하지만, AI의 성장은 오히려 온보딩, 즉 가이드를 받을 수 있게 되는 지점에서 끝난다. 사람에게는 첫날 필요한 일이, AI에게는 마지막에야 가능한 기능이 되는 것이다.
+    <br><br>그래서 이 성장 단계는 사람의 온보딩 순서가 아니라 <b>선행 조건 순서</b>로 지어졌다. 그리고 그 선행 조건들 — 장기 위임(Multi-agent sessions), 비용이 걸린 위임(task budgets), 결과 정의(Outcomes), 합의를 담을 저장소(Memory·Projects·Skills) — 이 전부 모인 시점이 <b>2025~26년</b>이라는 것을 데이터셋 자체가 보여준다. <b>STAGE 0은 건너뛴 단계가 아니라, 전제가 이제 막 갖춰진 단계다.</b> 이것이 "빈 칸이니까 다음"(소거법)이 아니라 <b>"채울 수 없던 칸의 전제가 방금 채워졌으니까 다음"(인과)</b>으로 예측을 승격시킨다.
+  </div>
+  <div class="callout amber"><span class="ct">반론 ① — 빈 시장인가, 죽은 시장인가</span>
+    요구사항을 명확히 하는 도구는 수십 년간 존재했다 — PRD 템플릿, 스펙 문서, 요구사항 관리 툴. 그런데도 실패율 80%는 유지됐다. 그렇다면 이 문제는 도구로 풀리지 않는 <b>조직의 문제</b>여서 비어 있는 것 아닌가. 이 반론은 유효하고, 기존 도구가 실패한 이유를 설명한다: 작성 비용이 높고(빈 문서에서 시작), 워크플로우 밖에 있었다(회의 끝나고 따로 써야 하는 문서). 이번이 다른 점은 둘이다 — 입력 비용이 대화 수준으로 떨어졌고, <b>위임이라는 피할 수 없는 순간 안에 내장된다</b>. 다만 사람들이 이 기능을 반기지 않을 가능성 자체가 사라지는 것은 아니다 — 05의 리스크로 넘긴다.
+  </div>
+  <div class="callout amber"><span class="ct">반론 ② — 선발은 이미 자동화되고 있지 않나</span>
+    최근 반례처럼 보이는 출시가 있었다: 에이전트가 태스크에 맞는 스킬·도구를 자동 선택하는 기능(Codex 자동 스킬 선택, 런타임 tool search — 데이터셋 35건). 후보 풀이 있고, 능력 기술이 있고, 선발이 일어난다.
+    <br><br>나눠 보면 시작 전에 맞춰야 하는 것은 두 가지다. 하나는 <b>무엇으로 할지 고르는 일</b>이다. 이 일을 하려면 어떤 도구가 필요한지, 어떤 역량을 붙여야 하는지 정하는 일이다. AI는 이쪽은 이미 배워가고 있다. 스스로 도구를 고르고, 스킬을 붙이고, 실행 환경을 구성한다. 자동 스킬 선택이 채우기 시작한 것은 바로 이 영역이다.
+    <br><br>하지만 다른 하나는 아직 비어 있다. <b>무엇을 성공이라 부를지 맞추는 일.</b> 이 일이 60점짜리 초안이면 되는지, 95점짜리 외부 공유본이어야 하는지, 누구의 기대를 기준으로 삼아야 하는지 먼저 확인하는 단계다. PDF 스킬을 골랐다고 이 불일치가 해소되지는 않는다. 오히려 자동 선발의 <b>입력</b>은 사람이 쓴 태스크 기술이므로, <b>의도가 모호하면 자동으로 구성된 공구함도 엉뚱한 과녁에 최적화된다.</b> 선발이 자동화될수록 그 기준이 되는 성공 기준의 값은 오른다. 이 원고의 예측이 겨냥하는 것은 처음부터 이쪽이며, 그 칸은 여전히 <b>0건</b>이다.
+  </div>
+  <div class="callout amber"><span class="ct">반론 ③ — 에이전트는 이미 목표와 성공지표를 만들지 않나</span>
+    가장 강한 반례는 task decomposition 자체다. 에이전트는 큰 일을 태스크로 쪼개고, 태스크마다 완료 조건을 붙인다 — 자료 조사를 끝냈는가, 코드가 테스트를 통과했는가, 문서가 생성되었는가. 그렇다면 성공 기준 맞추기는 이미 에이전트 안에 있는 기능 아닌가.
+    <br><br>나눠 보면 두 층이 다르다. 하위 태스크의 완료 조건은 대부분 <b>검증 가능(verifiable)</b>하다 — 실행 시점에 기계적으로 판정된다. 반면 상위 성공 기준은 <b>평가적(evaluative)</b>이다. "투자자를 설득했는가"는 결과가 나온 뒤에야, 그것도 사람의 판단으로만 알 수 있다. 에이전트가 점점 잘 만드는 것은 앞쪽이고, 이 원고가 겨냥하는 빈 칸은 뒤쪽이다.
+    <br><br>두 층은 종속 관계다. 같은 "기획서 초안 작성"도 상위 목표가 투자자 설득이면 시장 스토리가, 내부 착수면 범위·리스크·일정이 중요해진다. 상위 기준이 먼저 서야 하위 완료 조건도 제대로 정렬된다. 거꾸로 상위 기준 없이 하위 지표만 있으면, 에이전트는 <b>모든 완료 조건을 만족시키면서도 목적을 빗나간 결과물</b>을 만들 수 있다. 반론 ②와 같은 구조다 — 분해의 입력은 사람이 쓴 태스크 기술이므로, 상위 의도가 모호하면 잘게 쪼개진 태스크들도 엉뚱한 과녁에 정렬된다.
+    <br><br>마지막으로, 이것은 능력이 아니라 <b>권한의 문제</b>다. 에이전트가 상위 기준을 묻거나 후보로 제안할 수는 있다. 하지만 "이번 작업은 투자자 설득을 최우선으로 한다"고 확정하는 것은 예측이 아니라 <b>트레이드오프에 서명하는 행위</b>이고, 결과에 책임지는 사람의 몫이다(형태 조건 1 — 판단 근거의 외부성). 성공 기준 맞추기는 task decomposition 안의 기능이 아니라, decomposition이 제대로 되기 위해 그 <b>앞에</b> 필요한 정렬 단계다.
+  </div>
+  <div class="callout gray"><span class="ct">비유의 한계 — 성장 단계가 깨지는 두 지점</span>
+    <b>첫째</b>, 사람은 한 번 온보딩을 받으면 그 기준을 점점 자기 것으로 만든다. 기준을 몸에 익힐수록 같은 가이드는 줄어든다. AI는 다르다. 판단의 근거를 스스로 소유하지 못하므로(07), 이 기능은 일회성 입사 온보딩이 아니라 <b>무거운 위임마다 반복되는 상시 인터페이스</b>에 가깝다. Memory가 반복 비용을 줄일 수는 있어도 없애지는 못한다 — 없앨 수 있게 되는 순간이 곧 경계선이 이동하는 신호다(착지).
+    <b>둘째</b>, 사람은 역할 적합을 입사 전에 어느 정도 해결하지만, AI는 위임할 때마다 도구·역량과 성공 기준을 다시 맞춘다. 닮았다고 해서 같지는 않다 — 그리고 이 두 균열이 오히려 07의 명제를 뒷받침한다.
+  </div>
+
+  <h3>예측의 두 층 — 무엇이 나오는가, 어떤 모습으로 나오는가</h3>
+  <p>후자가 중요한 이유: 두 회사의 유료 고객은 <b>약 79% 겹친다</b>(Ramp). 고객은 같고, 갈리는 것은 <b>그 고객이 각 도구를 쓰는 용도</b>다. 그래서 같은 기능도 실리는 제품 화면이 다르다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>시작 축 개념</th><th>OpenAI 표면 (협업·조율)</th><th>Anthropic 표면 (역할·스펙)</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>성공 기준 맞추기</b></td><td>팀이 에이전트에 태스크를 넘기기 전, 여러 이해관계자의 성공 기준을 모아 격차를 시각화하고 합의 유도 — ChatGPT Work · 시트 기반</td><td>에이전트 위임 전, 완료 정의(DoD)를 스펙·코드 수준에서 명시하고 승인 범위 설정 — Claude Code · 토큰 기반</td></tr>
+      <tr><td>Alignment Check</td><td>논의 후 참여자들이 같게 이해했는지 확인 (회의록→정렬)</td><td>에이전트가 착수 전 "이해한 요구가 맞나"를 스펙으로 되짚음</td></tr>
+      <tr><td>Intent Inference</td><td colspan="2">— 가장 늦게, 가장 조심스럽게. "의도를 대신 추론"이 아니라 <b>"의도를 명확히 하도록 질문"</b>하는 형태로만 (양사 동일)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tcap">기능은 수렴, 표면은 분기. 회사의 성향이 아니라 현재 각사가 향한 용도의 반영이며, 배타적 구분이 아니라 강조의 차이다.</p>
+
+  <h3>예측을 좁히는 두 조건</h3>
+  <div class="card">
+    <h4 style="margin-top:0">형태 조건 1 — 판단 근거의 외부성</h4>
+    <p style="font-size:13.5px">AI가 기대·의도를 <b>정해주는</b> 형태가 아니라 사람이 <b>세우도록 돕는</b> 형태로만 나올 것이다. AI가 할 수 있는 일은 질문으로 끌어내고, 불일치를 보여주고, 과거 사례를 후보로 제안하는 데까지. 결정은 사람이 한다. <b>이 선을 넘는 기능이 나온다면 그것이 오히려 뉴스다</b> — 경계가 이동하는 신호이므로.</p>
+    <h4>형태 조건 3 — 조건부 발동</h4>
+    <p style="font-size:14px">이 기능은 모든 위임에 붙는 상시 단계가 아니라, <b>재작업 비용이 실제로 비싼 위임</b> — 장기·고예산·다중 이해관계자·되돌리기 어려운 실행 — 에서만 발동하는 형태로 나올 것이다. 짧고 되돌릴 수 있는 태스크의 정답은 온보딩이 아니라 재생성이기 때문이다. <span style="color:var(--muted)">(경제적 근거는 05의 반문 ②.)</span></p>
+    <h4>형태 조건 2 — Pulse 반례</h4>
+    <p style="font-size:13.5px;margin-bottom:0">능동성은 '피드'가 아니라 '위임된 작업'의 형태로 살아남았다 — OpenAI Pulse가 9개월 만에 예약 작업으로 흡수·종료(2026-06-17 릴리스, DATA 탭에서 확인 가능). 그러니 이 온보딩 기능도 "알아서 브리핑을 던지는" 형태가 아니라 <b>위임하는 그 시점에 끼어드는 단계</b>로 나올 것이다.</p>
+  </div>
+
+  <h3>수렴의 층위 — 그리고 이미 나타난 일치 신호</h3>
+  <p>흥미로운 건 이 수렴에도 층이 있다는 점이다. <b>OpenAI가 모델(엔진)을 더 빠르고 강하게 만드는 쪽이라면, Anthropic은 그 위의 인프라를 짠다.</b> 2026년 5월 개발자 행사에서 Anthropic은 일부러 새 모델을 내지 않고, 에이전트를 실제로 굴릴 때 걸리는 문제 — 세션이 바뀌면 기억이 흐려지고, 품질을 사람 검토 없이 보장하기 어렵고, 여러 에이전트를 조율해야 하는 것 — 를 겨냥한 기능들을 냈다.</p>
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k5">일치 신호</span><div>그중 <b>Dreams(Dreaming)</b>는 세션과 세션 사이에 돌면서 지난 작업을 되짚어, 에이전트가 시간이 갈수록 나아지게 한다. 앞에서 "에이전트는 세션이 끝나면 배운 게 이어지지 않는다, 그걸 잇는 것이 다음 자리"라고 봤는데, Dreams가 정확히 그 자리를 겨냥했다. <b>예측이 맞기 시작한 셈이다 — 증명이 아니라, 일치다.</b></div></div>
+    <div class="dc-row"><span class="dc-k k2">근거</span><div>v2 데이터셋: <span class="num">2026-05-06</span> · Multi-agent sessions + Outcomes + <b>Dreams (preview)</b> — 다중 에이전트, 결과 정의, 메모리 재구성 <span class="pill g" style="font-size:10.5px">T1</span> (DATA 탭에서 확인 가능)</div></div>
+    <div class="dc-row"><span class="dc-k k1">여전한 빈자리</span><div>Anthropic 쪽 정리에 따르면, 이 시대에 가장 큰 가치를 얻는 사람은 각 단계를 세세히 지시하는 사람이 아니라 <b>목표와 성공 기준을 명확히 정의할 줄 아는 사람</b>이다 — 이 글의 결론과 같은 말. 다만 이것이 1순위 예측을 뒤집지는 않는다. '목표를 명확히 하라'는 여전히 사람에게 요구될 뿐, 그것을 돕는 기능(일을 시작하기 전에 기대를 맞춰주는 기능)은 아직 나오지 않았다. 오히려 <b>"목표 정의가 중요하다"고 말하면서도 그걸 돕는 제품이 없다는 것이, 그 빈자리가 실재한다는 증거다. 빈자리는 여전히 비어 있다.</b></div></div>
+  </div>
+
+  <div class="quote">두 회사 모두 시작 축을 다음에 채울 것이다 — OpenAI는 이해관계자 간 조율로, Anthropic은 역할·성공 기준의 명시로. 어느 쪽도 판단의 근거를 대신 세우지는 않을 것이다. 그 선을 넘는 순간이 오면, 그것이 AI가 대체 불가 영역으로 진입하는 신호다.<span class="src">이 조건이 예측을 착지 장(격차)과 한 점에서 묶는다.</span></div>
+
+  <div class="callout gray"><span class="ct">한계 — 예측이지 증명이 아니다 <span class="pill v">반증 조건 명시</span></span>
+  릴리스 데이터는 "시작 축이 비어 있고 실제 페인포인트가 강하다"까지 보여주며, "그래서 이것이 다음에 나온다"는 그 관찰 위에 세운 추론이다. 만약 다음 릴리스가 시작 축을 건너뛰고 다른 자리(예: 완전 자율 실행)로 몰리거나, AI가 성공 기준과 의도를 사람에게 묻지 않고 스스로 확정하는 형태로 나온다면 — 이 예측의 근거(판단 근거의 외부성)는 재검토되어야 한다.</div>
+</div>
+</div>
+
+<!-- ═══════ P5 심층 설계 ═══════ -->
+<div class="panel" id="p5">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">05</i></span><span class="rt">AI가 성공 기준을 정해주는 게 아니라 사람에게서 끌어내는 기능 — 단, 재작업이 비싼 위임에서만 발동한다.</span></div></div>
+<div class="sec">
+  <h2>심층 설계 — 성공 기준 맞추기 <span class="chip">Q. 예측한 1순위 기능을, 나라면 어떻게 만들겠는가</span></h2>
+  <p class="lead">예측에서 멈추지 않는다. 단, 뇌피셜 스케치가 아니라 두 개의 앵커 위에서 그린다.</p>
+
+  <div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">앵커 1 · 인간이 이미 잘하는 방식</h4>
+      <p style="font-size:13.5px;margin:0">30-60-90 온보딩의 문서화된 practice. 좋은 매니저는 Day 1에 범위·기대 산출물·이해관계자·완료일을 담은 <b>서면 브리핑</b>을 준다. 이 기능은 그 브리핑을 <b>에이전트 위임 시점</b>으로 옮긴 것이다.</p>
     </div>
-    <p class="ships-title">출시한 프로덕트</p>
-    <div class="ships">
-      <a class="ship" href="https://glayer.framer.website/" target="_blank">
-        <img src="assets/glayer.png" alt="Glayer">
-        <div><span class="plat">Apple Vision Pro</span><b>Glayer ↗</b><span class="d">미술감독을 위한 공간 만들기 앱</span></div>
-      </a>
-      <a class="ship" href="https://apps.apple.com/us/app/escaple-immersive-escaperoom/id6749660261" target="_blank">
-        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/84/59/a3/8459a393-06c4-8f2f-5c5a-97b529f38050/AppIcon.lsr/512x512bb.jpg" alt="Escaple">
-        <div><span class="plat">Apple Vision Pro</span><b>Escaple ↗</b><span class="d">몰입형 방탈출 앱</span></div>
-      </a>
-      <a class="ship" href="https://apps.apple.com/kr/app/slotin-calendar/id6757516972" target="_blank">
-        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/19/48/63/19486305-c982-40c3-4f85-c5cd1bd304fa/AppIcon-0-0-1x_U007ephone-0-1-0-85-220.png/512x512bb.jpg" alt="SlotIn">
-        <div><span class="plat">iPhone</span><b>SlotIn ↗</b><span class="d">빈 시간을 시각화하는 일정 관리 앱</span></div>
-      </a>
-    </div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/gawonmonicalee/" target="_blank">LinkedIn ↗</a>
-      <a href="https://github.com/gaoningmomo" target="_blank">GitHub ↗</a>
-      <a href="https://medium.com/@monicagawonlee" target="_blank">Medium ↗</a>
-      <a href="mailto:monicalee@kakao.com" id="mail-link" onclick="event.preventDefault();navigator.clipboard.writeText('monicalee@kakao.com').then(()=>{const a=document.getElementById('mail-link');a.textContent='복사됨';setTimeout(()=>{a.textContent='Mail ↗'},1500)})">Mail ↗</a>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">앵커 2 · 넘으면 안 되는 선</h4>
+      <p style="font-size:13.5px;margin:0">AI는 판단의 근거를 소유하지 못한다(판단 근거의 외부성). 그러므로 AI가 성공 기준을 <b>정해주는</b> 것이 아니라 사람이 <b>세우도록 돕는</b> 형태여야 한다. 이 제약이 설계 전체를 규율한다.</p>
     </div>
   </div>
-</section>
+
+  <p style="margin-top:16px"><b>핵심 컨셉</b> — 사람이 에이전트에게 멀티스텝 태스크를 위임하기 <b>직전</b>, AI가 성공 기준을 사람에게서 끌어내고, 이해관계자 간 불일치를 드러내 합의를 유도한다. 현재 에이전트는 온보딩 정렬 없이 지시받고 바로 실행한다 — 이 기능은 그 빈자리에 들어간다.</p>
+
+  <h3>V6 · 유저 플로우 (초안)</h3>
+  <div class="callout"><span class="ct" style="color:var(--blue)">설계 원칙</span>
+  <b>이미 정해진 것은 묻지 않는다 — 컨텍스트에서 읽어와 확인만 받는다.</b> 목적·담당 팀·마감일은 대개 프로젝트 세팅 단계에서 이미 정해져 있다(검증용이면 애초에 프로토타입 팀이 붙는다). 이를 다시 묻는 것은 마찰만 늘린다.</div>
+  <div class="fig gray">
+    <div class="fg-hd"><h5>성공 기준 맞추기 플로우</h5><span class="dv"></span><span class="sb">MVP = ①~④ · ⑤는 Phase 2</span></div>
+    <div class="flowv">
+      <div class="fbox"><span class="fn">1</span><div class="ft">컨텍스트 자동 채우기 + 확인 <span class="pill k" style="font-size:10px">핵심</span></div><div class="fd">정해진 것(목적·팀·마감·과거 유사 태스크의 완료 기준)을 자동으로 채워 보여주고 확인받는다. "검증용 프로토타입, 프로토팀 건으로 이해했습니다. 맞나요?" — 묻는 게 아니라 보여주고 확인. 틀렸으면 사람이 고친다.</div></div>
+      <div class="ar">→</div>
+      <div class="fbox"><span class="fn">2</span><div class="ft">안 정해진 것만 질문</div><div class="fd">이번 건의 완료 눈높이 · 반드시 지킬 품질 기준(퀄리티 바) · 암묵적으로 어긋난 기대 — 세팅에 없고, 사람마다 다르고, 안 맞춰두면 터지는 것들.</div></div>
+      <div class="ar">→</div>
+      <div class="fbox"><span class="fn">3</span><div class="ft">성공 기준 갭 맵</div><div class="fd">이해관계자별 답 수집 → 대표 60점 검증 · PM 80점 · 디자이너 95점 완성 — 간극을 한눈에.</div></div>
+      <div class="ar">→</div>
+      <div class="fbox"><span class="fn">4</span><div class="ft">합의 유도 → DoD 고정</div><div class="fd">격차가 크면 합의를 유도하고, 합의된 완료 정의(DoD)를 문서로 고정.</div></div>
+      <div class="ar">→</div>
+      <div class="fbox p2"><span class="fn">5</span><div class="ft">산출물 ↔ DoD 대조 <span class="pill n" style="font-size:10px">PHASE 2</span></div><div class="fd">에이전트 완료 시 산출물이 DoD를 충족하는지 대조 (Quality Calibration 연결). 자동 평가는 Phase 2.</div></div>
+    </div>
+    <div class="cap">①(컨텍스트 자동 채우기)이 핵심 — "판단의 앞부분(재료 준비)"을 AI가 대신하고, 사람은 진짜 판단에만 힘을 쓴다</div>
+  </div>
+
+  <div class="callout red"><span class="ct" style="color:var(--red)">판단 근거 경계를 지키는 장치 — AI가 하지 않는 것</span>
+  "이것이 성공 기준이다"라고 <b>선언하지 않는다.</b> 대신 과거 유사 태스크의 DoD를 <b>후보로 제안</b>하고, 질문으로 사람의 답을 <b>끌어내고</b>, 불일치를 <b>보여주기만</b> 한다. 결정은 사람이 한다. 이 선을 지키는 것이 설계의 핵심 제약이다.</div>
+
+  <h3>같은 기능, 다른 표면</h3>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>협업 조율 표면 (예: ChatGPT Work)</th><th>역할·스펙 표면 (예: Claude Code)</th></tr></thead>
+    <tbody>
+      <tr><td><b>무게중심</b></td><td>팀이 에이전트에 태스크를 넘길 때, 여러 이해관계자의 기대를 모아 맞추기 — '커뮤니케이션'</td><td>개발자가 위임할 때, DoD를 스펙·코드 수준에서 명시하고 승인 범위 정의 — '명세'</td></tr>
+      <tr><td><b>과금</b></td><td>시트 기반</td><td>토큰 기반</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tcap">고객 자체는 ~79% 겹친다 — 회사의 성향이 아니라 용도의 반영.</p>
+
+  <h3>정면으로 받는 반문 — "AI 프로토타이핑이 이미 풀고 있지 않나?"</h3>
+  <p>요즘 PM들은 이미 AI로 프로토타입을 빠르게 만들어 "제가 이해한 게 이건데 맞나요?"를 눈으로 보여주며 싱크를 맞춘다. 그렇다면 이 기능은 중복 아닌가? — <b>절반은 그렇고, 절반은 아니다.</b></p>
+  <div class="tw"><table>
+    <thead><tr><th>기대의 층</th><th>프로토타입</th><th>이 기능</th></tr></thead>
+    <tbody>
+      <tr><td><b>형태</b> — 결과물이 어떻게 생겼는지 (화면·흐름·톤)</td><td><span class="pill g">이미 잘 푼다</span> 즉시 시각화</td><td>프로토타입을 재료로 활용</td></tr>
+      <tr><td><b>완성도·범위</b> — 어디까지 하면 끝인지 · 왜 하는지 · 무엇을 포기할지</td><td><span class="pill r">오히려 숨긴다</span> 같은 프로토타입을 보고 대표는 "검증되겠네", 디자이너는 "이건 초안" — 봤으니 합의됐다고 착각</td><td><span class="pill b">겨냥하는 층</span> "이 프로토타입을 대표는 출시 가능, 디자이너는 60% 완성으로 본다"를 드러냄</td></tr>
+    </tbody>
+  </table></div>
+  <p>재작업이 터지는 곳은 대개 형태가 아니라 <b>완성도·범위의 불일치</b>다. 그래서 이 기능은 프로토타입을 <b>대체하지 않고 그 위에 얹힌다.</b></p>
+  <p class="tcap">(정직하게: 프로토타입 세션에서 완료 기준까지 논의하는 경우도 있다. "프로토타입이 이걸 못 한다"가 아니라 "프로토타입은 형태 싱크에 강하고, 완료 기준 싱크는 구조적으로 놓치기 쉽다"가 정확하다.)</p>
+
+    <h3>정면으로 받는 반문 ② — "재생성이 거의 공짜인데, 왜 시작 전에 맞추나?"</h3>
+  <p>이 설계의 경제적 전제를 겨누는 더 아픈 반문이 있다. 03의 수치(재작업의 78%가 시작 전 이해 격차에서)는 <b>사람 팀의 재작업이 비쌌던 시대의 데이터</b>다. AI 산출물은 다시 시키는 비용이 몇 분·몇 센트로 떨어졌다. "틀리면 다시 돌리면 된다"가 성립한다면, 시작 전에 기대를 맞추는 비용이 오히려 낭비 아닌가.</p>
+  <p>짧고 되돌릴 수 있는 태스크에서는 — <b>맞다.</b> 초안의 톤이 마음에 안 들면 답은 온보딩이 아니라 재생성 버튼이다. 그러나 재작업 비용이 다시 비싸지는 조건이 세 가지 있다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>조건</th><th>왜 "다시 돌리면 된다"가 깨지는가</th></tr></thead>
+    <tbody>
+      <tr><td><b>만드는 건 싸졌지만<br>확인하는 건 안 싸졌다</b></td><td>반려 루프의 병목은 AI의 재생성 시간이 아니라 <b>사람의 검토 시간</b>이다. 기대가 안 맞으면 "돌리고–보고–반려"를 반복하는 것은 사람이고, 루프마다 이해관계자들의 시간이 든다.</td></tr>
+      <tr><td><b>눈높이 차이는<br>재생성으로 안 좁혀진다</b></td><td>대표가 60점 검증용을, 디자이너가 95점 완성본을 원한다면 100번 재생성해도 둘을 동시에 만족시킬 수 없다. 이것은 재작업이 아니라 <b>표류</b>이고, 푸는 방법은 생성이 아니라 합의뿐이다.</td></tr>
+      <tr><td><b>위임 단위가 다시<br>길고 비싸지고 있다</b></td><td>릴리스 데이터 자체가 방향을 보여준다 — task budgets(2026-04), Outcomes(2026-05), 수 시간짜리 멀티에이전트 세션. 위임이 커질수록, 실행이 실제 흔적(머지·발송·구매)을 남길수록 "틀리면 다시"의 비용은 사람 팀 시대로 회귀한다.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout green"><span class="ct">그래서 예측은 후퇴하는 게 아니라 정교해진다</span>
+    <b>성공 기준 맞추기는 모든 위임이 아니라 장기·고비용·다중 이해관계자·되돌리기 어려운 위임에서 나온다.</b> 이는 04의 표면 예측과도 정합적이다 — ChatGPT Work(이해관계자 조율이 필요한 팀 태스크)와 Claude Code(예산이 걸린 장기 에이전트 태스크)가 그 조건이 성립하는 표면이다. 그리고 이 발동 조건이 그대로 설계로 들어간다.
+  </div>
+
+  <h3>성공 지표</h3>
+  <div class="tw"><table>
+    <thead><tr><th>지표</th><th>정의</th><th>근거</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>재작업률</b> <span class="pill r">North Star</span></td><td>"다시 해오라"로 이어진 산출물 비율</td><td>03: 재작업의 78%가 시작 전 이해 격차에서 발생 — 이 기능이 겨냥하는 정확한 수치</td></tr>
+      <tr><td>성공 기준 갭 사전 발견율</td><td>산출물 제출 전 발견된 성공 기준 불일치 / 전체 불일치</td><td>문제를 시작 전에 잡는 것이 핵심</td></tr>
+      <tr><td>온보딩 완료율</td><td>태스크 생성 대비 캘리브레이션 완료 비율</td><td>마찰로 건너뛰어지지 않는지</td></tr>
+      <tr><td>완료 후 만족도(CSAT)</td><td>이해관계자 5점 척도 설문</td><td>정성 보완</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>주요 리스크</h3>
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k4">리스크</span><div>시작 전 질문 단계가 <b>마찰로 느껴져 건너뛰어질</b> 수 있다.</div></div>
+    <div class="dc-row"><span class="dc-k k5">완화</span><div>질문 3개 이내로 압축 · 과거 유사 태스크의 DoD를 디폴트로 깔아 입력 비용 최소화 · 위임하는 자연스러운 흐름 안에 끼워 넣기(별도 단계가 아니라).</div></div>
+  </div>
+
+  <div class="quote">이 기능을 어느 쪽으로 설계하느냐가 곧 경계선의 시험대다. AI가 성공 기준을 끌어내고 보여주는 선에 머물면 판단의 근거는 사람에게 남는다. 스스로 확정하는 쪽으로 설계되면, 그것은 AI가 대체 불가 영역으로 넘어가는 첫 신호다.<span class="src">이 하나의 설계 결정이 착지 장(격차)의 실물 사례가 된다.</span></div>
+</div>
+</div>
+
+<!-- ═══════ P6 가설·검증 ═══════ -->
+<div class="panel" id="p6">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">06</i></span><span class="rt">팩트(0건·수렴)와 가설(인간 모방·다음 예측)을 끝까지 분리했고, 틀려서 고친 흔적을 지우지 않았다.</span></div></div>
+<div class="sec">
+  <h2>가설 · 검증 <span class="chip">Q. 무엇이 데이터로 확인된 것이고, 무엇이 그 위에 세운 해석인가</span></h2>
+  <p class="lead">이 장은 방법론적 심장이다 — 결론이 아니라 검증 과정 자체를 보여준다.</p>
+
+  <h3>팩트와 가설의 분리</h3>
+  <div class="tw"><table>
+    <thead><tr><th>구분</th><th>내용</th><th>근거</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill g">✅ 팩트</span></td><td>Memory·Projects·에이전트 등 협업 마찰을 줄이는 기능이 실제 출시돼 왔다</td><td>공개 릴리스 — v2 데이터셋 186행</td></tr>
+      <tr><td><span class="pill g">✅ 팩트</span></td><td>두 회사가 같은 마찰을 시차를 두고 겨냥했다</td><td>릴리스 시점 대조 (V4)</td></tr>
+      <tr><td><span class="pill g">✅ 팩트</span></td><td>'시작 축'은 실제 페인포인트가 강한데 출시된 기능이 비어 있다</td><td>매핑표(V1) + 03 실제 페인포인트 삼각검증</td></tr>
+      <tr><td><span class="pill v">🔍 가설</span></td><td>AI 기능의 진화는 인간의 성장·협업 방식을 본떠 왔다</td><td>강한 정합이나 인과는 미증명</td></tr>
+      <tr><td><span class="pill v">🔍 가설</span></td><td>다음은 시작 축(성공 기준 맞추기)이 나온다</td><td>빈 칸 + 수요에서 도출한 예측</td></tr>
+      <tr><td><span class="pill r">🔍 해석</span></td><td>관리 장치가 자율보다 먼저 온 원인은 판단 근거의 외부성</td><td>관찰된 패턴에 대한 해석</td></tr>
+    </tbody>
+  </table></div>
+  <p class="tcap">원칙: <b>관찰과 해석을 끝까지 분리한다.</b> 데이터는 패턴을 보여줄 뿐, 그 패턴에 이름을 붙이는 것은 분석자다.</p>
+
+  <h3>검증 설계 — 출시된 기능과 실제 페인포인트, 양쪽에서</h3>
+  <ul class="blist">
+    <li><b>출시된 기능 측(공급)</b>: 공식 릴리스 노트로 v2 데이터셋(186행) 구축 — Anthropic 전수, OpenAI 공식 헬프센터 원문. <b>데이터를 보기 전에 코드북 고정</b>, 비-기능 항목 대칭 제외.</li>
+    <li><b>실제 페인포인트 측(수요)</b>: 이해관계가 겹치지 않는 3개 독립 소스로 삼각검증(03). 사전 판정 기준(3개 이상 독립 소스면 실재 인정)을 먼저 박았다.</li>
+  </ul>
+
+  <h3>검증 결과 ① — V4 · 수렴의 증거</h3>
+  <div class="fig">
+    <div class="fg-hd"><h5>수렴 타임라인</h5><span class="dv"></span><span class="sb">독립된 두 회사가 같은 마찰을 시차를 두고 겨냥했다</span></div>
+    <div class="tlw"><div class="tl">
+      <div class="tl-head"><div class="a">OpenAI</div><div></div><div class="b">Anthropic</div></div>
+      <div class="tl-row"><div class="tl-ev l"><span class="f">Memory 발표 (saved memories)</span><span class="d">2024-02-13</span></div><div class="tl-mid"><span class="gap">+19개월 →</span></div><div class="tl-ev r"><span class="f">Memory on Team plans</span><span class="d">2025-09-11</span></div></div>
+      <div class="tl-row"><div class="tl-ev l"><span class="f">Projects</span><span class="d">2024-12-13</span></div><div class="tl-mid"><span class="gap">+8개월 →</span></div><div class="tl-ev r"><span class="f">Project sharing (Team/Ent)</span><span class="d">2025-08-01</span></div></div>
+      <div class="tl-row"><div class="tl-ev l"><span class="f">Operator — 첫 범용 에이전트</span><span class="d">2025-01-23 (research preview)</span></div><div class="tl-mid"><span class="gap">+12개월 →</span></div><div class="tl-ev r"><span class="f">Cowork research preview</span><span class="d">2026-01-12</span></div></div>
+      <div class="tl-row"><div class="tl-ev l"><span class="f">Operator (자체 브라우저 조작)</span><span class="d">2025-01-23</span></div><div class="tl-mid"><span class="gap rev">← 3개월 먼저</span></div><div class="tl-ev r"><span class="f">Computer use tools</span><span class="d">2024-10-22</span></div></div>
+      <div class="tl-row"><div class="tl-ev l"><span class="f">GPT-5.6 (Sol) — 코딩·에이전트 진입 <span class="pill a">tier 3</span></span><span class="d">2026-06-27 (limited preview)</span></div><div class="tl-mid"><span class="gap">수렴 진행 중</span></div><div class="tl-ev r"><span class="f">(Anthropic의 앞마당 — Claude Code·Cowork)</span><span class="d">2026-07 시점</span></div></div>
+    </div></div>
+    <div class="cap">날짜: v2 데이터셋 기준. 컴퓨터 사용은 반대로 Anthropic이 먼저 — 수렴은 한 방향 모방이 아니라 양방향. 가치관·사업모델이 다른 두 관측점이 같은 방향을 가리켰다.</div>
+  </div>
+
+  <h3>검증 결과 ② — V3 · Agent 역추적: "이상한 온보딩"</h3>
+  <p>어떤 회사가 신입을 뽑았다고 하자. 첫날 노트북과 계정을 주고, 곧 프로젝트를 통째로 맡기고, 몇 달 뒤에야 중간보고를 시키고, 결국 후배와 예산까지 붙여줬다. 그런데 이 회사는 그 신입에게 <b>한 번도 "무엇을 하면 성공인지" 말해준 적이 없다.</b></p>
+  <p>이것이 지난 2년간 업계가 에이전트에게 한 일이다. 릴리스를 신입사원의 성장 단계에 대보면 순서가 거의 그대로 겹치는데, <b>모든 회사가 첫날 하는 단 하나 — 온보딩 — 만 빠져 있다.</b></p>
+  <div class="fig gray">
+    <div class="fg-hd"><h5>Agent 온보딩 성장 단계</h5><span class="dv"></span><span class="sb">신입사원의 성장 ↔ 실제 릴리스 (186행 태깅 건수)</span></div>
+    <div class="ladder">
+      <div class="lh">신입사원의 성장</div><div class="lh">AI의 릴리스 (실제 날짜)</div><div class="lh c">건수</div>
+      <div class="hum s0"><b>STAGE 0 · 첫날 온보딩</b>기대와 성공 기준을 맞춘다 (30-60-90 브리핑)</div>
+      <div class="s0"><b style="color:var(--red)">대응 릴리스 없음</b><br><span class="rel">04·05의 예측과 설계가 겨냥하는 자리</span></div>
+      <div class="cnt s0">0</div>
+      <div class="hum"><b>STAGE 1 · 장비 지급</b>노트북·계정·접근 권한</div>
+      <div class="rel">Tool use GA <span class="d">2024-05</span> · Computer use <span class="d">2024-10</span> · Connectors·MCP · 파일 생성 · Excel/PPT 애드인</div>
+      <div class="cnt">35</div>
+      <div class="hum"><b>STAGE 2 · 첫 업무 위임</b>작은 일을 통째로 맡긴다</div>
+      <div class="rel">Operator <span class="d">2025-01</span> · Codex cloud agent <span class="d">2025-05</span> <span class="pill a">T3</span> · ChatGPT agent <span class="d">2025-07</span> · Cowork <span class="d">2026-01</span></div>
+      <div class="cnt">12</div>
+      <div class="hum"><b>STAGE 3 · 중간보고와 결재</b>진행을 보고, 중요한 건 승인받게 한다</div>
+      <div class="rel">Interrupt queries <span class="d">2025-11</span> · Chrome 승인된 계획 내 실행 <span class="d">2025-11</span> · ChatGPT Work 진행 확인·승인 <span class="d">2026-07</span></div>
+      <div class="cnt">10</div>
+      <div class="hum"><b>STAGE 4 · 팀과 예산</b>후배를 붙이고 예산 권한을 준다</div>
+      <div class="rel">Managed Agents + ant CLI <span class="d">2026-04</span> · task budgets <span class="d">2026-04</span> · Multi-agent + Outcomes <span class="d">2026-05</span></div>
+      <div class="cnt">4</div>
+    </div>
+    <div class="cap"><span class="pill b">관찰</span> 관리 장치(진행 확인·개입·승인)가 자율 기능보다 <b>나중에</b> 왔고, 성장 단계에서 첫 단계 하나만 비어 있다 · <span class="pill r">해석</span> 그 바탕이 '판단 근거의 외부성'이라는 것은 이 패턴에 대한 나의 해석이다</div>
+  </div>
+  <div class="callout amber"><span class="ct">그런데 이 비유는 한 지점에서 반드시 깨진다 — 그리고 그 균열이 더 중요하다</span>
+    사람에게 온보딩이 <b>첫날</b>인 이유는 신입이 이미 유능하기 때문이다. 능력은 있고 방향만 없으니, 방향부터 맞춘다. AI는 반대였다 — 능력 자체가 없었으니, 회사들은 온보딩 순서가 아니라 <b>선행 조건 순서</b>로 성장 단계를 지었다. 도구 없이는 위임이 무의미하고, 위임 없이는 감독이 무의미하고, 길고 비싼 위임 없이는 온보딩이 무의미하다. <b>사람의 성장 단계는 온보딩, 즉 가이드에서 시작하지만, AI의 성장은 온보딩, 즉 가이드를 받을 수 있게 되는 지점에서 끝난다.</b> 왜 그런지는 04에서 따로 논증한다.
+  </div>
+
+  <h3>검증 결과 ③·④</h3>
+  <ul class="blist">
+    <li><b>채워진 축과 빈 축</b> — 10개 개념에 186행을 태깅하니 진행(26)·전달(12)·축적(40)은 채워졌고 <b>시작 축의 성공 기준 맞추기는 0건이다.</b> 성공 기준 맞추기·Alignment Check·Intent Inference 세 개념 모두 대응 릴리스 없음 (V1 · 03 탭).</li>
+    <li><b>페인포인트×출시 기능 교차</b> — 시작 축은 실제 페인포인트가 가장 강하게 정량화되는데(실패 80%) 출시된 기능이 없다. 이 칸이 예측의 근거 (V2 · 03 탭).</li>
+  </ul>
+
+  <h3>이 검증이 지킨 신뢰도 장치</h3>
+  <ul class="blist">
+    <li><b>사전 판정 기준</b> — 데이터 보기 전에 태깅 규칙과 수요 실재 기준을 고정</li>
+    <li><b>관찰/해석 분리</b> — "관리 장치가 먼저 왔다"(관찰)와 "판단 근거 외부성 때문"(해석)을 섞지 않음</li>
+    <li><b>대칭성 점검</b> — Anthropic 전수 vs OpenAI 선별의 비대칭을 스스로 짚고, 건수 비교 제한</li>
+    <li><b>run-rate 한계</b> — 연환산 추정치와 실현 매출 구분 (02)</li>
+    <li><b>코드북 공개</b> — 태깅 규칙과 단일 배정 순서를 문서로 공개해, 제3자가 186행을 재태깅해 검증할 수 있게 함</li>
+    <li><b>가장 가까운 이웃 확인</b> — "0건"을 주장하기 전에 시작 축에 근접한 기능(Codex goals)까지 찾아 대조</li>
+    <li><b>자기수정 보존</b> — 직관을 고친 흔적을 지우지 않음 (아래)</li>
+  </ul>
+
+  <h3>자기수정 로그 — 틀려서 고친 흔적</h3>
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k4">시트→토큰</span><div><span class="from">"시트 확장=매출"</span>이라던 초기 가정을, 2026년 데이터(토큰·엔터프라이즈가 더 빠른 수익화)로 수정</div></div>
+    <div class="dc-row"><span class="dc-k k4">분류 구멍</span><div>개인 메모리가 10개 개념 어디에도 안 맞음을 태깅 중 발견 → 분류 체계를 확장</div></div>
+    <div class="dc-row"><span class="dc-k k4">대칭성</span><div>Anthropic apps는 전수, OpenAI는 필터링이라 건수 비교가 불공정함을 스스로 짚고 제한</div></div>
+    <div class="dc-row"><span class="dc-k k4">과대해석</span><div><span class="from">per-MAU 통계</span>를 오해 소지로 걷어내고, <span class="from">"사업모델→로드맵" 인과</span>를 상관으로 낮춤</div></div>
+    <div class="dc-row"><span class="dc-k k4">프레임</span><div>7단계 틀에 발견을 끼워 맞추다 어색해짐을 자각 → 미디엄 판본은 사고 순서(4막: 직관→검증→발견→예측)로 재배열</div></div>
+    <div class="dc-row"><span class="dc-k k4">논거 교체</span><div><span class="from">"에이전트는 상위 기준을 스스로 발견할 수 없다"</span>(능력 근거 — 모델이 좋아지면 낡는다) → <b>"확정하고 책임지는 것은 사람의 몫"</b>(권한 근거)으로 교체. 하위/상위 경계에도 검증 가능/평가적이라는 기계적 기준 부여 (04 반론 ③)</div></div>
+  </div>
+
+  <h3 style="margin-top:34px">이 분석의 한계 — 한 곳에 모아서</h3>
+  <p>정직한 분석은 스스로의 약점을 안다. 각 장에 흩어 두는 대신 여기 한 곳에 모은다 — 이 글의 주장이 어디까지 갈 수 있고 어디서 멈추는지를 한눈에 보기 위해서다.</p>
+
+  <h4>데이터가 가진 한계</h4>
+  <ul class="blist">
+    <li>매출 수치는 대부분 연환산 추정치(run-rate)로, 실제 회계상 매출과 다르다. 두 회사 모두 비상장이라 유출·보도 기반이며, 발행 전 1차 출처로 재검증한다.</li>
+    <li>Anthropic 릴리스는 전수, OpenAI는 공식 원문 기반이되 <b>10행</b>은 재검증 대상(<span class="pill a">tier 3</span>)으로 남았다. 그래서 두 회사의 릴리스 '건수'를 직접 비교하지 않는다.</li>
+    <li>릴리스 노트는 회사가 공개하기로 선택한 것만 담는다. 개발 우선순위의 완전한 거울은 아니다.</li>
+    <li>태깅은 <b>단일 배정(single-label)</b>이다. 한 릴리스가 여러 축에 걸칠 때 코드북 순서대로 하나만 배정하므로, 규칙을 바꾸면 축별 건수도 바뀐다. 다만 <b>시작 축 0건은 어떤 순서를 써도 변하지 않는다</b> — 애초에 후보 릴리스가 없기 때문이다.</li>
+  </ul>
+
+  <h4>수요 검증의 한계</h4>
+  <ul class="blist">
+    <li>직접 설문이 아니라 이미 발표된 자료 3종을 교차한 것이다. Asana·Atlassian은 협업 도구를 파는 회사의 조사라 결론에 유리할 수 있고, 앱 리뷰는 이미 불편을 느낀 사람들의 목소리만 모은 것이며, 요구사항 문헌은 소프트웨어 중심이라 일반화에 주의가 필요하다.</li>
+    <li>실패율 80%·재작업 78% 같은 수치는 <b>사람끼리 일하던 시대의 데이터</b>다. AI가 결과물을 다시 만드는 비용은 크게 떨어졌으므로 그대로 가져올 수 없다 — 언제 그 손해가 여전히 큰지는 05 반문 ②에서 따로 따진다.</li>
+  </ul>
+
+  <h4>예측이 틀릴 수 있는 경우 — 미리 적어두는 반증 조건</h4>
+  <ul class="blist">
+    <li>다음 릴리스들이 '시작' 축을 건너뛰고 다른 자리(예: 완전 자율 실행)로 몰리면, 이 예측은 <b>틀린 것</b>이다.</li>
+    <li>AI가 성공 기준을 사람에게 묻지 않고 <b>스스로 정하는</b> 형태로 나오면, 이 글의 전제(판단의 근거는 사람에게서 온다)부터 재검토해야 한다.</li>
+    <li>예측한 기능은 별도 발표 없이 <b>"AI가 착수 전에 알아서 되묻는 행동"</b>으로 조용히 나올 수도 있다 — 릴리스 노트 추적이라는 이 글의 방법으로는 그 도착을 잡아내지 못한다.</li>
+  </ul>
+  <div class="callout amber"><span class="ct">★ 이 경우는 이미 부분적으로 일어났다 — 그리고 그것이 주장을 확증했다</span>
+    <b>의도 추론(Intent Inference)은 기능이 아니라 모델 행동으로 도착하는 중이다.</b> GPT-5.5 Instant 업데이트(2026-06-24)는 "질문 이면의 목표 파악"을 명시하고, GPT-5.6 가이드는 모델이 맥락에서 저변 목표를 추론한다고 말한다.
+    <br><br>그런데 <b>바로 그 문장이 이 글의 핵심 주장을 확증한다.</b> 같은 가이드가 이어서 요구하기 때문이다 — 의도 추론이 좋아져도 도메인 맥락·하드 제약·승인 경계, 그리고 <b>성공 기준(success criteria)은 계속 제공하라</b>고. 모델을 만든 회사가 직접 <b>"의도는 우리가 추론하겠지만, 무엇이 성공인지는 여전히 당신이 대라"</b>고 쓰고 있는 셈이다. 방법론의 한계가 드러난 자리에서 핵심 주장은 오히려 벤더 문서라는 외부 근거를 얻었다. <b>성공 기준 맞추기의 빈 칸은 행동으로도 메워지지 않았다.</b>
+  </div>
+
+  <h4>설계가 부딪힐 수 있는 벽</h4>
+  <ul class="blist">
+    <li>시작 전에 질문을 받는 것 자체가 귀찮아서 <b>건너뛰어질</b> 수 있다(완화책은 05).</li>
+    <li>사람들이 이 기능을 <b>반기지 않을</b> 수 있다. 성공 기준을 미리 못 박으면 나중에 말을 바꾸기 어려워지므로, 성공 기준을 흐리게 두고 싶은 이해관계자에게는 부담이다. 기술이 아니라 사람의 문제라 기능 설계만으로 다 풀리지 않는다.</li>
+  </ul>
+
+  <h4>해석의 한계</h4>
+  <ul class="blist">
+    <li>"관리 기능이 자율 기능보다 먼저 왔다"는 <b>관찰</b>이고, "그 이유가 판단 근거의 외부성"이라는 건 <b>해석</b>이다.</li>
+    <li>도구를 주고 → 일을 맡기고 → 감독하는 순서는 AI만의 것이 아니라, <b>조직이 새 기술을 받아들일 때 늘 밟는 순서</b>일 수도 있다. "인간의 성장을 본떴다"는 출발 직관은 매력적인 만큼 넓어서, 끝까지 가설로 남는다.</li>
+    <li>두 회사는 인력이 오가고 서로의 출시를 실시간으로 보는 <b>같은 시장의 경쟁자</b>다. 수렴이 '독립적 발견'인지 '경쟁적 모방'인지는 이 데이터만으로 가릴 수 없다.</li>
+    <li>"AI가 격차를 벌린다"(착지)는 이 글에서 <b>가장 검증이 얇은 주장</b>이다. 초기 연구들은 오히려 AI가 하위 수행자를 가장 많이 끌어올린다는 결과도 보고했다.</li>
+  </ul>
+  <div class="callout gray">따라서 이 글 전체의 주장은 "증명했다"가 아니라 <b>"여러 독립 근거가 같은 방향을 가리킨다"</b>까지다.</div>
+</div>
+</div>
+
+<!-- ═══════ P7 회고 ═══════ -->
+<div class="panel" id="p7">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">07</i></span><span class="rt">AI는 판단 근거의 소유자가 아니라 전달자다 — 자율을 스스로 벌지 못한다는 것이 그 증거다.</span></div></div>
+<div class="sec">
+  <h2>회고 <span class="chip">AI는 무엇이고, 나는 무엇을 배웠나</span></h2>
+
+  <h3>AI는 무엇인가 — 판단의 근거는 누구의 것인가</h3>
+  <p>이 글은 AI가 꼭 사람 같다는 생각에서 시작했다. 거기서 질문을 옮겼다 — AI를 좋은 동료로 키우는 문제가 아니라, <b>좋은 동료들이 더 잘 일하게 만드는 문제</b>로. AI는 협업의 주체가 아니라 인프라라는 것. 그때 그것은 직관이었다.</p>
+  <p>릴리스를 시점별로 따라가자 데이터가 보여준 것은 예상과 조금 달랐다. 회사들은 에이전트에게 자율을 주는 기능보다 <b>그 자율을 감독하는 장치를 먼저, 더 많이</b> 만들었다 — 진행을 보여주고, 도중에 개입하게 하고, 중요한 행동에는 승인을 받게 했다. 위임은 일찍 나왔지만, 위임을 관리하는 도구는 뒤늦게 채워졌다.</p>
+  <p>왜 그런가. 답은 자율이라는 말 안에 있었다. 사람의 자율은 판단의 근거를 스스로 세울 수 있어서 성립한다. 신입이 시니어가 되는 것은 일을 빨리 해서가 아니라 "이 상황에서는 이렇게 판단해도 된다"는 기준이 안에 생기기 때문이다. 승인을 더 구하지 않게 되는 순간은, 승인을 대신할 내부 기준이 선 순간이다.</p>
+  <div class="quote">AI에는 그 기준이 없다. AI가 판단하는 근거는 언제나 밖에서, 사람에게서 온다 — 지시, 지침, 승인, 피드백. 자율의 부재는 능력의 문제가 아니라 구조의 문제다.<span class="src">제품이 할 수 있는 일은 자율을 주는 것이 아니라 외부 참조를 매끄럽게 만드는 것 — 승인은 판단을 사람에게 되묻는 창구, 진행 가시화는 사람이 판단하도록 상태를 보여주는 장치, 메모리는 사람이 준 근거를 저장해두는 곳.</span></div>
+  <div class="callout"><span class="ct" style="color:var(--blue)">관찰과 해석의 구분</span>
+  <span class="pill b">관찰</span> 릴리스 데이터가 보여준 것은 <b>관리 장치가 자율 기능보다 앞섰다는 패턴</b>까지다. <span class="pill r">해석</span> 그 원인이 <b>판단 근거의 외부성</b>이라는 것은 나의 해석이다. 이 글은 전자를 근거로 후자를 제안할 뿐, 그 이상을 주장하지 않는다.</div>
+  <p>닮았다고 해서 같지는 않다. 사람은 자율을 <b>역량으로 얻는다</b> — 스스로 증명해 보이면 놓아준다. AI의 자율은 <b>성능 릴리스로 주어진다</b> — 회사가 능력을 키우고 사람이 권한을 연다. 획득의 방식이 반대다. 그리고 이 갈라짐이 앞의 명제를 오히려 뒷받침한다. <b>스스로 자율을 벌어들이지 못한다는 것이야말로, 판단의 근거가 제 것이 아니라는 증거다.</b></p>
+  <p>이 하나의 축으로 보면 이분 표가 다시 읽힌다. AI가 줄이는 협업 비용(반복 설명·인수인계·진행 확인·누락과 망각)은 모두 판단의 근거를 <b>전달하고 참조하는</b> 비용이고, 사람이 남기는 협업 가치(질문·결정·책임·창의적 충돌)는 모두 판단의 근거를 <b>만들고 소유하는</b> 일이다. 두 열은 하나의 질문으로 모인다 — 판단의 근거는 누구의 것인가. <b>AI는 그 근거의 소유자가 아니라 전달자다.</b></p>
+  <p>예측이 비어 있던 자리도 같은 이유로 설명된다. 시작 축은 모두 판단의 근거를 <b>세우는</b> 단계다. AI는 근거의 소유자가 아니므로 이 단계를 주도할 수 없다. 그러니 그 자리는 사람이 근거를 더 쉽게 세우도록 <b>AI가 돕는 기능</b>의 형태로만 올 것이다 — 무엇이 나올지뿐 아니라 어떤 모습으로 나올지까지, 이 명제가 규정한다.</p>
+
+  <h3>나는 무엇을 배웠나</h3>
+  <div class="dc">
+    <div class="dc-row"><span class="dc-k k1">배움 1</span><div><b>기술이 아니라 문제에서 출발해야 한다.</b> 기술로 시작한 프로덕트는 기술의 맥락을 벗어나지 못했다. 문제를 먼저 정의하고, 기술은 수단으로 따라와야 한다.</div></div>
+    <div class="dc-row"><span class="dc-k k1">배움 2</span><div><b>빅테크의 문제와 우리의 문제는 다르다.</b> "그들도 만들었으니 우리도"를 반복하면 차별점이 흐려진다. 그들이 풀 문제와 우리가 풀 문제를 나눠 보거나, 그들도 따라올 수 없는 단 하나의 차별점을 가져가야 한다.</div></div>
+    <div class="dc-row"><span class="dc-k k1">배움 3</span><div><b>관찰의 연쇄가 분석이 된다.</b> AI가 사람 같다는 데서 사람이 보였고, 사람을 이해하려다 회사가 보였고, 회사를 관찰하다 두 회사가 무엇을 풀고 있는지가 보였다.</div></div>
+    <div class="dc-row"><span class="dc-k k1">배움 4</span><div><b>다음 기능의 단서는 논문이 아니라 사무실에 있다.</b> 사람들이 함께 일하며 반복해 겪는 마찰을 관찰하면, 다음에 풀릴 문제를 짐작할 수 있다.</div></div>
+    <div class="dc-row"><span class="dc-k k1">배움 5</span><div><b>정성적 통찰만으로는 우선순위가 내 경험에 머문다.</b> 데이터가 채워져야 주장이 진단이 된다.</div></div>
+    <div class="dc-row"><span class="dc-k k5">+ 하나 더</span><div><b>관찰과 해석을 끝까지 분리하는 것.</b> 데이터는 패턴을 보여줄 뿐, 그 패턴에 이름을 붙이는 것은 나였다. 좋은 분석은 그 둘을 섞지 않는 데서 온다. 언젠가 이 명제가 틀렸다고 말해줄 데이터를 만나면 — 그것을 반길 것이다.</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════ P8 착지 · 격차 ═══════ -->
+<div class="panel" id="p8">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">착지</i></span><span class="rt">대체선은 직업 목록이 아니다 — 그럼 어디를 지나는가. <i style="opacity:.75">(이 장만 결론을 끝에 둔다 — 처음의 불안으로 원을 닫기 위해.)</i></span></div></div>
+<div class="sec">
+  <h2>착지 — 대체 가능/불가능, 그리고 격차 <span class="chip">Q. AI가 여기까지 온다면, 사람에게는 무슨 뜻인가</span></h2>
+  <p class="lead">07이 "AI는 무엇인가"라면, 이 장은 "그래서 사람에게 무슨 뜻인가"다. 경계선은 이미 앞에서 나왔다 — 판단의 근거를 누가 소유하는가.</p>
+
+  <h3>경계선 — 근거를 나르는 일 vs 만드는 일</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="fig gray" style="margin:0;border-top:4px solid #10b981">
+      <h4 style="margin-top:0"><span class="pill g">대체 가능</span> 근거를 전달·참조·실행</h4>
+      <p style="font-size:13px;margin:0">반복 설명 · 자료 정리 · 인수인계 · 진행 확인 · 문서화 · 코드 실행. 매핑(V1)에서 확인한 '채워진' 기능들이 전부 여기 있다.</p>
+    </div>
+    <div class="fig gray" style="margin:0;border-top:4px solid var(--red)">
+      <h4 style="margin-top:0"><span class="pill r">대체 불가</span> 근거를 만들고 소유</h4>
+      <p style="font-size:13px;margin:0">무엇이 옳은지 정하기 · 성공 기준 세우기 · 책임지기 · 방향 결정. 자기 판단 근거(자율)를 요구하는데, AI에는 그것이 구조적으로 없다.</p>
+    </div>
+  </div>
+  <p style="margin-top:14px">그러므로 '대체 가능/불가능'은 직업의 목록이 아니라 <b>한 사람의 일 안에서도 갈리는 축</b>이다. 같은 일이라도 근거를 나르는 부분은 대체되고, 근거를 세우는 부분은 남는다.</p>
+
+  <h3>반문 — "알아서 정해줘"가 편하지 않나?</h3>
+  <p>여기서 자연스러운 반문이 든다. 사람은 선택이 줄어들 때 편하지 않나? 맞다. 그런데 판단이 다 같은 판단은 아니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>가벼운 판단</th><th>무거운 판단</th></tr></thead>
+    <tbody>
+      <tr><td class="bk" style="font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap">예</td><td>점심 메뉴 · 요약 방식 · 초안 톤</td><td>무엇을 목표로 잡을지 · 어디까지를 완료로 볼지 · 어느 방향으로 갈지</td></tr>
+      <tr><td style="font-size:12px;font-weight:800;color:var(--muted)">성격</td><td>되돌릴 수 있고 책임이 가볍다</td><td>되돌리기 어렵고 책임이 따른다</td></tr>
+      <tr><td style="font-size:12px;font-weight:800;color:var(--muted)">AI가 대신 정하면</td><td><span class="pill g">편하다</span> 틀려도 손해가 작다</td><td><span class="pill r">오히려 불안하다</span> 내가 통제하지 못한 결과의 책임은 결국 내가 진다 — "AI가 그러라고 했어요"는 회의에서 통하지 않는다</td></tr>
+      <tr><td style="font-size:12px;font-weight:800;color:var(--muted)">그래서</td><td><b>대신해줄 때</b> 편하다</td><td><b>도와줄 때</b> 편하다</td></tr>
+    </tbody>
+  </table></div>
+  <p>둘은 무엇으로 갈리는가. 완벽한 기준은 없지만, 세 가지가 방향을 준다 —</p>
+  <ul class="blist">
+    <li><b>되돌릴 수 있는가</b> — 아마존의 '한 방향 문(one-way door) vs 양방향 문(two-way door)'</li>
+    <li><b>결과의 책임이 누구에게 남는가</b></li>
+    <li><b>판단의 근거가 어디에 있는가</b> — 데이터·규칙 안에 있으면 AI가, 사람의 맥락·가치 안에 있으면 사람이</li>
+  </ul>
+  <p>이 셋은 대체로 같은 곳을 가리킨다. 다만 이 선은 고정된 게 아니다 — AI가 좋아질수록, 어제는 사람 몫이던 판단을 오늘은 AI가 넘본다.</p>
+  <div class="callout"><span class="ct" style="color:var(--blue)">그러면 AI는 무거운 판단을 '어떻게' 돕는가</span>
+  대신 정하지 않는다면 무엇을 하나. 답은 — <b>판단을 대신하지 않고, 판단의 앞뒤를 대신한다.</b> 흩어진 근거를 한자리에 모아주고, 사람들이 서로 어긋나 있다는 걸 드러내주고, 물어봐야 할 걸 대신 물어주고, 과거를 근거로 초안을 깔아준다. 결정의 순간만 사람에게 남기고, 그 주변의 노동(재료 찾기·차이 발견·질문 떠올리기·백지에서 시작하기)을 걷어낸다. 선택 자체는 사람이 하지만 선택이 쉬워진다. '대신 정해주는' 편함은 아니어도, <b>'정하기 쉽게 만들어주는' 편함</b>이다. — 05의 유저 플로우 ①(컨텍스트 자동 채우기)이 정확히 이 원리의 구현이다.</div>
+
+  <h3>그래서 갈리는 두 사람</h3>
+  <div class="tw"><table>
+    <thead><tr><th>AI에게 좋은 판단 근거를 세워줄 수 있는 사람</th><th>그러지 못하는 사람</th></tr></thead>
+    <tbody><tr>
+      <td>무엇을 원하는지 명확히 하고, 성공 기준을 정의하고, 방향을 잡아준다 → <b>AI가 증폭기가 된다</b></td>
+      <td>무엇을 시킬지도 모호하고, 나온 결과가 맞는지도 판단하지 못한다 → <b>AI가 있어도 소용이 없다</b></td>
+    </tr></tbody>
+  </table></div>
+  <div class="callout red"><span class="ct" style="color:var(--red)">이것이 격차의 실체다</span>
+  AI는 능력을 평준화하지 않는다. 오히려 '판단 근거를 세우는 능력'을 가진 사람과 아닌 사람 사이를 <b>벌린다.</b> AI가 발전할수록, 근거를 세우는 능력의 값이 오른다. 더 우려스러운 건, <b>편함의 유혹이 이 격차를 키울 수 있다</b>는 점이다 — 사람들이 편함을 좇아 무거운 판단까지 AI에 떠넘기기 시작하면, 근거를 세우는 능력 자체가 위축된다.</div>
+
+  <h3>처음의 불안으로 — 이제 이유와 함께</h3>
+  <div class="fig gray">
+    <div class="flowv" style="margin:0">
+      <div class="fbox" style="border-top-color:#94a3b8"><div class="ft">불안</div><div class="fd">격차가 두렵다 (02)</div></div>
+      <div class="ar">→</div>
+      <div class="fbox"><div class="ft">예측</div><div class="fd">AI는 인간 성장을 따라 여기로 간다 (03·04)</div></div>
+      <div class="ar">→</div>
+      <div class="fbox"><div class="ft">경계</div><div class="fd">AI는 근거를 나르지만 만들지는 못한다 (06·07)</div></div>
+      <div class="ar">→</div>
+      <div class="fbox" style="border-top-color:var(--red)"><div class="ft">격차의 축</div><div class="fd">대체 가능/불가능이 갈리고, 그 경계가 곧 새 격차의 축</div></div>
+      <div class="ar">→</div>
+      <div class="fbox" style="border-top-color:#94a3b8"><div class="ft">처음의 불안으로</div><div class="fd">이제 이유와 함께 — 원이 닫힌다</div></div>
+    </div>
+  </div>
+
+  <div class="callout gray"><span class="ct">한계 — 그리고 반증의 여지 <span class="pill v">우려, 증명 아님</span></span>
+  이것은 데이터로 증명한 것이 아니라 <b>궤적과 구조에서 끌어낸 우려</b>다. 릴리스 데이터는 "AI가 근거 전달을 대체해 왔다"까지 보여주고, "근거 만들기는 영영 대체하지 못한다"는 미래에 대한 논증이다. 정확한 표현은 "데이터가 증명한다"가 아니라 <b>"지금까지의 궤적과 판단 근거의 구조로 볼 때, 나는 이 격차를 우려한다"</b>다.<br><br>
+  반증의 여지 — 만약 AI가 스스로 판단 근거를 세우는 신호(시키지 않아도 성공 기준을 먼저 정의하고 합의하는 기능)가 나오면 이 경계선은 이동한다. 무거운 판단과 가벼운 판단을 가르는 그 선이 어디로 움직이는지도 같은 자리에서 드러난다. 1순위로 예측한 <b>성공 기준 맞추기가 바로 그 시험대</b>다. 사람이 근거를 세우도록 <b>돕는</b> 선에 머무는가, 근거를 <b>대신 세우는</b> 쪽으로 넘어가는가 — 그 한 걸음이 이 격차가 고정될지 재편될지를 가른다.</div>
+</div>
+</div>
+
+<!-- ═══════ DATA 186행 ═══════ -->
+<div class="panel" id="pd">
+<div class="remember"><div class="ico">!</div><div><span class="rb">먼저 알아둘 것 <i class="nn">DATA</i></span><span class="rt">표 한 줄이 헤드라인이다 — 시작 축(성공 기준 맞추기) 0건, 나머지는 채워짐.</span></div></div>
+  <h3>데이터 프로필 — 186행이 어떻게 생겼나</h3>
+  <p>원본 전체를 나열하기 전에, 태깅 결과의 <b>모양</b>을 먼저 보인다.</p>
+  <h4>협업 축 분포 <span style="font-weight:400;color:var(--muted);font-size:12px">— 이 표 한 줄이 이 글의 헤드라인이다</span></h4>
+  <div class="tw"><table>
+    <thead><tr><th>축</th><th>OpenAI</th><th>Anthropic</th><th>합계</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>시작 (성공 기준 맞추기)</b></td><td><b>0</b></td><td><b>0</b></td><td><b style="color:var(--red)">0</b> <span style="font-size:12px;color:var(--muted)">← 예측이 겨냥하는 자리</span></td></tr>
+      <tr><td>시작 (협업 스타일)</td><td>2</td><td>0</td><td>2</td></tr>
+      <tr><td>전달</td><td>9</td><td>3</td><td>12</td></tr>
+      <tr><td>진행</td><td>16</td><td>10</td><td>26</td></tr>
+      <tr><td>축적</td><td>14</td><td>26</td><td>40</td></tr>
+      <tr><td>비협업 <span style="font-size:12px;color:var(--muted)">(모델 출시·안전·역량 부여 등)</span></td><td>53</td><td>53</td><td>106</td></tr>
+    </tbody>
+  </table></div>
+  <h4>개념별 태깅 건수 <span style="font-weight:400;color:var(--muted);font-size:12px">— 10개 개념 중 시작 축 3개가 0건</span></h4>
+  <div class="tw"><table>
+    <thead><tr><th>개념</th><th>건수</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>성공 기준 맞추기 · Alignment Check · Intent Inference</b></td><td><b style="color:var(--red)">각 0건</b></td></tr>
+      <tr><td>Collaboration Profile</td><td>2</td></tr>
+      <tr><td>Project Brain</td><td>6</td></tr>
+      <tr><td>Handoff / Alignment</td><td>12</td></tr>
+      <tr><td>Personal Memory</td><td>16</td></tr>
+      <tr><td>Org Memory</td><td>18</td></tr>
+      <tr><td>Live Progress / Follow-through</td><td>26</td></tr>
+      <tr><td>도구·역량 부여(Capability / Tool Access) <span class="pill v">v2.1 신설</span></td><td>35</td></tr>
+    </tbody>
+  </table></div>
+  <h4>온보딩 성장 단계 단계별 <span style="font-weight:400;color:var(--muted);font-size:12px">— STAGE 0만 0건</span></h4>
+  <div class="tw"><table>
+    <thead><tr><th>STAGE 0 온보딩</th><th>STAGE 1 손발</th><th>STAGE 2 위임</th><th>STAGE 3 감독</th><th>STAGE 4 팀·예산</th></tr></thead>
+    <tbody><tr><td><b style="color:var(--red);font-size:17px">0</b></td><td>35</td><td>12</td><td>10</td><td>4</td></tr></tbody>
+  </table></div>
+  <div class="callout"><span class="ct">회사별 축 강조 — 02의 사업 모델 분석과 맞물린다</span>
+    Anthropic은 <b>축적</b>(26건, 그중 Org Memory 15건 — Skills·조직 권한·거버넌스)에, OpenAI는 <b>진행</b>(16건)과 <b>전달</b>(9건)에 무게가 실린다. <b>토큰(조직 배포) 엔진과 시트(소비자 협업) 엔진의 차이가 릴리스 분포에서도 보인다.</b>
+  </div>
+  <div class="callout gray"><span class="ct">판정 규칙(코드북)은 별도 공개</span>
+    한 릴리스가 여러 축에 걸칠 때의 단일 배정 순서(축적 → 전달 → 진행 → 역량 → 시작 → 비협업)를 포함해, 태깅 규칙 전체를 코드북 문서로 함께 공개한다. <b>규칙을 바꾸면 숫자도 바뀌므로, 검증하려는 사람이 재현할 수 있어야 한다.</b>
+  </div>
+
+<div class="sec">
+  <h2>릴리스 데이터셋 v2.1 — 186행 전체 <span class="chip">원본 데이터</span></h2>
+  <p class="lead">이 분석의 근거가 된 원본. 회사·tier·표면으로 필터하고, 기능명·설명으로 검색할 수 있다.</p>
+  <div class="stats">
+    <div class="stat"><div class="k">전체</div><div class="v num">186행</div><div class="d">OpenAI 91 · Anthropic 92</div></div>
+    <div class="stat"><div class="k">tier 1 — 공식 원문 확인</div><div class="v green num">175행</div><div class="d">2026-07-10 검증</div></div>
+    <div class="stat"><div class="k">tier 3 — 재검증 대상</div><div class="v num" style="color:var(--amber)">8행</div><div class="d">발행 전 원문 재확인 예정</div></div>
+  </div>
+  <div id="ds-controls">
+    <select id="f-company" aria-label="회사 필터"><option value="">회사: 전체</option><option>OpenAI</option><option>Anthropic</option></select>
+    <select id="f-tier" aria-label="tier 필터"><option value="">tier: 전체</option><option value="1">tier 1 (원문 확인)</option><option value="3">tier 3 (재검증 대상)</option></select>
+    <select id="f-surface" aria-label="표면 필터"><option value="">표면: 전체</option></select>
+    <input id="f-q" type="search" placeholder="기능명·설명 검색…" aria-label="검색">
+  </div>
+  <div id="ds-count"></div>
+  <div id="ds-tablewrap">
+    <table id="ds-table">
+      <thead><tr><th>날짜</th><th>회사</th><th>표면</th><th>기능</th><th>설명</th><th>tier</th></tr></thead>
+      <tbody id="ds-body"></tbody>
+    </table>
+  </div>
+  <button id="ds-more" type="button">더 보기</button>
+  <p class="tcap" style="margin-top:12px">수집: Anthropic 전수 · OpenAI 공식 헬프센터 원문. 비-기능 항목(모델 폐기·요금·지역 확장·UI 소소 변경·모델 마이너 업데이트)은 사전 규칙으로 대칭 제외 — 상세는 P3의 병합 로그 요약 참조.</p>
+</div>
+</div>
+
+</div><!-- /wrap -->
 
 <footer>
-  © monicalee
+  <div style="margin-bottom:10px">
+    <span class="pill g">tier 1 = 공식 원문</span>
+    <span class="pill a">tier 3 = 재검증 대상</span>
+    <span class="pill b">관찰</span>
+    <span class="pill r">해석</span>
+    <span class="pill v">가설·예측</span>
+    <span class="pill n">run-rate ≠ 실현 매출</span>
+  </div>
+  이 페이지의 모든 내용·수치는 분석 문서(01–08)와 v2 데이터셋(186행)에 근거하며, 모든 수치는 발행 전 1차 출처로 재검증 대상이다.<br>
+  미디엄 요약글 「OpenAI와 Anthropic은 다음에 무엇을 만들까」 — 링크 게재 예정
 </footer>
 
+<script>
+/* ===== 데이터: release_dataset_v2.csv (186행) — [date, company, surface, feature, desc, tier] ===== */
+const DATASET = [["2022-11-30", "OpenAI", "ChatGPT", "ChatGPT 출시", "공개 연구 미리보기", "3", "비협업", ""], ["2023-02-09", "OpenAI", "ChatGPT", "ChatGPT Plus", "유료 구독", "1", "비협업", ""], ["2023-03-14", "OpenAI", "ChatGPT", "GPT-4", "멀티모달 모델", "1", "비협업", ""], ["2023-03-23", "OpenAI", "ChatGPT", "ChatGPT plugins", "외부 도구·서비스 연결의 초기 체계(추후 폐기)", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2023-05-12", "OpenAI", "ChatGPT", "Web browsing (beta)", "웹 브라우징 베타", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2023-05-24", "OpenAI", "ChatGPT", "Shared links", "대화 공유 링크", "1", "전달", "Handoff / Alignment"], ["2023-07-06", "OpenAI", "ChatGPT", "Code interpreter (beta)", "코드 인터프리터 베타", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2023-07-20", "OpenAI", "ChatGPT", "Custom instructions", "커스텀 인스트럭션(지침 저장)", "1", "시작", "Collaboration Profile"], ["2023-08-28", "OpenAI", "ChatGPT Enterprise", "ChatGPT Enterprise", "엔터프라이즈 출시", "1", "비협업", ""], ["2023-09-25", "OpenAI", "ChatGPT", "Voice + image (multimodal)", "음성·이미지 멀티모달 입력", "1", "비협업", ""], ["2023-10-16", "OpenAI", "ChatGPT", "DALL·E 3 in ChatGPT", "이미지 생성 DALL·E 3 통합", "1", "비협업", ""], ["2023-11-06", "OpenAI", "ChatGPT", "GPTs (GPT Builder)", "용도별 커스텀 어시스턴트 생성", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-01-10", "OpenAI", "ChatGPT Team", "ChatGPT Team plan", "팀 협업 플랜", "1", "비협업", ""], ["2024-01-10", "OpenAI", "ChatGPT", "GPT Store", "GPTs 마켓플레이스", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-02-13", "OpenAI", "ChatGPT", "Memory 발표 (saved memories)", "이전 대화의 정보를 기억해 반복 설명 제거. 소규모 테스트로 시작", "1", "축적", "Personal Memory"], ["2024-05-13", "OpenAI", "ChatGPT", "GPT-4o", "텍스트·음성·비전 실시간 옴니 모델", "1", "비협업", ""], ["2024-05-30", "Anthropic", "Claude Platform (API)", "Tool use GA", "도구 사용 정식 제공", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-06-20", "Anthropic", "Claude Platform (API)", "Claude Sonnet 3.5 launch", "신규 주력 모델", "1", "비협업", ""], ["2024-07-18", "OpenAI", "ChatGPT", "GPT-4o mini", "소형 모델", "1", "비협업", ""], ["2024-08-14", "Anthropic", "Claude Platform (API)", "Prompt caching (beta)", "프롬프트 캐싱으로 지연·비용 절감", "1", "비협업", ""], ["2024-09-05", "OpenAI", "ChatGPT", "Memory 전체 확대", "Free/Plus/Team/Enterprise 전체 제공, 메모리 갱신 알림", "1", "축적", "Org Memory"], ["2024-09-12", "OpenAI", "ChatGPT", "o1-preview", "첫 추론 모델 시리즈", "3", "비협업", ""], ["2024-10-03", "OpenAI", "ChatGPT", "Canvas", "글쓰기·코딩용 별도 공동 작업 공간", "3", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-10-08", "Anthropic", "Claude Platform (API)", "Message Batches API (beta)", "대량 비동기 처리 50% 비용", "1", "비협업", ""], ["2024-10-22", "Anthropic", "Claude Platform (API)", "Computer use tools + Sonnet 3.5 upgrade", "화면을 보고 마우스·키보드로 조작하는 컴퓨터 사용 도구", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-10-31", "OpenAI", "ChatGPT", "ChatGPT search", "출처 링크 포함 웹 답변", "3", "비협업", ""], ["2024-11-01", "Anthropic", "Claude Platform (API)", "PDF support + token counting", "PDF 이해, 사전 토큰 계산", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-11-04", "Anthropic", "Claude Platform (API)", "Claude Haiku 3.5", "소형 모델", "1", "비협업", ""], ["2024-12-10", "OpenAI", "ChatGPT", "Canvas GA (4o, free)", "캔버스 전체 확대·파이썬 실행", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2024-12-12", "OpenAI", "ChatGPT", "Video + screen share in voice", "음성모드 영상·화면공유", "1", "전달", "Handoff / Alignment"], ["2024-12-13", "OpenAI", "ChatGPT", "Projects", "채팅·파일·지침을 목표 단위로 묶는 기능 (정확 일자 원문 재확인 필요)", "1", "축적", "Project Brain"], ["2024-12-17", "Anthropic", "Claude Platform (API)", "Models/Batches/Caching/PDF GA", "주요 플랫폼 기능 일괄 정식화", "1", "비협업", ""], ["2025-01-14", "OpenAI", "ChatGPT", "Tasks", "리마인더·예약 프롬프트 등 단순 자동화 (Operator 출시 1주 전 보도 기준)", "1", "진행", "Live Progress / Follow-through"], ["2025-01-23", "Anthropic", "Claude Platform (API)", "Citations API", "응답 출처 표기 기능", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-01-23", "OpenAI", "ChatGPT", "Operator (research preview)", "자체 브라우저로 웹을 보고 클릭·입력해 작업 수행하는 첫 범용 에이전트(Pro)", "1", "진행", "Live Progress / Follow-through"], ["2025-02-02", "OpenAI", "ChatGPT", "Deep research", "다수 온라인 소스를 비동기로 조사·종합해 인용 있는 보고서 생성", "1", "진행", "Live Progress / Follow-through"], ["2025-02-06", "OpenAI", "ChatGPT", "Canvas sharing", "캔버스 산출물 공유", "1", "전달", "Handoff / Alignment"], ["2025-02-24", "Anthropic", "Claude Platform (API)", "Claude Sonnet 3.7 (extended thinking)", "즉답·단계적 사고를 하나의 모델로", "1", "비협업", ""], ["2025-04-10", "OpenAI", "ChatGPT", "Memory: 과거 대화 전체 참조", "saved memories 외에 chat history 기반 개인화 추가", "1", "축적", "Personal Memory"], ["2025-04-15", "OpenAI", "ChatGPT", "ChatGPT Image Library", "이미지 라이브러리", "1", "비협업", ""], ["2025-04-16", "OpenAI", "ChatGPT", "o3 / o4-mini", "추론 모델, 도구 통합 사용", "1", "비협업", ""], ["2025-05-07", "Anthropic", "Claude Platform (API)", "Web search tool", "API에서 웹 검색", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-05-14", "OpenAI", "ChatGPT", "GPT-4.1 in ChatGPT", "코딩 특화 모델", "1", "비협업", ""], ["2025-05-16", "OpenAI", "ChatGPT", "Codex (cloud agent)", "클라우드 SW 엔지니어링 에이전트", "3", "진행", "Live Progress / Follow-through"], ["2025-05-22", "Anthropic", "Claude Platform (API)", "Opus 4 / Sonnet 4 + Files API + code execution + MCP connector", "모델 출시와 함께 파일·코드실행·원격 MCP 연결 베타", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-06-04", "OpenAI", "ChatGPT", "Connectors + custom MCP (deep research)", "딥리서치 커넥터·커스텀 MCP", "1", "진행", "Live Progress / Follow-through"], ["2025-06-10", "OpenAI", "ChatGPT", "o3-pro", "고신뢰 추론 모델", "1", "비협업", ""], ["2025-06-18", "OpenAI", "ChatGPT", "Record mode", "회의·음성 기록→요약", "1", "비협업", ""], ["2025-07-03", "Anthropic", "Claude Platform (API)", "Search result content blocks (beta)", "RAG 응답의 자연 인용", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-07-17", "OpenAI", "ChatGPT", "ChatGPT agent", "Operator(웹 조작)+deep research(정보 종합)를 통합한 에이전트. 자체 가상 컴퓨터로 조사→분석→슬라이드·스프레드시트 산출까지", "1", "진행", "Live Progress / Follow-through"], ["2025-07-29", "OpenAI", "ChatGPT", "Study mode", "소크라테스식 학습 모드", "1", "비협업", ""], ["2025-08-01", "Anthropic", "Claude apps", "Project sharing (Team/Enterprise)", "프로젝트 권한·조직 공유", "1", "축적", "Project Brain"], ["2025-08-05", "Anthropic", "Claude apps", "Claude Opus 4.1 launch", "Opus 4 증분 업그레이드", "1", "비협업", ""], ["2025-08-06", "Anthropic", "Claude apps", "Claude Code security reviews", "/security-review 커맨드, GitHub Actions", "1", "비협업", ""], ["2025-08-07", "OpenAI", "ChatGPT", "Personalities", "성격(톤) 프리셋", "1", "시작", "Collaboration Profile"], ["2025-08-07", "OpenAI", "ChatGPT", "GPT-5", "고속 모델+심층 추론 모델을 라우터로 통합", "1", "비협업", ""], ["2025-08-11", "Anthropic", "Claude apps", "Search past conversations", "과거 대화 검색으로 맥락 이어가기(Max/Team/Enterprise)", "1", "축적", "Personal Memory"], ["2025-08-12", "Anthropic", "Claude Platform (API)", "1M token context (beta, Sonnet 4)", "장문맥 베타", "1", "비협업", ""], ["2025-08-13", "OpenAI", "ChatGPT", "Connectors in chat (Gmail/Calendar 등)", "채팅 내 커넥터", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-08-20", "Anthropic", "Claude apps", "Premium seats with Claude Code + extra usage", "Team/Enterprise 프리미엄 시트 및 추가 사용량 구매", "1", "비협업", ""], ["2025-08-21", "Anthropic", "Claude apps", "Desktop extension admin controls + embeddable artifacts", "조직의 확장 관리, 아티팩트 임베드 코드", "1", "비협업", ""], ["2025-08-22", "OpenAI", "ChatGPT", "Project-only memory", "프로젝트 한정 메모리", "1", "축적", "Project Brain"], ["2025-08-26", "Anthropic", "Claude apps", "Claude in Chrome (experimental)", "Claude가 웹사이트를 읽고 클릭·탐색하는 브라우저 확장", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-08-27", "Anthropic", "Claude apps", "Code execution tool (API)", "샌드박스 파이썬 실행 도구", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-08-27", "OpenAI", "ChatGPT", "Codex local↔cloud handoff", "로컬·클라우드 이어받기(IDE/CLI)", "1", "전달", "Handoff / Alignment"], ["2025-09-03", "Anthropic", "Claude apps", "Location, maps, calendar on mobile", "iOS/Android 앱 연동: 일정 초안, 위치 찾기, 리마인더", "1", "비협업", ""], ["2025-09-04", "OpenAI", "ChatGPT", "Branch conversations", "대화 분기", "1", "전달", "Handoff / Alignment"], ["2025-09-09", "Anthropic", "Claude apps", "Create and edit files", "엑셀·PPT·문서·PDF를 앱 안에서 직접 생성·편집", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-09-10", "Anthropic", "Claude Platform (API)", "Web fetch tool (beta)", "지정 웹페이지·PDF 전체 내용 수집", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-09-11", "Anthropic", "Claude apps", "Memory on Team plans + incognito chats", "메모리(Team) 및 메모리 제외용 시크릿 챗(무료~Team)", "1", "축적", "Org Memory"], ["2025-09-16", "Anthropic", "Claude apps", "Claude in Chrome expansion (10k users)", "장기 실행 워크플로, 슬래시 커맨드, 맥락 프롬프트 제안", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-09-18", "Anthropic", "Claude apps", "Memory on Enterprise plans", "대화 맥락 기억 + 메모리 요약 생성(Enterprise)", "1", "축적", "Org Memory"], ["2025-09-25", "OpenAI", "ChatGPT", "Pulse", "대화·연결 앱 기반 일일 맞춤 브리핑 (2026-06-17 예약작업으로 흡수·종료)", "1", "진행", "Live Progress / Follow-through"], ["2025-09-29", "Anthropic", "Claude apps", "File creation/editing → Pro + mobile", "파일 생성·편집 기능 Pro 및 모바일 확대", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-09-29", "Anthropic", "Claude apps", "Claude in Chrome: multi-tab + site understanding", "다중 탭 동시 작업, Slack/Gmail/Docs 등 주요 사이트 탐색 이해, 완료·승인 알림", "1", "진행", "Live Progress / Follow-through"], ["2025-09-29", "OpenAI", "ChatGPT", "Instant Checkout + ACP", "인챗 결제·에이전트 커머스 프로토콜", "1", "비협업", ""], ["2025-09-29", "Anthropic", "Claude Platform (API)", "Sonnet 4.5 + memory tool + context editing (beta)", "대화 간 정보 저장·참조하는 메모리 도구, 컨텍스트 자동 관리", "1", "축적", "Personal Memory"], ["2025-09-29", "Anthropic", "Claude apps", "Claude Sonnet 4.5 launch", "에이전트·코딩·컴퓨터사용 특화", "1", "비협업", ""], ["2025-09-29", "OpenAI", "ChatGPT", "Parental controls", "청소년 보호자 통제", "1", "비협업", ""], ["2025-10", "OpenAI", "ChatGPT", "ChatGPT Atlas", "ChatGPT 내장 브라우저, agentic mode", "3", "진행", "Live Progress / Follow-through"], ["2025-10-13", "OpenAI", "ChatGPT", "Slack connector & app", "Slack 커넥터·앱", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-10-15", "Anthropic", "Claude apps", "Claude Haiku 4.5 launch", "최고속·저비용 소형 모델", "1", "비협업", ""], ["2025-10-15", "Anthropic", "Claude apps", "Claude in Chrome: Haiku 4.5 default + image upload", "Haiku 4.5 기본화, 이미지 업로드 대행, 화면 영역 지정 지시", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-10-15", "OpenAI", "ChatGPT", "Auto memory management", "저장 메모리 자동 관리", "1", "축적", "Personal Memory"], ["2025-10-16", "Anthropic", "Claude Platform (API)", "Agent Skills", "지시·스크립트·리소스 폴더를 동적으로 로드하는 스킬 체계(문서 스킬 포함)", "1", "축적", "Org Memory"], ["2025-10-23", "Anthropic", "Claude apps", "Memory on Max/Pro plans", "메모리 기능 Max/Pro 확대", "1", "축적", "Personal Memory"], ["2025-10-23", "OpenAI", "ChatGPT Enterprise", "Shared projects", "워크스페이스 동료와 프로젝트 공유: 파일·지침을 함께 구성해 공동 목표로 응답을 유도. 새 정보가 추가돼도 구성원이 같은 맥락을 공유. 메모리는 프로젝트 한정", "1", "축적", "Project Brain"], ["2025-11-05", "OpenAI", "ChatGPT", "Interrupt queries", "실행 중 개입·수정", "1", "진행", "Live Progress / Follow-through"], ["2025-11-12", "OpenAI", "ChatGPT", "GPT-5.1", "Instant/Thinking", "1", "비협업", ""], ["2025-11-13", "OpenAI", "ChatGPT", "Group chats (pilot)", "그룹 채팅 파일럿", "1", "전달", "Handoff / Alignment"], ["2025-11-14", "Anthropic", "Claude Platform (API)", "Structured outputs (beta)", "스키마 보장 출력", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-11-24", "Anthropic", "Claude apps", "Claude in Chrome: scheduled tasks + follow a plan", "반복 브라우저 작업 예약, 승인된 계획 내 자율 실행, 모델 선택(Max 베타)", "1", "진행", "Live Progress / Follow-through"], ["2025-11-24", "Anthropic", "Claude apps", "Context window compaction", "이전 메시지 요약으로 사실상 무한 길이 대화 지원", "1", "축적", "Personal Memory"], ["2025-11-24", "Anthropic", "Claude Platform (API)", "Opus 4.5 + programmatic tool calling + tool search tool", "코드 내 도구 호출, 대규모 도구 카탈로그 동적 탐색, effort 파라미터", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-11-24", "Anthropic", "Claude apps", "Claude for Excel beta", "Max/Team/Enterprise 대상. 피벗·차트·파일 업로드", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-11-24", "Anthropic", "Claude apps", "Claude Opus 4.5 launch", "당시 최상위 프런티어 모델", "1", "비협업", ""], ["2025-11-24", "OpenAI", "ChatGPT", "Shopping research", "쇼핑 리서치", "1", "비협업", ""], ["2025-12-11", "OpenAI", "ChatGPT", "GPT-5.2", "전문 지식노동·장기 에이전트", "1", "비협업", ""], ["2025-12-18", "OpenAI", "ChatGPT", "App directory", "앱 디렉터리(앱·커넥터)", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-12-18", "Anthropic", "Claude apps", "Claude in Chrome: all paid plans beta + Code integration", "전체 유료 플랜 베타. Claude Code 연동 디버깅, 데스크톱에서 브라우저 제어, 워크플로 녹화 학습, 콘솔 로그 읽기, 조직 관리 기능", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2025-12-18", "Anthropic", "Claude apps", "Skills: org management + directory + open standard", "조직 단위 스킬 관리, 파트너 스킬 디렉터리, Agent Skills 오픈 표준", "1", "축적", "Org Memory"], ["2026-01", "OpenAI", "Codex", "Codex Skills (auto-selection)", "$skill-name으로 명시 호출하거나 프롬프트 기반으로 Codex가 스킬 자동 선택. Agent Skills 오픈 표준(2025-12) 채택 직후", "3", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-01-07", "OpenAI", "ChatGPT", "Health", "건강 전용 공간", "1", "비협업", ""], ["2026-01-12", "Anthropic", "Claude apps", "Health and fitness data on mobile", "건강·운동 데이터 분석 및 시각화(iOS/Android, 미국)", "1", "비협업", ""], ["2026-01-12", "Anthropic", "Claude apps", "Cowork research preview (Max, macOS)", "Claude Code의 에이전트 역량을 코딩 외 지식노동으로 확장한 데스크톱 기능. 로컬 VM에서 파일·MCP 직접 접근", "1", "진행", "Live Progress / Follow-through"], ["2026-01-12", "Anthropic", "Claude apps", "HIPAA-ready Enterprise plans", "PHI 처리 가능한 Enterprise 옵션", "1", "비협업", ""], ["2026-01-16", "Anthropic", "Claude apps", "Claude Code in Team standard seats", "Team 표준 시트에 Claude Code 포함", "1", "비협업", ""], ["2026-01-16", "Anthropic", "Claude apps", "Cowork research preview → Pro plans", "Pro 요금제로 확대(macOS)", "1", "진행", "Live Progress / Follow-through"], ["2026-01-20", "OpenAI", "ChatGPT", "Age prediction", "연령 예측 모델", "1", "비협업", ""], ["2026-02-02", "OpenAI", "ChatGPT", "Codex app (macOS)", "Codex 앱(맥) 다중 에이전트", "1", "진행", "Live Progress / Follow-through"], ["2026-02-05", "Anthropic", "Claude Platform (API)", "Opus 4.6 + compaction API + data residency", "서버측 컨텍스트 요약으로 무한 대화, 추론 지역 지정", "1", "축적", "Personal Memory"], ["2026-02-05", "Anthropic", "Claude apps", "Claude for Excel improvements", "피벗테이블 편집·조건부 서식 등 네이티브 엑셀 작업 지원", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-02-05", "Anthropic", "Claude apps", "Claude Opus 4.6 launch", "최상위 모델 업그레이드, 코딩 개선", "1", "비협업", ""], ["2026-02-05", "Anthropic", "Claude apps", "Claude for PowerPoint", "PPT 애드인 출시", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-02-12", "Anthropic", "Claude apps", "Self-serve Enterprise plans", "영업 없이 웹에서 직접 Enterprise 구매", "1", "비협업", ""], ["2026-02-13", "Anthropic", "Claude apps", "Analytics API (Enterprise)", "조직 사용·참여 데이터 프로그래매틱 접근", "1", "축적", "Org Memory"], ["2026-02-17", "Anthropic", "Claude apps", "Claude Sonnet 4.6 launch", "코딩·컴퓨터사용·장문맥·에이전트 계획·지식노동·디자인 전반 업그레이드, 1M 컨텍스트 베타", "1", "비협업", ""], ["2026-02-17", "Anthropic", "Claude Platform (API)", "Sonnet 4.6 + web tools GA", "웹검색·코드실행·메모리 도구 등 정식화, 동적 필터링", "1", "축적", "Personal Memory"], ["2026-02-19", "OpenAI", "ChatGPT", "Interactive Code Blocks", "인터랙티브 코드 블록", "1", "비협업", ""], ["2026-02-24", "Anthropic", "Claude apps", "Cowork plugins + admin controls", "플러그인 마켓플레이스 및 조직 관리 기능(Team/Enterprise)", "1", "진행", "Live Progress / Follow-through"], ["2026-02-25", "OpenAI", "ChatGPT", "Project sources", "프로젝트 소스(앱·챗·텍스트)", "1", "축적", "Project Brain"], ["2026-02-25", "Anthropic", "Claude apps", "Scheduled tasks in Cowork", "반복·온디맨드 작업 예약 + Customize 섹션(스킬/플러그인/커넥터 통합 관리)", "1", "축적", "Org Memory"], ["2026-03-02", "Anthropic", "Claude apps", "Memory for free users", "무료 사용자 포함 전체에 대화 기록 기반 메모리 제공", "1", "축적", "Personal Memory"], ["2026-03-05", "OpenAI", "ChatGPT", "GPT-5.4", "프런티어 모델", "1", "비협업", ""], ["2026-03-05", "OpenAI", "OpenAI Platform (API)", "Tool search (Responses API)", "대규모 도구 목록을 런타임까지 미뤄두고 모델이 필요한 부분집합만 로드. gpt-5.4 이상 전용 → GPT-5.4와 동시 도입", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-03-10", "OpenAI", "ChatGPT", "Interactive learning", "수학·과학 인터랙티브 학습", "1", "비협업", ""], ["2026-03-11", "Anthropic", "Claude apps", "Work across Excel and PowerPoint", "엑셀·PPT 애드인이 대화 컨텍스트를 상호 공유, 스킬 지원", "1", "축적", "Org Memory"], ["2026-03-12", "Anthropic", "Claude apps", "Custom visuals in chat", "응답 내 인라인 차트·다이어그램·시각화 생성", "1", "비협업", ""], ["2026-03-17", "Anthropic", "Claude apps", "Control Cowork from phone", "데스크톱·모바일에서 지속 에이전트 스레드로 Cowork 작업 관리(연구 미리보기)", "1", "전달", "Handoff / Alignment"], ["2026-03-23", "Anthropic", "Claude apps", "Computer use research preview (Cowork/Code)", "Claude가 사용자의 컴퓨터에서 파일 열기·클릭·탐색 수행. Dispatch 개선 포함", "1", "진행", "Live Progress / Follow-through"], ["2026-03-25", "Anthropic", "Claude apps", "Interactive apps on mobile", "모바일에서 인터랙티브 앱 연결: 라이브 차트·다이어그램·공유 자산", "1", "전달", "Handoff / Alignment"], ["2026-03-26", "OpenAI", "ChatGPT", "Location sharing", "위치 공유", "1", "전달", "Handoff / Alignment"], ["2026-04-08", "OpenAI", "ChatGPT", "Outlook shared mailboxes", "Outlook 공유메일함·캘린더", "1", "전달", "Handoff / Alignment"], ["2026-04-08", "Anthropic", "Claude Platform (API)", "Claude Managed Agents (beta) + ant CLI", "완전관리형 에이전트 하니스(샌드박스·내장도구·스트리밍)", "1", "진행", "Live Progress / Follow-through"], ["2026-04-09", "Anthropic", "Claude Platform (API)", "Advisor tool (beta)", "실행 모델에 상위 모델이 중간 전략 조언", "1", "진행", "Live Progress / Follow-through"], ["2026-04-09", "Anthropic", "Claude apps", "Role-based access controls (Enterprise)", "그룹·SCIM 기반 역할별 기능 접근 통제", "1", "축적", "Org Memory"], ["2026-04-09", "Anthropic", "Claude apps", "Cowork GA (macOS/Windows)", "Cowork 정식 출시 + Analytics API·사용 분석·OpenTelemetry 지원", "1", "축적", "Org Memory"], ["2026-04-16", "Anthropic", "Claude Platform (API)", "Opus 4.7 + task budgets", "에이전트 루프 전체에 토큰 예산 부여", "1", "진행", "Live Progress / Follow-through"], ["2026-04-16", "Anthropic", "Claude apps", "Claude Opus 4.7 launch", "SW엔지니어링·장기 코딩 작업·고해상도 비전 개선", "1", "비협업", ""], ["2026-04-17", "Anthropic", "Claude apps", "Claude Design launch (Labs)", "디자인·프로토타입·슬라이드 등 시각 산출물 협업 제작", "1", "비협업", ""], ["2026-04-22", "OpenAI", "ChatGPT", "Fast answers", "빠른 답변", "1", "비협업", ""], ["2026-04-22", "OpenAI", "ChatGPT for Clinicians", "ChatGPT for Clinicians", "임상의 전용 버전", "1", "비협업", ""], ["2026-04-23", "OpenAI", "ChatGPT", "GPT-5.5", "코딩·리서치·컴퓨터사용·장기작업", "3", "비협업", ""], ["2026-04-23", "Anthropic", "Claude Platform (API)", "Memory for Managed Agents (beta)", "에이전트용 메모리 스토어", "1", "축적", "Org Memory"], ["2026-04-30", "OpenAI", "ChatGPT", "Advanced Account Security", "고급 계정 보안", "1", "비협업", ""], ["2026-05-05", "OpenAI", "ChatGPT", "Memory sources + personalization", "메모리 소스·교차대화 개인화", "1", "축적", "Personal Memory"], ["2026-05-05", "OpenAI", "ChatGPT", "ChatGPT for Excel & Sheets", "엑셀·시트 사이드바 에이전트", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-05-06", "Anthropic", "Claude Platform (API)", "Multi-agent sessions + Outcomes + Dreams (preview)", "다중 에이전트, 결과 정의, 메모리 재구성(Dreams)", "1", "축적", "Personal Memory"], ["2026-05-07", "OpenAI", "ChatGPT", "Trusted contact", "신뢰 연락처 안전기능", "1", "비협업", ""], ["2026-05-15", "OpenAI", "ChatGPT", "Personal finance", "개인 재무 대시보드", "1", "비협업", ""], ["2026-05-21", "Anthropic", "Claude apps", "Compliance API integrations", "보안·컴플라이언스 도구와 연동해 조직 차원 거버넌스", "1", "축적", "Org Memory"], ["2026-05-28", "Anthropic", "Claude apps", "Claude Opus 4.8 launch", "코딩·에이전트·추론·실무 지식노동 개선", "1", "비협업", ""], ["2026-05-28", "Anthropic", "Claude apps", "Connector permissions via custom roles", "역할별로 커넥터·개별 도구 접근 통제(Enterprise)", "1", "축적", "Org Memory"], ["2026-05-28", "Anthropic", "Claude Platform (API)", "Opus 4.8 + mid-conversation system messages", "대화 중 시스템 메시지 삽입", "1", "비협업", ""], ["2026-06", "OpenAI", "Codex", "Codex goals (/goal)", "목표 생성·관리(/goal), 목표 방향 유지(steering), 유휴 시 자동 진행. 최초 관측: Codex CLI 0.136(2026-06-01). 목표 선언이지 기대 합의는 아님", "3", "진행", "Live Progress / Follow-through"], ["2026-06-01", "OpenAI", "ChatGPT", "Job search & resume", "채용 검색·이력서 작성", "1", "비협업", ""], ["2026-06-02", "Anthropic", "Claude apps", "Admin permissions via custom roles", "Owner 권한 없이 특정 관리 영역 접근 부여(Enterprise)", "1", "축적", "Org Memory"], ["2026-06-02", "OpenAI", "ChatGPT", "Active sessions", "활성 세션 관리", "1", "비협업", ""], ["2026-06-04", "OpenAI", "ChatGPT", "Lockdown Mode", "프롬프트 인젝션에 의한 데이터 유출 위험을 줄이는 보안 설정(웹·에이전트·다운로드 제한)", "1", "진행", "Live Progress / Follow-through"], ["2026-06-04", "OpenAI", "ChatGPT", "Memory: dreaming 아키텍처", "백그라운드에서 다수 대화를 종합·시간 경과 반영하는 새 메모리 구조, 메모리 요약 제공", "1", "축적", "Personal Memory"], ["2026-06-08", "OpenAI", "ChatGPT", "Interactive charts + TOC + full-screen writing + send email", "응답 내 인터랙티브 차트, 긴 대화 목차, 장문 전용 전체화면 에디터+라이브러리 저장, Gmail/Outlook 연결 시 챗에서 메일 발송", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-06-09", "Anthropic", "Claude apps", "Claude Fable 5 launch", "일반 사용 가능하도록 안전조치를 더한 Mythos급 모델", "1", "비협업", ""], ["2026-06-09", "Anthropic", "Claude Platform (API)", "Fable 5 / Mythos 5 (API)", "1M 컨텍스트 기본, 적응형 사고 상시", "1", "비협업", ""], ["2026-06-10", "OpenAI", "ChatGPT", "Simplified model picker", "Instant/Medium/High 등으로 선택 단순화", "1", "비협업", ""], ["2026-06-12", "Anthropic", "Claude apps", "Edit drafts in place", "챗·Cowork에서 Claude가 쓴 초안을 하이라이트+지시로 해당 위치에서 바로 수정", "1", "진행", "Live Progress / Follow-through"], ["2026-06-12", "Anthropic", "Claude apps", "Fable 5 / Mythos 5 suspended", "두 모델 접근 일시 중단", "1", "비협업", ""], ["2026-06-12", "OpenAI", "ChatGPT", "Memory summary controls", "메모리 요약 페이지에서 삭제·끄기·텍스트로 수정", "1", "축적", "Personal Memory"], ["2026-06-17", "OpenAI", "ChatGPT", "Scheduled tasks 개편 + Pulse 종료", "예약 작업 전용 페이지(조회·일시정지·수정), 모니터링 작업은 변화 감지 시에만 알림. Pulse는 예약 작업으로 흡수되며 종료", "1", "진행", "Live Progress / Follow-through"], ["2026-06-18", "OpenAI", "ChatGPT", "App experience updates + Record & Replay", "연결 앱 권한 제어(항상 확인/변경 전 확인 등), 핀·사이드바 정리, 공유 개선. Codex에서 워크플로 1회 시연→재사용 스킬화", "1", "축적", "Org Memory"], ["2026-06-23", "Anthropic", "Claude apps", "Claude Tag in Slack", "Slack 대화에서 Claude를 태그해 업무를 위임(Team/Enterprise)", "1", "전달", "Handoff / Alignment"], ["2026-06-24", "OpenAI", "ChatGPT", "GPT-5.5 Instant update", "질문 이면의 목표 파악, 다중 턴 맥락 유지, 복합 제약 지시 준수 개선", "1", "비협업", ""], ["2026-06-25", "OpenAI", "ChatGPT", "Codex Remote GA", "모바일에서 연결된 Mac/Windows의 작업 시작·진행 확인·승인", "1", "진행", "Live Progress / Follow-through"], ["2026-06-25", "Anthropic", "Claude apps", "Trusted Devices for Remote Control", "원격 Claude Code 세션 조회·조작 전 기기 인증 요구(Team/Enterprise 관리자)", "1", "축적", "Org Memory"], ["2026-06-27", "OpenAI", "ChatGPT", "GPT-5.6 (limited preview)", "Sol/Terra/Luna 3계층", "3", "비협업", ""], ["2026-06-30", "Anthropic", "Claude apps", "Claude Sonnet 5 launch", "추론·도구사용·코딩·지식노동 개선한 Sonnet 모델", "1", "비협업", ""], ["2026-06-30", "Anthropic", "Claude Platform (API)", "Sonnet 5 (API)", "차세대 Sonnet, 1M 컨텍스트", "1", "비협업", ""], ["2026-07-01", "Anthropic", "Claude apps", "Model entitlements (Enterprise, beta)", "관리자가 사용자별 모델 접근·effort 설정 통제", "1", "축적", "Org Memory"], ["2026-07-01", "Anthropic", "Claude apps", "Fable 5 / Mythos 5 access restored", "일시 중단됐던 두 모델 접근 복원", "1", "비협업", ""], ["2026-07-07", "Anthropic", "Claude apps", "Cowork on web and mobile", "Cowork 웹·모바일 확장. 세션이 원격 실행되어 기기 간 이어짐, 노트북 닫아도 작업 지속, 기기 없이 예약 작업 실행. 챗과 Cowork가 프로젝트·아티팩트를 공유하는 단일 홈", "1", "축적", "Project Brain"], ["2026-07-07", "Anthropic", "Claude apps", "Microsoft 365 connector write tools", "M365 커넥터에 쓰기 도구 추가: 메일 작성·발송·정리, 일정 관리, OneDrive/SharePoint 파일 생성·수정", "1", "비협업", "도구·역량 부여(Capability / Tool Access)"], ["2026-07-08", "OpenAI", "ChatGPT", "New Voice (GPT-Live-1)", "동시 듣기·말하기 풀듀플렉스 음성. 검색·메모리·위젯을 챗 안에서", "1", "축적", "Personal Memory"], ["2026-07-09", "OpenAI", "ChatGPT", "Plugin Directory (App Directory 대체)", "스킬·앱·템플릿을 워크플로 단위로 패키징", "1", "축적", "Org Memory"], ["2026-07-09", "OpenAI", "ChatGPT", "ChatGPT Sites (public beta)", "대시보드·트래커·프로토타입·내부 포털 등 인터랙티브 웹을 만들어 URL로 공유", "1", "전달", "Handoff / Alignment"], ["2026-07-09", "OpenAI", "ChatGPT", "ChatGPT Work + Scheduled Tasks", "장시간·다단계 업무용 에이전트. 연결 앱·파일을 넘나들며 문서·스프레드시트·프레젠테이션 등 완성 산출물 생성. 진행 확인·질문 응답·방향 수정·중요 행동 승인 가능. 예약 작업(1회/반복/트리거/모니터링) 포함", "1", "진행", "Live Progress / Follow-through"], ["2026-07-09", "OpenAI", "ChatGPT", "New ChatGPT desktop app (Chat+Work+Codex)", "챗·업무 에이전트·코딩 에이전트를 하나의 데스크톱 앱으로 통합. 로컬 파일·데스크톱 앱 사용(권한 기반)", "1", "진행", "Live Progress / Follow-through"], ["2026-07-09", "Anthropic", "Claude apps", "Monthly recap + Time and focus", "월간 회고 기능(주제/활동 패턴 요약, 베타) 및 휴식 알림·방해금지 시간 설정", "1", "축적", "Personal Memory"]];
+
+/* ===== 탭 전환 ===== */
+(function tabs(){
+  const btns=[...document.querySelectorAll('.tab-btn')];
+  function show(id, push){
+    btns.forEach(b=>b.classList.toggle('on', b.dataset.p===id));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on', p.id===id));
+    if(push) history.replaceState(null,'','#'+id);
+    window.scrollTo({top:0});
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>show(b.dataset.p,true)));
+  function fromHash(){
+    const h=location.hash.slice(1);
+    if(h && document.getElementById(h) && document.getElementById(h).classList.contains('panel')) show(h,false);
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+})();
+
+/* ===== V5-c 상세 토글 ===== */
+(function cmpToggle(){
+  const btn=document.getElementById('cmp-btn'), tbl=document.getElementById('cmp');
+  if(!btn||!tbl) return;
+  btn.addEventListener('click',()=>{
+    const on=tbl.classList.toggle('expanded');
+    btn.textContent = on ? '− 상세 근거 접기' : '+ 상세 근거 펼치기';
+    btn.setAttribute('aria-expanded', on);
+  });
+})();
+
+/* ===== V1 매핑 매트릭스 ===== */
+/* 상태·개념은 03/04/06 md의 매핑 결과, 근거 릴리스는 v2 데이터셋의 실제 행 */
+const MATRIX = [
+  {axis:"시작 — 지시·합의 (일 맡기기 전)", hot:true, rows:[
+    {c:"성공 기준 맞추기", en:"무엇을 성공이라 부를지 맞추는 일", oa:{st:"empty",label:"0건"}, an:{st:"empty",label:"0건"},
+     note:"186행 중 0건. 실제 페인포인트는 세 소스에서 가장 강함(프로젝트 실패 80%, 재작업 78%) — 04 예측의 1순위. <b>가장 가까운 이웃까지 확인했다</b>: Codex의 /goal(2026-06)은 사람이 목표를 <i>선언</i>하는 기능이지, AI가 성공 기준을 끌어내고 이해관계자 간 눈높이 차이를 드러내는 기능이 아니다."},
+    {c:"Alignment Check", en:"이해 얼라인 확인", oa:{st:"empty",label:"0건"}, an:{st:"empty",label:"0건"},
+     note:"논의 후 참여자들이 같게 이해했는지 확인하는 전용 기능 0건 — 04에서 2순위 후보."},
+    {c:"Intent Inference", en:"의도 추론", oa:{st:"empty",label:"0건"}, an:{st:"empty",label:"0건"},
+     note:"<b>★ 기능 릴리스는 0건이지만, 모델 행동으로는 이미 도착 중</b> — GPT-5.5 Instant 업데이트(2026-06-24)는 \'질문 이면의 목표 파악\'을 명시하고, GPT-5.6 가이드는 모델이 맥락에서 저변 목표를 추론한다고 말한다. <b>그런데 같은 가이드가 \'성공 기준(success criteria)은 계속 제공하라\'고 요구한다.</b> 의도는 추론하되 성공 기준은 사람에게서 받겠다는 것 — 벤더 스스로 이 글의 주장을 쓴 셈이다."},
+    {c:"Collaboration Profile", en:"협업 스타일 학습",
+     oa:{st:"part",label:"2건", rel:[["2023-07-20","Custom instructions","커스텀 인스트럭션(지침 저장)"],["2025-08-07","Personalities","성격(톤) 프리셋"]]},
+     an:{st:"empty",label:"0건"},
+     note:"시작 축의 후순위 후보(수요 약). OpenAI만 2건, Anthropic 0건 — 초기 원고의 \'양사 거의 빔\'을 태깅 결과로 정정했다."}
+  ]},
+  {axis:"전달 — 인수인계·정렬", rows:[
+    {c:"Handoff · Alignment", en:"인수인계 — 결정·맥락을 앞으로 넘기기",
+     oa:{st:"part",label:"9건", rel:[["2025-08-27","Codex local↔cloud handoff","로컬·클라우드 이어받기(IDE/CLI)"],["2026-02-25","Project sources","프로젝트 소스(앱·챗·텍스트)"],["2023-05-24","Shared links","대화 공유 링크"]]},
+     an:{st:"part",label:"3건", rel:[["2026-03-17","Control Cowork from phone","기기 간 지속 에이전트 스레드"],["2026-07-07","Cowork on web and mobile","세션이 원격 실행되어 기기 간 이어짐"],["2026-06-23","Claude Tag in Slack","Slack에서 Claude를 태그해 업무 위임"]]},
+     note:"채워진 것은 기기·세션의 이어받기까지. 사람 사이의 \'결정·의도\' 인수인계는 여전히 부분적 — 실제 페인포인트는 강함(03)."}
+  ]},
+  {axis:"진행 — 실행·점검", rows:[
+    {c:"Live Progress · Follow-through", en:"진행 확인 · 개입 · 승인 · 팔로업",
+     oa:{st:"full",label:"16건", rel:[["2025-01-14","Tasks","리마인더·예약 프롬프트"],["2025-11-05","Interrupt queries","실행 중 개입·수정"],["2026-06-17","Scheduled tasks 개편 + Pulse 종료","Pulse는 예약 작업으로 흡수 — 04 형태 조건 2의 근거"],["2026-07-09","ChatGPT Work","진행 확인·방향 수정·중요 행동 승인"]]},
+     an:{st:"full",label:"10건", rel:[["2025-11-24","Claude in Chrome: scheduled tasks + follow a plan","승인된 계획 내 자율 실행"],["2026-02-25","Scheduled tasks in Cowork","반복·온디맨드 작업 예약"],["2026-04-16","Opus 4.7 + task budgets","에이전트 루프 전체에 토큰 예산"],["2026-05-06","Multi-agent sessions + Outcomes","다중 에이전트·결과 정의"]]},
+     note:"양사 모두 채움. 관리 장치(개입·승인)가 자율 기능보다 나중에 온 것이 06 역추적의 핵심 관찰."}
+  ]},
+  {axis:"축적 — 조직·프로젝트의 기억", rows:[
+    {c:"Project Brain", en:"목표 단위 맥락 묶기",
+     oa:{st:"full",label:"4건", rel:[["2024-12-13","Projects","채팅·파일·지침을 목표 단위로 묶음"],["2025-08-22","Project-only memory","프로젝트 한정 메모리"],["2025-10-23","Shared projects","구성원이 같은 맥락을 공유"]]},
+     an:{st:"full",label:"2건", rel:[["2025-08-01","Project sharing (Team/Enterprise)","프로젝트 권한·조직 공유"]]},
+     note:""},
+    {c:"Org Memory", en:"조직 지식의 축적",
+     oa:{st:"full",label:"3건", rel:[["2025-10-15","Auto memory management","저장 메모리 자동 관리"],["2026-05-05","Memory sources + personalization","메모리 소스·교차대화 개인화"],["2026-06-04","Memory: dreaming 아키텍처","다수 대화를 종합하는 새 메모리 구조"]]},
+     an:{st:"full",label:"15건", rel:[["2025-10-16","Agent Skills","지시·스크립트·리소스 폴더를 동적 로드"],["2025-09-18","Memory on Enterprise plans","대화 맥락 기억 + 메모리 요약"],["2025-12-18","Skills: org management + directory","조직 단위 스킬 관리·오픈 표준"],["2026-04-23","Memory for Managed Agents","에이전트용 메모리 스토어"]]},
+     note:"Anthropic이 15건으로 압도 — 토큰(조직 배포) 엔진과 맞물린다(02)."},
+    {c:"Personal Memory", en:"반복 설명 제거 (사람↔AI)",
+     oa:{st:"full",label:"7건", rel:[["2024-02-13","Memory 발표 (saved memories)","이전 대화의 정보를 기억해 반복 설명 제거"],["2024-09-05","Memory 전체 확대","Free/Plus/Team/Enterprise 전체 제공"],["2025-04-10","Memory: 과거 대화 전체 참조","chat history 기반 개인화"]]},
+     an:{st:"full",label:"9건", rel:[["2025-09-29","Sonnet 4.5 + memory tool","대화 간 정보 저장·참조 도구"],["2025-10-23","Memory on Max/Pro plans","메모리 Max/Pro 확대"],["2026-03-02","Memory for free users","전체 사용자 메모리 제공"]]},
+     note:"태깅 중 기존 개념 어디에도 맞지 않음을 발견해 분류 체계를 확장한 개념(자기수정 로그 ①)."}
+  ]},
+  {axis:"[분류 밖] 역량 부여 — 성장 단계 STAGE 1", rows:[
+    {c:"도구·역량 부여(Capability / Tool Access)", en:"도구·권한 부여 — v2.1 신설 개념",
+     oa:{st:"full",label:"12건", rel:[["2023-03-23","ChatGPT plugins","외부 도구 연결의 초기 체계"],["2025-06-04","Connectors + custom MCP","딥리서치 커넥터·커스텀 MCP"],["2026-03-05","Tool search (Responses API)","런타임에 필요한 도구만 로드 — gpt-5.4 이상 전용"]]},
+     an:{st:"full",label:"23건", rel:[["2024-05-30","Tool use GA","도구 사용 정식 제공"],["2024-10-22","Computer use tools","화면을 보고 마우스·키보드로 조작"],["2025-11-24","Opus 4.5 + tool search tool","대규모 도구 카탈로그 동적 탐색"]]},
+     note:"<b>태깅 중 발견해 신설한 10번째 개념</b>(자기수정 로그 ②). 기존 9개 개념 어디에도 속하지 않았다. 이것이 04 반론 ②의 <b>무엇으로 할지 고르는 일(capability fit)</b> — 시작 축의 절반은 이미 출시가 시작됐다. 그러나 <b>무엇을 성공이라 부를지 맞추는 일(expectation fit)은 여전히 0건</b>이다."}
+  ]}
+];
+
+(function renderMatrix(){
+  const m = document.getElementById('matrix');
+  let html = '<div class="mh"></div><div class="mh">OpenAI</div><div class="mh">Anthropic</div>';
+  MATRIX.forEach((ax,ai)=>{
+    html += `<div class="axis${ax.hot?' hot':''}">${ax.hot?'★ ':''}${ax.axis}${ax.hot?' — 성공 기준 맞추기는 0건':''}</div>`;
+    ax.rows.forEach((r,ri)=>{
+      html += `<div class="concept">${r.c}<span class="en">${r.en}</span></div>`;
+      ['oa','an'].forEach(co=>{
+        const cell=r[co];
+        html += `<div class="cell st-${cell.st}"><button type="button" data-a="${ai}" data-r="${ri}" data-c="${co}" aria-expanded="false"><span class="dot"></span>${cell.label}</button></div>`;
+      });
+    });
+  });
+  m.innerHTML = html;
+  const detail = document.getElementById('matrix-detail');
+  m.addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    const row = MATRIX[+b.dataset.a].rows[+b.dataset.r];
+    const cell = row[b.dataset.c];
+    const coName = b.dataset.c==='oa'?'OpenAI':'Anthropic';
+    let inner = `<div class="dt">${row.c} × ${coName} — ${cell.label}</div>`;
+    if(cell.rel && cell.rel.length){
+      inner += '<ul>'+cell.rel.map(x=>`<li><span class="d num">${x[0]}</span><span><b>${x[1]}</b> — ${x[2]} <span class="pill g" style="font-size:10.5px">T1</span></span></li>`).join('')+'</ul>';
+    } else {
+      inner += `<p style="margin:0;color:var(--red);font-weight:700;font-size:13px">대응 릴리스 0건 — 186행 데이터셋에서 이 개념에 매핑되는 기능이 확인되지 않음.</p>`;
+    }
+    if(row.note) inner += `<p class="note">${row.note}</p>`;
+    detail.innerHTML = inner;
+    detail.classList.add('open');
+    m.querySelectorAll('button').forEach(x=>x.setAttribute('aria-expanded','false'));
+    b.setAttribute('aria-expanded','true');
+  });
+})();
+
+/* ===== 데이터셋 표 ===== */
+(function dataset(){
+  const body=document.getElementById('ds-body'), count=document.getElementById('ds-count'),
+        fC=document.getElementById('f-company'), fT=document.getElementById('f-tier'),
+        fS=document.getElementById('f-surface'), fQ=document.getElementById('f-q'),
+        more=document.getElementById('ds-more');
+  const surfaces=[...new Set(DATASET.map(r=>r[2]))].sort();
+  surfaces.forEach(s=>{const o=document.createElement('option');o.textContent=s;fS.appendChild(o);});
+  let shown=40, filtered=DATASET;
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  function apply(){
+    const q=fQ.value.trim().toLowerCase();
+    filtered = DATASET.filter(r=>
+      (!fC.value||r[1]===fC.value) && (!fT.value||r[5]===fT.value) && (!fS.value||r[2]===fS.value) &&
+      (!q || (r[3]+' '+r[4]).toLowerCase().includes(q)));
+    shown=40; render();
+  }
+  function render(){
+    body.innerHTML = filtered.slice(0,shown).map(r=>
+      `<tr><td>${r[0]}</td><td><b>${r[1]}</b></td><td style="font-size:12px;color:var(--muted)">${esc(r[2])}</td><td><b>${esc(r[3])}</b></td><td>${esc(r[4])}</td><td><span class="pill ${r[5]==='1'?'g':'a'}" style="font-size:10.5px">T${r[5]}</span></td></tr>`).join('');
+    count.textContent = `${filtered.length}행 표시 대상 (전체 186행 중) — ${Math.min(shown,filtered.length)}행 렌더됨`;
+    more.style.display = shown<filtered.length ? 'block':'none';
+  }
+  [fC,fT,fS].forEach(el=>el.addEventListener('change',apply));
+  fQ.addEventListener('input',apply);
+  more.addEventListener('click',()=>{shown+=60;render();});
+  apply();
+})();
+</script>
 </body>
 </html>
