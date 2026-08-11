@@ -12,6 +12,14 @@
 | 02 | OpenAI · Anthropic | AI 기능의 진화를 '신입사원 온보딩' 순서에 빗대, 릴리스 186건에서 빠진 '무엇을 성공이라 부를지 맞추는' 단계를 발견하고 다음에 나올 기능을 직접 설계 | [보러 가기](https://gaoningmomo.github.io/investigating_products/openai-anthropic/) |
 | 03 | 클럽하우스, BeReal, 셋로그 | 정점에서 무너진 세 SNS의 흥망을 '시대의 결핍' 프레임으로 해부하고, 여론조사 데이터로 검증해 AI 시대의 3부작 서비스를 제안 | [보러 가기](https://gaoningmomo.github.io/investigating_products/nextaiproduct/) |
 
+## 빌딩 노트
+
+남의 프로덕트를 밖에서 분석하는 것과 별개로, 직접 만들며 부딪힌 문제와 그때 내린 판단을 기록합니다.
+
+| # | 프로덕트 | 한 줄 요약 | 링크 |
+|---|---|---|---|
+| 01 | MOA (핀테크) | 마이데이터를 분석하기 전에 '소비'부터 다시 정의한 기록. 내 카드 3년치를 넣자 더미 1,120만 건으로도 못 본 문제가 드러났고, '잘 맞히기'보다 '틀리지 않기'를 택했다 | [보러 가기](https://gaoningmomo.github.io/investigating_products/moa/) |
+
 ## 각 분석의 구성
 
 모든 분석은 같은 뼈대를 따릅니다.
