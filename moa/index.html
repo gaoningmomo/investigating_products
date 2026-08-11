@@ -1,1 +1,945 @@
-placeholder
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마이데이터를 분석하기 전에, ‘소비’부터 다시 정의했다</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --ink:#1d1d1f; --ink-2:#6e6e73; --ink-3:#86868b;
+  --line:#d2d2d7; --line-2:#e8e8ed;
+  --bg:#fff; --soft:#f5f5f7;
+  --blue:#0071e3; --blue-l:#5ac8fa; --red:#c1271e; --green:#1a7f37; --orange:#b26b00;
+  --col:720px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Apple SD Gothic Neo","Pretendard Variable",Pretendard,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--ink);letter-spacing:-.015em;
+  font-size:17px;line-height:1.75;-webkit-font-smoothing:antialiased;
+}
+.col{max-width:var(--col);margin:0 auto;padding:0 24px}
+.wide{max-width:960px;margin:0 auto;padding:0 24px}
+
+/* 진행바 */
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--blue);z-index:50;transition:width .1s linear}
+
+/* 히어로 */
+.hero{background:radial-gradient(120% 90% at 75% 0%,#1f1f21,#000 62%);color:#f5f5f7;padding:clamp(90px,13vw,150px) 0 clamp(52px,7vw,80px)}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#86868b}
+h1{margin-top:18px;font-size:clamp(32px,5.4vw,58px);font-weight:700;line-height:1.08;letter-spacing:-.04em}
+.sub{margin-top:20px;font-size:clamp(16px,1.9vw,20px);color:#a1a1a6;line-height:1.6;max-width:34ch}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.meta div{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);border-radius:12px;padding:10px 15px;font-size:12.5px;color:#a1a1a6}
+.meta div b{display:block;color:#fff;font-size:17px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-bottom:2px}
+
+/* 리드 */
+.lead{padding:clamp(48px,7vw,80px) 0 0}
+.lead p{font-size:clamp(18px,2vw,20px);line-height:1.75;color:var(--ink)}
+.lead p+p{margin-top:20px}
+
+/* 목차 */
+.toc{margin:clamp(48px,6vw,72px) auto 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0}
+.toc .t{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+.toc ol{list-style:none;display:grid;gap:7px;counter-reset:s}
+.toc li{counter-increment:s;font-size:14.5px}
+.toc a{color:var(--ink-2);text-decoration:none;display:flex;gap:12px}
+.toc a::before{content:counter(s,decimal-leading-zero);color:var(--ink-3);font-variant-numeric:tabular-nums;flex:none;width:22px}
+.toc a:hover{color:var(--blue)}
+
+/* 본문 */
+section{padding:clamp(52px,7vw,84px) 0 0}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.eyebrow i{font-style:normal;opacity:.5;margin-right:8px}
+h2{font-size:clamp(24px,3.2vw,34px);font-weight:700;line-height:1.22;letter-spacing:-.032em;margin-bottom:8px}
+h3{font-size:clamp(18px,2.1vw,21px);font-weight:600;letter-spacing:-.024em;margin:34px 0 4px}
+p{margin-top:16px}
+p b,li b{font-weight:600}
+strong{font-weight:600;background:linear-gradient(transparent 62%,rgba(0,113,227,.16) 0)}
+em{font-style:normal;color:var(--ink-2)}
+ul.plain{list-style:none;margin-top:16px;display:grid;gap:8px}
+ul.plain li{padding-left:16px;position:relative}
+ul.plain li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--line)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;letter-spacing:0}
+
+/* 인용 */
+blockquote{margin:24px 0;border-left:3px solid var(--blue);padding:4px 0 4px 18px;color:var(--ink);font-size:16px;line-height:1.72}
+blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:13px;color:var(--ink-3)}
+blockquote+blockquote{margin-top:14px}
+
+/* 강조 문장 */
+.pull{margin:36px 0;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  font-size:clamp(19px,2.3vw,23px);line-height:1.55;font-weight:600;letter-spacing:-.03em}
+.pull.dark{background:#000;color:#f5f5f7;border:0;border-radius:20px;padding:30px 28px;font-weight:600}
+
+/* 표 */
+.tw{margin:28px 0;overflow-x:auto;border-radius:12px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+caption{text-align:left;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding-bottom:10px}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:top;line-height:1.5}
+th{font-size:12px;font-weight:600;color:var(--ink-3);border-bottom:1px solid var(--line);white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hi td{background:rgba(255,59,48,.05)}
+tr.hi td:first-child{font-weight:600}
+tbody tr:last-child td{border-bottom:0}
+.barcell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.bg{height:6px;border-radius:99px;background:var(--line-2);width:60px;overflow:hidden;flex:none}
+.bg i{display:block;height:100%;border-radius:99px;background:var(--blue)}
+
+/* 데이터 박스 */
+.box{margin:28px 0;background:var(--soft);border-radius:18px;padding:22px 24px;font-size:15px;line-height:1.7}
+.box .bt{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.box p:first-of-type{margin-top:0}
+.flow{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:2;letter-spacing:0;color:var(--ink-2);white-space:pre;overflow-x:auto}
+.flow b{color:var(--ink)}
+
+/* PG 인포그래픽 */
+.pg-visual{margin:28px 0;border:1px solid var(--line);border-radius:20px;padding:24px;background:#fff}
+.pg-visual .pv-kicker{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.pg-visual .pv-title{font-size:clamp(19px,2.3vw,24px);font-weight:700;line-height:1.4;letter-spacing:-.03em;margin:0}
+.pg-visual .pv-sub{margin-top:8px;font-size:14px;line-height:1.65;color:var(--ink-2)}
+.pg-map{display:grid;grid-template-columns:1fr 44px 1fr;gap:10px;align-items:stretch;margin-top:22px}
+.pg-side{display:grid;gap:8px}
+.pg-side .label{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.04em;margin-bottom:2px}
+.pg-item{border-radius:12px;padding:12px 14px;background:var(--soft);font-size:14px;line-height:1.45}
+.pg-item b{display:block;font-size:14.5px;color:var(--ink);margin-bottom:2px}
+.pg-item small{font-size:12px;color:var(--ink-2)}
+.pg-arrow{display:grid;place-items:center;color:var(--ink-3);font-size:22px}
+.pg-result{border-radius:16px;padding:18px;background:#000;color:#f5f5f7;display:flex;flex-direction:column;justify-content:center}
+.pg-result .label{font-size:11.5px;font-weight:700;color:#86868b;letter-spacing:.04em;margin-bottom:9px}
+.pg-result b{font-size:19px;line-height:1.45;color:#fff}
+.pg-result p{margin-top:8px;font-size:13px;line-height:1.6;color:#a1a1a6}
+.pg-note{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2);font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.pg-note b{color:var(--ink)}
+@media (max-width:620px){.pg-map{grid-template-columns:1fr}.pg-arrow{transform:rotate(90deg);height:30px}.pg-visual{padding:20px}}
+
+/* 수치 강조 */
+.stat{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0}
+.stat div{flex:1 1 150px;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.stat b{display:block;font-size:26px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat small{display:block;margin-top:4px;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+
+/* 개인화 단계 — 스캔하기 쉬운 3단계 카드 */
+.steps{list-style:none;counter-reset:st;margin:26px 0 4px;display:grid;gap:12px}
+.steps li{counter-increment:st;position:relative;border:1px solid var(--line-2);border-radius:18px;padding:19px 20px 19px 58px;background:#fff;line-height:1.55}
+.steps li::before{content:counter(st);position:absolute;left:20px;top:20px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--ink-3);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.steps .step-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.steps li b{display:block;font-size:17px;line-height:1.35;letter-spacing:-.02em;color:var(--ink)}
+.steps .step-desc{display:block;margin-top:7px;font-size:14.5px;line-height:1.65;color:var(--ink-2)}
+.steps .step-tag{display:inline-flex;align-items:center;min-height:24px;padding:3px 8px;border-radius:999px;background:var(--soft);font-size:11.5px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+.steps li.now{background:var(--soft);border-color:var(--soft)}
+.steps li.now::before{background:#fff}
+.steps li.goal{border-color:rgba(0,113,227,.38);background:rgba(0,113,227,.045)}
+.steps li.goal::before{background:var(--blue);color:#fff}
+.steps li.goal b{color:#005bbd}
+.steps li.goal .step-tag{background:rgba(0,113,227,.1);color:#005bbd}
+.steps li.no{background:#fafafa;border-style:dashed}
+.steps li.no b,.steps li.no .step-desc{color:var(--ink-2)}
+
+/* 6번 추천 추론 시각화 */
+.reason-chain{margin:26px 0;border:1px solid var(--line-2);border-radius:18px;padding:20px;background:#fff}
+.reason-chain .rc-title{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.04em;margin-bottom:14px}
+.reason-chain .rc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch}
+.reason-chain .rc-node{position:relative;min-height:104px;border-radius:13px;padding:13px 12px;background:var(--soft);display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.reason-chain .rc-node:not(:last-child)::after{content:"→";position:absolute;right:-11px;top:50%;transform:translateY(-50%);z-index:2;color:var(--ink-3);font-size:14px;font-weight:700}
+.reason-chain .rc-node b{font-size:14px;line-height:1.4}
+.reason-chain .rc-node small{font-size:11.5px;line-height:1.45;color:var(--ink-3)}
+.reason-chain .rc-node.fact{background:rgba(0,113,227,.07)}
+.reason-chain .rc-node.fact b{color:#005bbd}
+.reason-chain .rc-node.guess{border:1px dashed var(--line);background:#fff}
+.reason-chain .rc-node.unknown{border:1px dashed #d8a7a2;background:rgba(193,39,30,.035)}
+.reason-chain .rc-node.unknown b{color:#9f211a}
+.reason-chain .rc-note{margin-top:14px;padding-top:14px;border-top:1px solid var(--line-2);font-size:13px;line-height:1.6;color:var(--ink-2)}
+
+/* 마무리 */
+.end{margin-top:clamp(60px,8vw,96px);background:#000;color:#f5f5f7;padding:clamp(52px,7vw,80px) 0}
+.end h2{color:#fff}
+.end p{color:#a1a1a6}
+.end .last{margin-top:28px;font-size:clamp(19px,2.4vw,24px);line-height:1.5;font-weight:600;color:#fff;letter-spacing:-.03em}
+.limits{padding:clamp(44px,6vw,64px) 0 clamp(60px,8vw,90px);background:var(--soft)}
+.limits h2{font-size:20px}
+.limits ul{list-style:none;margin-top:18px;display:grid;gap:12px;font-size:14.5px;color:var(--ink-2);line-height:1.65}
+.limits li{padding-left:16px;position:relative}
+.limits li::before{content:"";position:absolute;left:0;top:.7em;width:5px;height:5px;border-radius:50%;background:var(--line)}
+.ask{margin-top:26px;font-size:16px;color:var(--ink);font-weight:500}
+
+/* 일반 독자를 위한 용어 설명 */
+.term{font-weight:600;color:var(--ink);border-bottom:1px dotted var(--ink-3)}
+.explain{margin:18px 0;background:#f5f5f7;border-radius:14px;padding:16px 18px;font-size:14px;line-height:1.65;color:var(--ink-2)}
+.explain b{color:var(--ink);font-weight:600}
+.project-box{margin:24px 0;border:1px solid var(--line);border-radius:18px;padding:22px 24px;background:#fff}
+.project-box .pt{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.project-box p{margin-top:8px;font-size:15px;line-height:1.7}
+.project-box .mini-flow{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+.project-box .mini-flow span{background:var(--soft);border-radius:9px;padding:7px 10px}
+.project-box .mini-flow i{font-style:normal;color:var(--ink-3)}
+
+@media (max-width:620px){
+  body{font-size:16px;line-height:1.72}
+  .col,.wide{padding-left:20px;padding-right:20px}
+  section{padding-top:56px}
+  h2{font-size:27px;line-height:1.28}
+  h3{margin-top:30px}
+  .stat div{flex-basis:100%}
+  .box,.project-box,.pg-visual{padding:18px}
+  .tw{margin-left:-4px;margin-right:-4px}
+  th,td{padding:10px 9px;font-size:13px;min-width:88px}
+  .steps li{padding:17px 16px 17px 52px;border-radius:16px}
+  .steps li::before{left:17px;top:18px}
+  .steps .step-head{display:block}
+  .steps .step-tag{margin-top:7px}
+  .steps .step-desc{font-size:14px;margin-top:8px}
+  .reason-chain{padding:17px}
+  .reason-chain .rc-grid{grid-template-columns:1fr;gap:22px}
+  .reason-chain .rc-node{min-height:auto}
+  .reason-chain .rc-node:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-19px;transform:translateX(-50%)}
+  .toc{padding:20px 0}
+  .toc li{font-size:14px}
+}
+
+/* Medium/GitHub 공용 인포그래픽 */
+.inline-infographic{
+  margin:34px 0 10px;
+  background:#f7f8fa;
+  border:1px solid var(--line-2);
+  border-radius:22px;
+  padding:26px;
+}
+.inline-infographic .ig-kicker{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--blue);
+  margin-bottom:12px;
+}
+.inline-infographic .ig-title{
+  font-size:24px;
+  line-height:1.35;
+  letter-spacing:-.03em;
+  font-weight:700;
+  color:var(--ink);
+}
+.ig-compare{
+  display:grid;
+  grid-template-columns:1fr 64px 1fr;
+  gap:14px;
+  align-items:center;
+  margin-top:22px;
+}
+.ig-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+}
+.ig-card.strong{border:2px solid var(--blue)}
+.ig-label{font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:8px}
+.ig-num{font-size:34px;font-weight:800;letter-spacing:-.04em}
+.ig-card.strong .ig-num{color:var(--blue)}
+.ig-arrow{text-align:center;color:var(--ink-3);font-size:24px;font-weight:700}
+.ig-note{
+  margin-top:18px;
+  background:rgba(0,113,227,.07);
+  border-radius:14px;
+  padding:15px 17px;
+  font-size:15px;
+  line-height:1.6;
+  font-weight:600;
+  color:#1e3a8a;
+}
+.ig-three{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+.ig-issue{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+}
+.ig-issue .n{font-size:11px;font-weight:800;color:var(--blue);margin-bottom:8px}
+.ig-issue b{display:block;font-size:16px;line-height:1.45;margin-bottom:10px}
+.ig-eq{
+  background:var(--soft);
+  border-radius:10px;
+  padding:9px 10px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+.ig-metric{font-size:13px;line-height:1.55;color:var(--ink-2)}
+.ig-metric strong{display:block;font-size:22px;color:var(--ink);margin-top:3px}
+.ig-bottom{
+  margin-top:18px;
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+  color:var(--ink);
+}
+.ig-system{
+  display:grid;
+  grid-template-columns:1fr 44px 1.25fr;
+  gap:12px;
+  align-items:stretch;
+  margin-top:20px;
+}
+.ig-panel{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:16px;
+}
+.ig-panel.after{border:2px solid var(--blue)}
+.ig-panel .tag{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--ink-3);
+  margin-bottom:12px;
+}
+.ig-panel.after .tag{color:var(--blue)}
+.ig-topflow{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin-bottom:13px;
+}
+.ig-node{
+  background:var(--soft);
+  border-radius:9px;
+  padding:7px 9px;
+  font-size:12px;
+  font-weight:700;
+}
+.ig-split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.ig-lane{
+  border:1px solid var(--line-2);
+  border-radius:12px;
+  padding:11px;
+  background:#fcfcfd;
+}
+.ig-lane h4{
+  margin:0 0 8px;
+  font-size:13px;
+  line-height:1.35;
+}
+.ig-step{
+  background:var(--soft);
+  border-radius:8px;
+  padding:7px 8px;
+  text-align:center;
+  font-size:11.5px;
+  line-height:1.35;
+  font-weight:700;
+}
+.ig-panel.after .ig-step{background:rgba(0,113,227,.07);color:#1e3a8a}
+.ig-down{text-align:center;color:var(--ink-3);font-size:11px;margin:2px 0}
+.ig-mini{font-size:10.5px;line-height:1.45;color:var(--ink-3);margin-top:7px}
+.ig-mid{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:24px}
+.ig-badge{
+  display:inline-block;
+  margin-left:4px;
+  padding:2px 5px;
+  border-radius:999px;
+  background:rgba(0,113,227,.08);
+  color:#1e3a8a;
+  font-size:9.5px;
+  font-weight:800;
+}
+@media (max-width:620px){
+  .inline-infographic{padding:18px}
+  .ig-compare{grid-template-columns:1fr;gap:10px}
+  .ig-arrow{transform:rotate(90deg)}
+  .ig-three{grid-template-columns:1fr}
+  .ig-system{grid-template-columns:1fr;gap:16px}
+  .ig-mid{transform:rotate(90deg)}
+  .ig-split{grid-template-columns:1fr}
+}
+
+.home-link{display:inline-block;margin-bottom:20px;font-size:13px;font-weight:600;color:#a1a1a6;text-decoration:none;letter-spacing:-.01em;transition:color .2s ease}
+.home-link:hover{color:#fff}
+.site-footer{background:#fff;border-top:1px solid var(--line-2);padding:32px 24px;text-align:center;color:var(--ink-3);font-size:12.5px}
+.site-footer a{color:var(--ink-3);text-decoration:none}
+.site-footer a:hover{color:var(--ink);text-decoration:underline}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<header class="hero">
+  <div class="col">
+    <a class="home-link" href="../index.html">← Investigating Products</a>
+    <div class="kicker">실험 기록 · AI PM 부트캠프</div>
+    <h1>마이데이터를 분석하기 전에,<br>‘소비’부터 다시 정의했다</h1>
+    <p class="sub">내 카드 내역 3년치와 핀테크 앱 리뷰 9,548건으로 확인한 것</p>
+    <div class="meta">
+      <div><b>2,780건</b>카드·계좌 내역 (2년 7개월)</div>
+      <div><b>9,548건</b>핀테크 앱 리뷰 5종</div>
+      <div><b>2,725,318행</b>공공 상가정보 대조</div>
+    </div>
+  </div>
+</header>
+
+<div class="col lead">
+  <p>내 카드 내역 3년치에서 <span class="mono">한국철도공사</span>를 검색하면 3건이 나온다.</p>
+  <p>실제로 기차에 쓴 돈은 <b>123건, 약 550만 원</b>이다. 44개의 다른 이름으로 흩어져 있기 때문이다. <span class="mono">고속철도(KTX)포항-서울</span>, <span class="mono">코레일유통주식회사(</span>, <span class="mono">고속철도(SRT)동대구-S수서</span>. 노선마다 다른 이름으로 찍힌다. 출발지와 도착지가 같은 <span class="mono">포항-포항</span>이라는 표기도 있다. 왕복 예매를 한 건으로 처리해서 그렇다.</p>
+  <p>그런데 이 숫자도 틀렸다.</p>
+  <p>550만 원 중 약 220만 원은 취소했다. 실제로 낸 돈은 320만 원이다. 금액 기준 <strong>41%를 무른</strong> 셈이다. 그리고 취소하느라 낸 수수료가 따로 2만 9천 원 있다.</p>
+
+  <div class="pull">이름을 못 찾으면 있는 소비의 대부분을 놓치고,<br>취소를 못 세면 나머지를 41% 부풀린다.</div>
+<div class="inline-infographic" aria-label="기차비 실제 지출 비교">
+  <div class="ig-kicker">INFOGRAPHIC 01 · 실제 지출을 다시 계산해보니</div>
+  <div class="ig-title">3년간 기차비로 550만 원을 쓴 줄 알았다.</div>
+  <div class="ig-compare">
+    <div class="ig-card">
+      <div class="ig-label">처음 계산한 금액</div>
+      <div class="ig-num">550만 원</div>
+    </div>
+    <div class="ig-arrow">→</div>
+    <div class="ig-card strong">
+      <div class="ig-label">취소 거래 반영 후 실제 지출</div>
+      <div class="ig-num">320만 원</div>
+    </div>
+  </div>
+  <div class="ig-note">230만 원의 차이. 소비 습관의 문제가 아니라 <b>데이터를 어떻게 읽느냐의 문제</b>였다.</div>
+</div>
+
+
+  <p>이 글은 저 두 문장이 어디까지 문제가 되는지 확인해본 기록이다.</p>
+
+  <nav class="toc">
+    <div class="t">목차</div>
+    <ol>
+      <li><a href="#s0">이 실험을 하게 된 이유</a></li>
+      <li><a href="#s1">개인화된 추천을 하려면, 먼저 사용자를 알아야 한다</a></li>
+      <li><a href="#s2">실제 마이데이터를 쓸 수 없어서 1,120만 건의 더미 마이데이터를 직접 만들었다</a></li>
+      <li><a href="#s3">내 카드이용내역 3년치를 넣어보니 결과는 달랐다</a></li>
+      <li><a href="#s4">소비 데이터는 어디까지 나를 알 수 있을까?</a></li>
+      <li><a href="#s5">읽히는 건 골격까지다</a></li>
+      <li><a href="#s6">그리고 골격이면 충분하다</a></li>
+      <li><a href="#s7">1,120만 건으로도 발견하지 못한 이유</a></li>
+      <li><a href="#s8">‘잘 맞히는 것’보다 ‘틀리지 않는 것’부터</a></li>
+      <li><a href="#s9">결국, 질문이 바뀌었다</a></li>
+    </ol>
+  </nav>
+</div>
+
+<!-- 0 -->
+<section id="s0"><div class="col">
+  <div class="eyebrow"><i>00</i> 출발</div>
+  <h2>AI로 ‘새는 돈’을 찾으려 했다</h2>
+  <p>지금 AI PM 부트캠프에서 <b>MOA</b>라는 핀테크 서비스를 만들고 있다. 사용자의 소비를 분석해 “이번 달에는 이 돈을 한번 지켜보자”고 제안하는 서비스다.</p>
+
+  <div class="project-box">
+    <div class="pt">MOA가 하려는 일</div>
+    <p>AI가 소비 기록을 보고 줄여볼 만한 항목을 찾는다. 사용자는 그중 자신에게 중요한 소비는 남기고, 줄여볼 항목과 목표 금액을 직접 정한다.</p>
+    <div class="mini-flow"><span>소비 기록 불러오기</span><i>→</i><span>어디에 썼는지 분류</span><i>→</i><span>줄여볼 소비 찾기</span><i>→</i><span>한 달 목표 정하기</span></div>
+  </div>
+
+  <p>이 흐름에서 가장 먼저 맞아야 하는 것은 의외로 AI의 판단이 아니다. <b>“이 돈을 어디에 쓴 돈인지”를 제대로 알아보는 일</b>이다. 넷플릭스를 배달비로 분류하고, 취소한 기차표를 실제 지출로 세면서 “여기서 돈이 새고 있어요”라고 말하면 그다음 판단이 아무리 정교해도 소용이 없다.</p>
+  <p>프로젝트 과제에는 이런 문장이 있었다.</p>
+  <blockquote>마이데이터 기반의 소비 패턴 분석 기준과 맞춤형 금융 상품 추천 알고리즘 기준을 정의한다.</blockquote>
+  <div class="explain"><b>마이데이터</b>는 여러 금융기관에 흩어진 내 금융 정보를 한곳으로 불러와 활용할 수 있게 한 데이터다. 카드 결제, 계좌 거래 같은 기록을 서비스가 사용자의 동의를 받아 분석하는 방식이라고 생각하면 된다.</div>
+  <p>처음에는 소비 패턴을 잘 읽으면 개인화된 조언을 만들 수 있을 거라고 생각했다. 하지만 곧 질문이 바뀌었다. <b>소비를 해석하기 전에, 이 데이터 자체를 얼마나 믿을 수 있을까?</b></p>
+  <p>그래서 AI가 사람의 소비를 얼마나 잘 판단하는지를 검증하기 전에, <b>소비 데이터가 실제 생활을 어디까지 정확하게 담고 있는지</b>부터 확인하기 시작했다.</p>
+</div></section>
+
+<!-- 1 -->
+<section id="s1"><div class="col">
+  <div class="eyebrow"><i>01</i> 시장</div>
+  <h2>개인화된 추천을 하려면, 먼저 사용자를 알아야 한다</h2>
+  <p>개인화된 추천을 하려면 먼저 사용자가 무엇을 불편해하고, 어떤 정보를 필요로 하는지 알아야 했다. 그래서 국내 핀테크 앱 5종(토스·네이버페이·카카오페이·뱅크샐러드·하나핀크)의 스토어 리뷰 <b>9,548건</b>을 수집해 8개 토픽으로 코딩했다.</p>
+  <p>결론부터 말하면 이렇다. <strong>사람들은 개인화를 싫어한 게 아니었다.</strong> 대부분 ‘광고’라는 이름으로 이야기하고 있었다.</p>
+
+  <div class="tw">
+  <table>
+    <caption>2025–2026 리뷰 9,548건 · 전체 평균 별점 2.26</caption>
+    <thead><tr><th>토픽</th><th class="n">언급률</th><th class="n">평균 별점</th><th class="n">1–2점 비율</th></tr></thead>
+    <tbody>
+      <tr><td>성능·버그</td><td class="n">28.1%</td><td class="n">1.86</td><td class="n">72.7%</td></tr>
+      <tr class="hi"><td>광고·마케팅</td><td class="n">12.3%</td><td class="n">1.60</td><td class="n">82.2%</td></tr>
+      <tr><td>혜택·포인트</td><td class="n">12.1%</td><td class="n">2.16</td><td class="n">65.5%</td></tr>
+      <tr><td>자산조회·연동</td><td class="n">5.8%</td><td class="n">2.56</td><td class="n">52.6%</td></tr>
+      <tr><td>알림·푸시</td><td class="n">4.0%</td><td class="n">1.79</td><td class="n">75.5%</td></tr>
+      <tr><td>소비분석·분류</td><td class="n">3.0%</td><td class="n"><b>3.16</b></td><td class="n">35.1%</td></tr>
+      <tr><td>개인정보·보안</td><td class="n">2.1%</td><td class="n">1.70</td><td class="n">80.3%</td></tr>
+      <tr><td>개인화·추천</td><td class="n"><b>0.2%</b></td><td class="n">2.50</td><td class="n">60.0%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>개인화·추천 <b>0.2%</b>. 9,548건 중 20건이다.</p>
+  <p>처음엔 이게 결론인 줄 알았다. “사람들은 개인화를 원하지 않는다.” 그런데 사실 원하지 않는다고 말한 적은 없고 그저 언급을 안 했을 뿐이다. 언급이 없다는 건 세 가지 중 무엇이든 될 수 있다. 원하지 않거나, 눈에 안 띄거나, 불만이 없어서 말할 이유가 없거나.</p>
+  <p>그래서 20건을 하나씩 다 읽었다. 그러자 다른 게 보였다. 그 20건의 대부분은 개인화 추천 이야기가 아니었다. “이 앱 추천 안 함” 같은 추천사(推薦辭)이거나, 광고 불만이었다.</p>
+
+  <blockquote>포인트 혜택은 좋은데 광고만 2주째 나오는데 너무 지겨워요. 광고는 사용자 맞춤인가요?<cite>5★ 토스</cite></blockquote>
+  <blockquote>관심없음 기능이 없어 알고리즘에 자꾸 관심 없는 상품들이 추천으로 뜹니다. 알고리즘 초기화 같은 기능을 바랍니다<cite>3★ 토스</cite></blockquote>
+
+  <p>개인화는 언급되지 않은 게 아니다. <b>‘광고’라는 이름으로 언급되고 있다.</b> 그리고 그 이름의 별점이 8개 토픽 중 꼴찌다. 12.3%가 말했고, 그중 82.2%가 1–2점을 줬다.</p>
+
+  <div class="pull">사용자는 개인화에 대해 아주 많이 말하고 있었다.<br>대부분 화가 나 있었을 뿐이다.</div>
+
+  <h3>그런데 회사는 왜 멈추지 않는가</h3>
+  <p>악의가 아니라 구조다.</p>
+  <p>사용자가 앱에 내는 돈은 사실상 0이다. 토스의 유일한 B2C 과금인 토스프라임(월 5,900원)조차 규모가 공시되지 않을 만큼 작다. 내가 수집한 리뷰에서 유료 지불 의향을 밝힌 문장은 전수 검토 기준 3건이었고, 자릿수는 연 1~2만 원이었다.</p>
+  <p>매출의 대부분은 추천과 무관한 곳에서 나온다. 결제대행(PG)과 증권 위탁매매다. 그런데 한국신용평가는 토스의 2024년 창사 첫 흑자 동인을 <b>“마진율이 높은 플랫폼 광고수익의 성장”</b>으로 진단했다. PG 수수료는 아무리 키워도 마진이 얇다. 적자에서 흑자로 넘어가려면 앱 안의 지면을 눌러야 한다.</p>
+  <p>그리고 하나 더. 토스는 중개 수수료와 광고 매출을 각각 얼마 버는지 공개하지 않는다. 공시는 ‘컨슈머/머천트’ 두 부문까지만 쪼개주고, 그 안에서 중개와 광고는 ‘플랫폼수익’으로 합산된다.</p>
+  <div class="box">
+    <div class="bt">같은 자리</div>
+    <p>사용자가 리뷰에서 <b>개인화와 광고를 구분하지 못하는 것</b>과, 회사가 공시에서 <b>중개와 광고를 구분하지 않는 것</b>. 우연이겠지만 같은 자리다.</p>
+  </div>
+
+  <h3>사용자가 실제로 요구한 것</h3>
+  <p>반대편도 봤다. 소비분석·분류 토픽은 언급이 3.0%로 적지만 평균 <b>3.16★</b>로 8개 토픽 중 1위, baseline 대비 +0.89다. 사용자가 유일하게 후하게 평가한 영역이라 285건을 다 읽었다.</p>
+
+  <blockquote>고정지출 제외하고 변동 지출만 볼 수 있었으면 좋겠습니다. 총 소비에서 직접 고정 빼야 변동 알 수 있어서 불편해요<cite>4★ 토스</cite></blockquote>
+  <blockquote>고정지출 금액이 커서 그래프가 크게 출렁이니 오히려 줄일 수 있는 충동지출들을 확인하는 게 어렵네요<cite>4★ 뱅크샐러드</cite></blockquote>
+  <blockquote>카테고리를 2개 이상 고를 수 있으면 좋겠습니다. 필요한 소비 / 좋은 소비 / 나쁜 소비 이런 식으로 나눠서 쓰고 있는데<cite>5★ 토스</cite></blockquote>
+
+  <p>불만도 한 방향이었다. 월 달력이 주간 스크롤로 바뀐 것, 카테고리별 합계가 없어진 것, 여러 달 비교가 사라진 것. ‘예전 버전으로 되돌려달라’는 요청은 약 100건, 평균 1.9★대로 광고 불만보다 별점이 낮았다.</p>
+  <p><strong>사용자가 요구한 건 해석의 대행이 아니라 해석의 재료였다.</strong> 세 번째 리뷰의 사용자는 이미 자기 손으로 카테고리를 ‘필요/좋은/나쁜 소비’로 나누고 있었다.</p>
+</div></section>
+
+<!-- 2 -->
+<section id="s2"><div class="col">
+  <div class="eyebrow"><i>02</i> 데이터</div>
+  <h2>실제 마이데이터를 쓸 수 없어서<br>1,120만 건의 더미 마이데이터를 직접 만들었다</h2>
+  <p>여기서 첫 번째 현실적인 문제가 생겼다. 프로젝트에서는 실제 금융사의 마이데이터를 바로 연결해 쓸 수 없었다. 실서비스 사업자가 아닌 팀이 실제 이용자의 금융 데이터를 받아 테스트하기는 어렵기 때문이다.</p>
+  <p>그래서 우리 팀은 실제 마이데이터를 대신할 <b>더미 마이데이터</b>를 직접 만들었다. 여기서 더미 마이데이터는 실제 금융 데이터를 흉내 내 테스트용으로 만든 가상 거래 데이터다. 단순히 이름과 금액을 무작위로 찍은 데이터는 아니었다.</p>
+  <div class="stat">
+    <div><b>약 1,120만 건</b><small>5개 페르소나의 더미 마이데이터</small></div>
+    <div><b>17,000개</b><small>실제 상호</small></div>
+    <div><b>3,495개</b><small>전국 행정동 실제 좌표</small></div>
+  </div>
+  <p>실제 브랜드 310개와 2026년 가격 자료 569개도 섞었다. 사람마다 사는 동네와 출퇴근 동선을 만들고, 그 하루의 이동 위에 결제를 얹었다. 시간이 지나면 새로운 결제가 들어오는 것처럼 보이도록 미래 거래도 미리 만들어 두었다.</p>
+  <div class="pull">우리는 허술한 가짜 데이터를 만든 게 아니었다.<br>나름 현실을 닮았다고 생각한 1,120만 건을 만들었다.</div>
+  <p>그런데 그 데이터로 소비 분석 로직을 만들다가, 비교를 위해 <b>내 카드이용내역 3년치</b>을 넣어봤다. 그때부터 문제가 보이기 시작했다.</p>
+  <p><b>AI로 1,120만 건을 만드는 것과 현실을 제대로 모델링하는 것은 전혀 다른 일이었다.</b> 우리가 만든 데이터에는 실제 카드 데이터에서 흔하게 생기는 취소, 결제대행사, 이름의 뒤섞임 같은 문제가 애초에 거의 생길 수 없었다.</p>
+  <div class="explain"><b>API</b>는 서비스끼리 데이터를 주고받는 약속된 통로다. 우리는 실제 금융사 API 대신 공개된 마이데이터 <b>표준 규격</b>—어떤 항목을 어떤 형태로 주고받는지 정한 약속—을 참고해 테스트용 서버를 만들었다.</div>
+  <p>이 글에서 분석한 실제 데이터는 카드 소비내역으로 범위를 좁혔다. 신용카드 승인 1,726건과 체크카드·후불교통 1,054건, 총 2,780건이다.</p>
+  <div class="stat">
+    <div><b>1,726건</b><small>신용카드 승인내역</small></div>
+    <div><b>1,054건</b><small>체크카드 결제·후불교통</small></div>
+    <div><b>2년 7개월</b><small>합계 2,780건</small></div>
+  </div>
+</div></section>
+
+<!-- 3 -->
+<section id="s3"><div class="col">
+  <div class="eyebrow"><i>03</i> 실제 지출액</div>
+  <h2>내 카드이용내역 3년치를 넣어보니<br>결과는 달랐다</h2>
+  <p>소비를 분석한다고 하면 보통 “이걸 어느 카테고리로 넣을까”를 떠올린다. 그런데 실제로 데이터를 열어보니 그 앞에 훨씬 큰 문제가 있었다. <strong>금액 자체가 맞지 않는다.</strong></p>
+
+  <h3>취소를 안 빼면 41% 부풀려진다</h3>
+  <p>앞에서 본 철도가 그렇다. 결제 550만 원, 취소 220만 원, 실제 320만 원. 금액 기준 41%를 무른다.</p>
+  <p>취소가 가장 많은 항목이 앞에서 본 <span class="mono">포항-포항</span>이다. 35건 중 결제가 12건, 취소가 23건. <b>결제 한 건에 취소가 두 건씩</b> 붙는다.</p>
+  <p>날짜별로 보면 패턴이 선명하다. 하루에 20만 원대 결제 한 건이 찍히고, 같은 날 5만 원대 취소가 두세 건 붙는다. 여러 날짜의 왕복표를 한꺼번에 잡아두고 필요 없는 걸 나중에 무르는 것이다.</p>
+  <p>취소를 안 빼면 이 사람은 기차에 550만 원 쓰는 사람이 된다. 그러면 “교통비를 줄이세요”라는 조언이 나간다. 실제 문제는 총액이 아니라 예매-취소를 반복하며 낸 <b>수수료 2만 9천 원</b>인데도.</p>
+
+  <h3>그런데 취소는 그나마 쉬운 축이다</h3>
+  <p>취소는 명세서에 음수로 찍힌다. 빼면 된다. 진짜 문제는 <b>음수로 안 찍히는 것들</b>이다.</p>
+  <p>계좌의 <span class="term">거래 기록(원장)</span>을 열어보고 놀랐다. <strong>출금의 94%가 소비가 아니었다.</strong> 파킹통장으로 옮긴 돈, 내 다른 계좌로 보낸 돈, 이체. 실제 소비는 6%뿐이었다. 나갔던 돈이 거의 그대로 다시 들어온다.</p>
+  <p>이걸 전부 지출로 세면 실제 소비의 여섯 배를 쓰는 사람이 된다.</p>
+  <p>그리고 이건 내 특이한 습관이 아니다. 리뷰에서 사용자들이 정확히 같은 걸 말하고 있었다.</p>
+
+  <blockquote>타인 계좌로 돈을 보내면 이체가 아니라 ‘송금’으로 분류돼서 출금으로 잡힙니다<cite>3★ 뱅크샐러드</cite></blockquote>
+  <blockquote>1/n을 각각 송금받는 경우 실제 지출은 전체 금액이 나간 걸로 합산됩니다<cite>4★ 토스</cite></blockquote>
+  <blockquote>카카오페이머니로 결제하면 페이머니 차감과 결제가 이중지출로 찍힙니다. 오래된 문젠데 해결이 안되는 것 같습니다<cite>4★ 뱅크샐러드</cite></blockquote>
+  <blockquote>콘서트 티켓 같은 것도 거액인데 친구 것도 신청하니 제 소비만 불어난 것으로 표기돼 불편<cite>3★ 뱅크샐러드</cite></blockquote>
+
+  <p><b>한 번의 소비가 거래 기록에 몇 줄로 들어오는가.</b> 이게 실체다. 간편결제 이중, 승인과 출금 이중, 1/n 정산, 계좌 간 이체, 할부 승계, 그리고 취소. 소비분석 토픽이 별점 1위인데 그 안의 불만 대부분이 카테고리가 아니라 이 문제였다.</p>
+
+  <h3>그다음에야 “무슨 업종인가”가 온다</h3>
+  <p>금액이 맞아도 다음 문제가 있다. <b>마이데이터 카드 <span class="term">표준 규격</span>에는 “이 결제가 카페인지 병원인지”를 바로 알려주는 업종 항목이 없다.</b> 오는 건 가맹점명과 사업자등록번호뿐이고, 그마저 별도 동의를 켠 사용자에게만 온다.</p>
+  <p>그래서 서비스가 가맹점 이름과 사업자등록번호를 보고 업종을 직접 추정해야 한다. 단서는 사실상 이름과 번호 둘뿐이다.</p>
+  <p>문자열은 이렇게 생겼다. 앞에서 본 철도 44종이 그렇고, <span class="mono">배달의민족</span>으로 검색하면 0건이 나오는 것도 그렇다. 실제로는 39건이 있는데 법인명 ‘우아한형제들’로, 그것도 다섯 가지 표기로 흩어져 있다. 택시는 298건이 190개의 서로 다른 이름으로 기록돼 있다. 대부분이 <span class="mono">카카오택시-경북15바7177</span> 같은 차량번호판이라 사실상 전부 고유값이다.</p>
+  <div class="box">
+    <div class="bt">가맹점명이 너무 다양하게 흩어지는 문제</div>
+    <p>고유 서로 다른 가맹점명 1,441개 중 <b>1,090개(75.6%)가 딱 한 번만</b> 등장하고, 그 1회성 이름들이 거래의 <b>39.2%</b>를 차지한다.</p>
+  </div>
+
+  <p>그럼 숫자는 어떤가. 나는 처음에 사업자번호면 확실할 거라고 생각했다. 이름은 제각각이어도 번호는 하나일 테니까.</p>
+  <p>택시에서는 그 생각이 맞았다. <b>188개 이름이 사업자번호 3개</b>로 깔끔하게 정리된다.</p>
+  <p>그런데 배달의민족에서는 정반대였다. <b>한 회사가 사업자번호 5개</b>로 흩어진다.</p>
+  <p>그리고 온라인 결제에서는 더 이상한 일이 생겼다. <b>넷플릭스도, 배달의민족도, 맥도날드도 데이터에서는 같은 회사처럼 보일 수 있었다.</b></p>
+<div class="inline-infographic" aria-label="실제 데이터에서 깨진 세 가지 전제">
+  <div class="ig-kicker">INFOGRAPHIC 02 · 실제 데이터를 넣자 보인 세 가지 문제</div>
+  <div class="ig-title">거래 기록을 그대로 ‘소비’라고 부를 수 없었다.</div>
+  <div class="ig-three">
+    <div class="ig-issue">
+      <div class="n">01</div>
+      <b>같은 곳에서 썼는데 이름이 달랐다</b>
+      <div class="ig-eq">카드에 찍힌 이름 ≠ 실제 소비처</div>
+      <div class="ig-metric">‘한국철도공사’ 검색<strong>3건 → 실제 123건</strong></div>
+    </div>
+    <div class="ig-issue">
+      <div class="n">02</div>
+      <b>돈이 빠져나갔다고 모두 소비는 아니었다</b>
+      <div class="ig-eq">출금 ≠ 소비</div>
+      <div class="ig-metric">내 계좌 출금 내역 중<strong>94%는 소비 아님</strong></div>
+    </div>
+    <div class="ig-issue">
+      <div class="n">03</div>
+      <b>다른 곳에서 썼는데 같은 회사로 보였다</b>
+      <div class="ig-eq">결제한 회사 ≠ 실제 소비처</div>
+      <div class="ig-metric">넷플릭스 · 배달 · 외식 · 주차<strong>같은 PG 사업자번호</strong></div>
+    </div>
+  </div>
+  <div class="ig-bottom">분석보다 먼저, 무엇을 ‘소비’로 볼 것인지 정의해야 했다.</div>
+</div>
+
+
+  <div class="pg-visual">
+    <div class="pv-kicker">실제 소비 vs 데이터에 기록된 소비</div>
+    <p class="pv-title">결제한 곳은 다른데, 데이터에 찍힌 회사는 같았다.</p>
+    <p class="pv-sub">사용자는 서로 다른 서비스를 이용했지만, 결제대행사를 거치면서 여러 거래가 같은 사업자번호 아래 묶였다.</p>
+
+    <div class="pg-map">
+      <div class="pg-side">
+        <div class="label">내가 실제로 쓴 곳</div>
+        <div class="pg-item"><b>넷플릭스</b><small>OTT · 콘텐츠</small></div>
+        <div class="pg-item"><b>배달의민족</b><small>배달 · 식비</small></div>
+        <div class="pg-item"><b>맥도날드</b><small>외식 · 식비</small></div>
+        <div class="pg-item"><b>주차장 서비스</b><small>교통 · 주차</small></div>
+      </div>
+      <div class="pg-arrow">→</div>
+      <div class="pg-result">
+        <div class="label">데이터가 본 것</div>
+        <b>같은 결제대행사(PG) 사업자번호</b>
+        <p>서로 다른 소비가 하나의 회사 아래 묶여, 사업자번호만으로는 내가 무엇에 쓴 돈인지 알 수 없었다.</p>
+      </div>
+    </div>
+
+    <div class="pg-note"><b>PG(Payment Gateway)</b>는 온라인 카드 결제를 중간에서 대신 처리하는 결제대행사다. 가게가 카드사와 직접 연결되는 대신 PG사가 중간에서 결제를 처리하고, 명세서에는 실제 이용한 가게가 아니라 이 중간 회사의 사업자번호가 찍히기도 한다.</div>
+  </div>
+
+  <p>실제 데이터에서는 사업자번호 하나에 넷플릭스·배달의민족·맥도날드·주차장 서비스 등 <b>27종의 가맹점명</b>이 붙었고, 또 다른 번호에는 네이버페이·배달의민족·올리브영·영화관 등 <b>22종</b>이 묶였다.</p>
+  <p>사업자번호 486개 중 <strong>32개(6.6%)에 복수 가맹점명이 붙어 있고, 그 32개가 거래의 59.9%</strong>를 차지한다. 예외가 아니라 절반이다.</p>
+
+  <h3>그래서 낭비 판정은 시작도 못 한다</h3>
+  <p>MOA의 낭비 판정은 “술은 낭비, 병원은 필수”처럼 품목에 도덕적 낙인을 찍는 방식이 아니다. 설명 가능한 모델(EBM)이 <b>소비 유형, 평소 대비 금액 배수, 심야 여부, 재량 소비 성향</b> 등을 함께 보고 확률을 만든다. 최신 모델에서 영향력이 큰 순서도 이 네 항목이다. 절대 금액 자체의 영향은 상대적으로 작다.</p>
+  <p>예를 들어 평소 카페에서 5천 원을 쓰던 사람이 새벽 2시에 3만 원을 결제했다면 ‘카페라서’가 아니라 <b>평소보다 6배 크고, 심야에 발생했다는 맥락</b>이 함께 작동한다. 반대로 의료·주거처럼 생존에 가까운 소비는 큰 금액이어도 쉽게 낭비로 보지 않는다.</p>
+  <p>문제는 모델보다 앞단이었다. 이런 판단을 하려면 먼저 “무슨 소비인가”, “언제 썼나”, “평소보다 얼마나 큰가” 같은 입력이 믿을 만해야 한다. 그래서 모델을 돌리기 전에 확인할 게 있었다. <b>이 판단에 필요한 단서들이 실제로 손에 들어오는가.</b></p>
+  <ul class="plain">
+    <li><b>시각.</b> 2,780건 중 시각이 있는 건 1,054건, <b>37.9%</b>뿐이었다. 신용카드에는 시각 필드 자체가 없었다. 규격상 카드 승인내역은 초 단위 시각이 필수인데, 내가 카드사에서 받은 명세서에는 없었다. <b>표준상 존재하는 정보와, 사용자가 실제 명세서에서 받을 수 있는 정보가 다르다.</b> 게다가 시각이 있는 37.9%로 세어보니 23시~04시 거래는 2.5%뿐이었다. 다 확보해도 이 신호는 거의 발화하지 않는다.</li>
+    <li><b>업종.</b> 위에서 본 대로다. 규격에 없고, 직접 추론해야 하고, 두 단서가 서로 다른 답을 가리킨다.</li>
+    <li><b>평소보다 많이 썼나.</b> 이건 업종별 중앙값이 있어야 계산된다. 업종이 흔들리면 기준액도 흔들린다.</li>
+  </ul>
+  <div class="pull">모델이 틀린 게 아니다.<br>판단에 필요한 단서를 충분히 받지 못한다.</div>
+</div></section>
+
+<!-- 4 -->
+<section id="s4"><div class="col">
+  <div class="eyebrow"><i>04</i> 골격</div>
+  <h2>소비 데이터는 어디까지 나를 알 수 있을까?</h2>
+  <p>단서가 부족하다는 게 아무것도 못 본다는 뜻은 아니었다. 카테고리를 포기하고 <b>시간·순서·반복·지역</b>만으로 다시 봤더니 이런 게 나왔다.</p>
+  <p><b>두 개의 거점.</b> KTX 서울–포항 노선이 반복되고, 택시 번호판 지역이 경북과 서울로 갈리고, 포항 소재 가맹점이 200건 넘게 찍힌다. 서로 다른 세 종류의 데이터가 같은 결론을 가리킨다.</p>
+  <p>그리고 번호판이 뜻밖의 역할을 했다. <strong>처음에는 쓸모없는 정보처럼 보였던 차량번호가 사실은 지역을 알려주는 단서였다.</strong></p>
+
+  <div class="tw">
+  <table>
+    <caption>택시 — 번호판 지역별</caption>
+    <thead><tr><th>지역</th><th class="n">건수</th><th class="n">건당 평균</th></tr></thead>
+    <tbody>
+      <tr><td>경북</td><td class="n">107</td><td class="n">8,102원</td></tr>
+      <tr><td>서울</td><td class="n">73</td><td class="n">14,707원</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>같은 ‘택시’인데 두 도시에서 성격이 다르다. 서울 택시가 거의 두 배 비싸다. 하나는 도시 안 짧은 이동이고 하나는 더 긴 이동이다.</p>
+  <p><b>자차 없음.</b> 주유 결제가 사실상 없고 택시·KTX·후불교통이 반복된다.</p>
+  <p>그리고 그 거점에는 <b>시작과 끝</b>이 있다.</p>
+
+  <div class="tw">
+  <table>
+    <caption>연도별 출현</caption>
+    <thead><tr><th></th><th class="n">2024</th><th class="n">2025</th><th class="n">2026</th></tr></thead>
+    <tbody>
+      <tr><td>경북 번호판 택시</td><td class="n">0건</td><td class="n">107건</td><td class="n">0건</td></tr>
+      <tr><td>포항 소재 가맹점</td><td class="n">3건</td><td class="n">167건</td><td class="n">0건</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>2025년 한 해에만 존재한다. 1분기에 솟아서 3분기에 정점을 찍고 연말에 꺼진다. 데이터는 이 사람의 다거점 생활이 <b>언제 시작해서 언제 끝났는지</b>를 정확히 안다.</p>
+  <p>실제로 나는 2025년에 포항에서 애플 디벨로퍼 아카데미를 다녔다. 데이터가 맞췄다.</p>
+  <p>다만 <b>아카데미라는 건 못 맞췄다.</b> 그건 카드 명세서 어디에도 없다.</p>
+
+  <h3>구독 탐지는 세 번 시도해서 세 번 다르게 틀렸다</h3>
+  <p>리서치 자료에는 “룰 기반 반복결제 탐지는 정밀도 90% 이상”이라고 적혀 있었다. 내 데이터에서는 그렇지 않았다.</p>
+  <p><b>1차 — 가맹점명 단위로 30일 주기를 찾았다.</b> 넷플릭스는 정확히 잡혔다. 31건, 간격 31일, 22,000원 고정. 그런데 <b>후불교통대금</b>이 같이 걸렸다. 간격이 30일로 규칙적이라서다.</p>
+  <p>후불교통대금은 구독이 아니다. 지하철 요금 수십 건을 월말에 묶은 청구서다. 넷플릭스는 안 봐도 22,000원이 나가지만 후불교통은 안 타면 안 나간다. 주기가 같아도 성격이 다르다. 이걸 고정비로 분류하면 <b>사용자가 줄일 수 있는 돈이 줄일 수 없는 돈으로 보인다.</b> 리뷰에서 사용자들이 화냈던 바로 그 문제다.</p>
+  <p>반대로 <b>Apple 43건은 놓쳤다.</b> 금액이 14,000 / 2,500 / 3,300원으로 쪼개져 있어서다. 애플은 판매자가 아니라 결제 창구다. 한 이름 안에 iCloud 구독과 앱 결제와 하드웨어가 섞여 있다.</p>
+  <p><b>2차 — 묶는 단위를 ‘가맹점명’에서 ‘가맹점명 + 금액’으로 바꿨다.</b> 그러자 Apple 안에 숨어 있던 iCloud 14,000원이 17건, 30일 간격으로 나왔다. 이름만으로는 절대 안 걸리던 게 금액을 붙이니 바로 잡혔다.</p>
+  <p>후불교통대금은 <b>자동으로 빠졌다.</b> 30건 중 금액 종류가 29개라, 이름+금액으로 묶는 순간 각 그룹이 1건이 되어 조건에 안 걸린다. 규칙을 따로 만든 게 아니라 단위를 바꾸니 저절로 풀렸다.</p>
+  <p>대신 새 오탐이 생겼다. 어떤 항목은 간격 중앙값만 33일이지 실제로는 들쭉날쭉했다. <b>3차 — 간격이 얼마나 일정한지를 조건에 추가</b>했더니 그것만 떨어졌다.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>시도</th><th>넷플릭스</th><th>후불교통대금</th><th>Apple</th><th>부동산 관련</th></tr></thead>
+    <tbody>
+      <tr><td>1차 · 이름 단위</td><td>잡힘</td><td style="color:var(--red)">오탐</td><td style="color:var(--red)">놓침</td><td>—</td></tr>
+      <tr><td>2차 · 이름+금액</td><td>잡힘</td><td style="color:var(--green)">자동 제외</td><td>잡힘</td><td style="color:var(--red)">오탐</td></tr>
+      <tr><td>3차 · 간격 일정성 추가</td><td>잡힘</td><td style="color:var(--green)">제외</td><td>잡힘</td><td style="color:var(--green)">제외</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>세 번 시도해서 세 번 다르게 틀렸다. 하나는 성격을 착각했고(청구서를 구독으로), 하나는 단위를 잘못 잡았고(한 이름 안에 여러 구독), 하나는 새로 만든 규칙이 새 오탐을 낳았다.</p>
+</div></section>
+
+<!-- 5 -->
+<section id="s5"><div class="col">
+  <div class="eyebrow"><i>05</i> 경계</div>
+  <h2>읽히는 건 골격까지다</h2>
+  <p>읽힌 것과 안 읽힌 것을 나란히 놓으면 경계가 뚜렷하다.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>관찰 사실</th><th>여기까지 읽힌다</th><th>여기부터 안 읽힌다</th></tr></thead>
+    <tbody>
+      <tr><td>두 도시 KTX·택시 반복</td><td>두 도시를 오간다</td><td>왜 오가는가</td></tr>
+      <tr><td>같은 미용실 3년 10건</td><td>단골이다</td><td>왜 단골인가</td></tr>
+      <tr><td>특정 대학 가맹점 30여 건</td><td>이 학교와 관련 있다</td><td>학생인가 교수인가 방문객인가</td></tr>
+      <tr><td>예매의 41%를 취소</td><td>취소를 반복한다</td><td>낭비인가, 불확실한 일정에 대한 보험료인가</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>패턴이 하나로 모인다. 데이터는 <b>“무엇을 반복하는가”</b>까지 주고, <b>“그게 누구이며 왜인가”</b>는 안 준다.</p>
+  <p>세 번째 줄이 특히 중요하다. 학생인지 교수인지 방문객인지에 따라 소득 구조 추정이 통째로 갈린다. 그런데 데이터는 그걸 안 준다. 알고 싶으면 방법은 하나뿐이다. <b>물어보는 것.</b></p>
+
+  <h3>그리고 층마다 요구되는 정확도가 다르다</h3>
+  <p>여기서 설계에 직접 쓸 수 있는 게 나왔다. 거래를 해석하는 일은 한 겹이 아니라 여러 겹이고, 겹마다 필요한 정확도가 다르다.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>층</th><th>판단 단위</th><th>요구 정확도</th><th>틀리면</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>실제 지출액 맞추기</td><td>거래 1건</td><td>매우 높음</td><td>금액이 통째로 틀림</td></tr>
+      <tr><td>카테고리 분류</td><td>거래 1건</td><td>높음</td><td>사용자에게 바로 들킴</td></tr>
+      <tr><td>생활 패턴 찾기</td><td>기간 내 반복</td><td>중간</td><td>신호가 겹쳐 상쇄됨</td></tr>
+      <tr><td>사람의 이유까지 해석하기</td><td>—</td><td>—</td><td>정확해도 하면 안 됨</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>아래로 갈수록 요구 정확도는 낮아지는데 위험은 반대로 올라간다. 카테고리는 틀려도 사용자가 고치면 되지만, 해석은 정확할수록 불쾌해진다.</p>
+  <p>그리고 가장 아픈 건 맨 윗줄이다. <strong>가장 정확해야 하는 층이 가장 못 푸는 층이다.</strong></p>
+  <p>정산에는 원리적 한계가 있다. 취소는 음수로 찍히니 뺄 수 있고, 내 계좌 간 이체는 양쪽이 다 내 계좌라 알 수 있고, 간편결제 이중 기록은 같은 금액·같은 날이라 짝을 찾을 수 있다. 여기까지는 <b>거래 기록 안에서 서로 짝을 찾을 수 있다.</b></p>
+  <p>그런데 친구들과 밥을 먹고 내 카드로 3인분을 결제한 뒤 2인분을 계좌로 돌려받으면? 카드 명세서에는 3인분이 찍히고, 계좌에는 친구 이름으로 입금이 찍히고, 둘을 잇는 정보는 어디에도 없다. 금액도 안 맞고 날짜도 안 맞는다.</p>
+  <p>이건 더 좋은 알고리즘으로 풀리는 문제가 아니다. <b>데이터에 정보가 없다.</b> 결제되지 않은 것이 데이터가 아니듯, 결제됐다가 되돌아온 돈도 그 되돌아옴이 원장에 안 남으면 데이터가 아니다.</p>
+  <p>그리고 골격이 신뢰할 만한 이유는 <b>여러 신호가 겹치는 지점에서만</b> 만들어지기 때문이다. 거점은 KTX와 택시 번호판과 지역 가맹점 셋이 동시에 가리켰다. 해석은 하나의 신호를 늘여서 만든다. 그래서 골격은 정확하고 해석은 부정확하다. 우연이 아니라 구조적이다.</p>
+  <div class="pull">소비 데이터로 읽을 수 있는 건 생활의 골격까지다.<br>라이프스타일이 아니다.</div>
+</div></section>
+
+<!-- 6 -->
+<section id="s6"><div class="col">
+  <div class="eyebrow"><i>06</i> 그러면 충분한가</div>
+  <h2>그리고 골격이면 충분하다</h2>
+  <p>여기서 뜻밖의 결론이 나왔다. <strong>골격만으로도 추천은 성립한다.</strong></p>
+  <p>두 도시를 정기적으로 오간다는 사실만 알면 철도 할인 상품을 제안할 수 있다. 왜 오가는지는 몰라도 된다. 교육 과정이든 이직이든 가족이든 상품 조건은 같다. 코레일도 안 물어본다.</p>
+  <p>반대로 이유를 알아야만 가능한 추천을 생각해보자. 장거리 이동이 잦으니 기차에서 쓸 헤드셋을 추천한다면?</p>
+
+  <div class="reason-chain" aria-label="KTX 이용 기록에서 헤드셋 추천까지 추론이 늘어나는 과정">
+    <div class="rc-title">데이터가 말하는 것과 우리가 추측하는 것</div>
+    <div class="rc-grid">
+      <div class="rc-node fact"><b>KTX를 반복 이용한다</b><small>데이터로 확인 가능한 사실</small></div>
+      <div class="rc-node guess"><b>기차에서 오래 머문다</b><small>그럴듯하지만 직접 확인되지 않은 추정</small></div>
+      <div class="rc-node unknown"><b>그 시간에 무엇을 하는가</b><small>데이터에는 정보가 없음</small></div>
+      <div class="rc-node unknown"><b>그래서 헤드셋이 필요하다</b><small>사용자 정보가 아니라 판매자의 가정</small></div>
+    </div>
+    <div class="rc-note"><b>첫 칸만 사실이다.</b> 오른쪽으로 갈수록 사용자의 실제 맥락이 아니라 서비스가 만들어낸 추측이 늘어난다.</div>
+  </div>
+
+  <p>두 번째 칸부터 데이터가 없다. 자는지, 일하는지, 이미 있는지 명세서에는 아무것도 없다. 그리고 틀리면 “얘가 나를 뭘로 보고”가 되고, 맞아도 감시당하는 느낌이 든다.</p>
+  <p>2012년 Target 사례가 그랬다. 25개 상품으로 임신 예측 점수를 산출했고 통계적으로는 작동했다. 아버지보다 먼저 알았다는 이야기로 번지며 브랜드 위기가 됐다. 쿠폰을 무관한 상품 사이에 숨긴 대응은 “몰래 쓰는 게 더 나쁘다”는 2차 비판을 불렀다. <b>실패한 건 모델이 아니라 전달이었다.</b></p>
+  <div class="pull">이유를 몰라도 되는 추천이 좋은 추천이고,<br>이유를 알아야 성립하는 추천은 대개 광고다.</div>
+  <p>우연히 맞아떨어지는 게 아니다. 반복되는 행동에 붙는 상품은 원래 이유와 무관하다. 교통 패스, 구독 통합, 카드 실적 최적화 — 전부 “얼마나 자주”만 알면 된다.</p>
+  <p>그래서 개인화의 단계는 이렇게 정리된다.</p>
+  <ol class="steps" aria-label="개인화의 세 단계">
+    <li class="now">
+      <div class="step-head"><b>카테고리 합산</b><span class="step-tag">현재 대부분의 서비스</span></div>
+      <span class="step-desc">카페·교통·쇼핑처럼 어디에 얼마를 썼는지 묶어 보여주는 단계. 소비 현황은 알 수 있지만, 아직 개인화라고 하기는 어렵다.</span>
+    </li>
+    <li class="goal">
+      <div class="step-head"><b>생활의 골격 찾기</b><span class="step-tag">MOA의 목표</span></div>
+      <span class="step-desc">반복되는 이동, 고정지출, 자주 쓰는 카테고리처럼 여러 데이터가 함께 가리키는 생활 패턴까지 읽는다. 추천에 필요한 정보는 여기까지로 충분하다.</span>
+    </li>
+    <li class="no">
+      <div class="step-head"><b>사람의 이유까지 해석하기</b><span class="step-tag">넘지 않을 선</span></div>
+      <span class="step-desc">왜 이동하는지, 왜 그 소비를 좋아하는지까지 추측하는 단계. 데이터에 근거가 부족하고, 맞더라도 사용자가 감시받는다고 느낄 수 있다.</span>
+    </li>
+  </ol>
+</div></section>
+
+<!-- 7 -->
+<section id="s7"><div class="col">
+  <div class="eyebrow"><i>07</i> 자기 발견</div>
+  <h2>1,120만 건으로도 발견하지 못한 이유</h2>
+  <p>이 실험을 하면서 가장 뼈아픈 걸 발견했다. 데이터 양이 부족했던 게 아니었다.</p>
+  <p><strong>약 1,120만 건을 만들었지만, 우리가 만든 더미 마이데이터에는 이 문제가 애초에 존재할 수 없었다.</strong></p>
+  <p>더미 마이데이터를 만들 때는 먼저 “이 사람이 어떤 소비를 한다”는 상황을 정하고 → 업종을 정하고 → 그 업종의 가게를 고른 뒤 → 마지막에 사업자번호를 붙였다. <b>업종이 원인이고 사업자번호가 결과다.</b> 그래서 한 번호에 여러 업종이 달리는 상태가 애초에 생기지 않는다. 시각도 100%, 업종코드도 100% 채워진다.</p>
+  <p>즉 우리는 문제가 생길 수 없는 세계에서 테스트하고 있었다. 실제 카드 내역을 넣어보고서야 알았다.</p>
+  <p>그리고 지금 실데이터를 넣으면 어떻게 되는지도 확인했다. 업종 칸이 비어 있으니 전부 미분류로 떨어지고 소비를 판단하는 프로그램이 조용히 멈춘다. 화면이 깨지거나 오류 메시지가 뜨는 것도 아니다. 그냥 아무 판단도 내리지 않는다.</p>
+  <p>반대로 업종이나 사업자번호를 채워 넣기 시작하면, 그 순간 그 60%가 잘못된 카테고리로 분류될 수 있다. PG 사업자번호 하나가 넷플릭스와 배민과 맥도날드를 한 가맹점으로 묶으면서, 사용자가 넷플릭스에 “이건 낭비 아니에요”를 한 번 누르면 <b>같은 결제대행사를 거친 배달·외식 결제까지 “낭비가 아닐 가능성이 높다”고 잘못 배우게 된다.</b> 사용자는 자기가 뭘 했는지 모른다.</p>
+  <div class="pull dark">눈에 띄는 오류는 없고 숫자만 조용히 틀린다.<br>이게 이 문제의 진짜 무서운 점이다.</div>
+</div></section>
+
+<!-- 8 -->
+<section id="s8"><div class="col">
+  <div class="eyebrow"><i>08</i> 설계</div>
+  <h2>‘잘 맞히는 것’보다 ‘틀리지 않는 것’부터</h2>
+  <p>금융 데이터가 주는 건 결국 가맹점 이름과 사업자번호 같은 원재료다. 그걸 “카페”, “교통”, “배달”처럼 사람이 이해할 수 있는 소비 카테고리로 바꾸는 건 서비스를 만드는 쪽의 일이다.</p>
+  <div class="explain"><b>MOA의 15개 소비 유형</b>은 식비 · 교통/자동차 · 의료 · 금융/보험 · 주거/통신 · 카페/간식 · 술/유흥 · 쇼핑 · 취미/여가 · 생활 · 미용 · 건강/피트니스 · 여행/숙박 · 대형마트 · 편의점/잡화다. <b>카테고리 미분류</b>은 15개 중 하나가 아니라, 무엇에 쓴 돈인지 끝내 확신할 수 없을 때 남겨두는 별도 상태다.</div>
+
+  <h3>왜 업종코드 하나만 봤나</h3>
+  <p>처음부터 게을렀던 게 아니다. 이전 방식이 실제로 문제를 냈고, 그걸 고치다 나온 결과였다.</p>
+  <p>예전에는 데이터 제공자가 소비 카테고리를 직접 붙여서 넘겼다. 식비 · 카페/간식 · 편의점 · 쇼핑 · 생활 · 여가 · <b>온라인</b> 일곱 가지였는데, 여기 이상한 게 섞여 있다. ‘온라인’은 결제 수단이고 나머지는 업종이다. <b>한 목록에 두 축이 들어가 있었다.</b></p>
+  <p>그래서 이런 일이 벌어졌다. 지하철 요금이 ‘온라인’으로 분류됐다. 그리고 배달을 줄이는 챌린지를 걸면 지하철 요금까지 한도에 잡혔다.</p>
+  <p>축을 갈라야 했다. 그래서 통계청의 <span class="term">표준산업분류(KSIC)</span>를 가져왔다. 전국의 사업체가 어떤 업종인지 같은 기준으로 구분하기 위한 국가 표준이다. 제공자는 “이 가게가 무슨 업종인가”까지만 말하고, “이 소비가 사용자에게 무엇인가”는 앱이 정한다. 실제 마이데이터도 그렇게 동작한다.</p>
+  <p>판단은 옳았다. 부수 효과도 좋았다. KSIC는 국가 표준이라 공공 상가정보와 연결할 수 있다. 가맹점명이 제각각이라 한 번씩만 등장하는 가게가 많아도, 약 270만 건의 상가정보와 대조해 업종을 추정할 수 있었던 이유다.</p>
+  <p>그런데 <b>축을 가르는 것</b>과, <b>업종코드 하나만 보는 것</b>은 다른 얘기였다.</p>
+  <p>그 뒤로 가맹점명과 사업자번호는 저장만 하고 판단에 쓰지 않게 됐다. 대조표도 더미 생성기가 쓰던 원천 열한 개에서 역으로 자라 47개에서 멈췄다. 그러다 실제 카드 명세서를 넣어보니 업종코드 칸 자체가 없었다.</p>
+  <div class="pull">옳은 결정이 한 걸음 더 갔을 뿐이다.<br>되돌릴 것도 한 걸음이다.</div>
+
+  <h3>이름이 코드를 이겨야 하는 이유</h3>
+  <p><span class="mono">GS25 울릉크루즈점</span>이라는 결제가 있었다. 울릉도 가는 배 안의 편의점이다.</p>
+  <p>이 결제의 사업자번호는 배를 운영하는 회사 것이다. 업종코드만 보면 ‘운송’으로 간다. <b>배 안에서 산 컵라면이 교통비가 되는 것이다.</b></p>
+  <p>카드 가맹점 정보가 사업자번호 기준이라, 입점 매장은 모(母)사업자의 업태를 그대로 상속한다. 병원 안 편의점, 휴게소 매장, 백화점 입점 브랜드가 전부 같다. 예외가 아니라 구조적으로 계속 나온다.</p>
+  <p>그런데 이름을 보면 한 번에 풀린다. GS25는 편의점이다.</p>
+  <p>그리고 앞에서 본 배달의민족이 정확히 거울상이다.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th></th><th>울릉크루즈</th><th>배달의민족</th></tr></thead>
+    <tbody>
+      <tr><td>구조</td><td>번호 1개 → 이름 2종</td><td>이름 1종 → 번호 5개</td></tr>
+      <tr><td>원인</td><td>입점 매장이 모사업자 업태 상속</td><td>결제마다 다른 결제대행사(PG)를 거침</td></tr>
+      <tr><td>번호를 믿으면</td><td style="color:var(--red)">편의점이 운송이 된다</td><td style="color:var(--red)">배달앱이 다섯 조각으로 갈린다</td></tr>
+      <tr><td>이름을 보면</td><td style="color:var(--green)">편의점</td><td style="color:var(--green)">식비 한 덩어리</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>방향이 반대인데 해법이 같다. 그래서 “번호를 믿으면 안 되는” 그 59.9% 구간의 <b>89%가 이름 한 축으로 풀린다.</b> 결제대행사를 거쳐도 가맹점 이름에는 실제 브랜드가 남는 경우가 많기 때문이다.</p>
+  <p>가맹점명을 업종코드보다 먼저 보는 것. 이 순서 하나로 거래의 <strong>71.2%</strong>가 잡혔다.</p>
+
+  <h3>사업자번호는 버리는 게 아니라 역할이 바뀐다</h3>
+  <p>그럼 번호는 쓸모가 없나. 아니다.</p>
+  <p>GS25 울릉크루즈점이 이름으로 편의점이라고 풀리는 순간, 그 답은 같은 번호의 업종(운송)과 <b>충돌한다.</b> 이 번호가 여러 업태를 담고 있다는 증거다. 그러면 같은 번호를 쓰는 다른 결제들에 “근거가 얇다”고 표시한다.</p>
+  <p>주의할 게 있다. <b>같은 번호의 다른 이름을 따라가면 안 된다.</b> 그러면 배를 운영하는 회사가 편의점이 된다. GS25가 하는 일은 답을 주는 게 아니라 <b>번호를 검증하는 것</b>이다.</p>
+  <p>즉 사업자번호는 “무슨 업종인가”가 아니라 <strong>“믿을 수 있는 번호인가”</strong>에 쓴다.</p>
+  <p>전부 막으면 과하기도 하다. 어느 교통카드 정산사업자 번호에는 이름이 75종 붙어 있는데 그중 74종이 택시와 버스다. 이런 번호는 믿어도 안전하다. 기준은 “이름이 여럿인가”가 아니라 <b>“아는 이름이 번호의 업종과 충돌하는가”</b>다.</p>
+
+  <h3>우리 대조표가 정답을 지우고 있었다</h3>
+  <p>이름을 모르면 공공 상가정보 270만 행에 상호로 대조하는 관문을 하나 더 붙였다.</p>
+  <p>그런데 여기서 이상한 걸 발견했다. <b>상가정보가 정확히 맞혔는데 우리가 받을 칸이 없어서 버린 경우</b>가 있었다.</p>
+  <p>우리 대조표에는 <span class="mono">약국 → 4781 → 의료</span>라고 적혀 있었다. 만들 때는 참이다. 약국은 4781이 맞다. 그런데 쓸 때는 거짓이다. 4781의 정식 명칭이 “의약품·의료용 기구·<b>화장품</b>·방향제 소매업”이기 때문이다.</p>
+  <div class="box">
+    <div class="bt">KSIC 4781 · 전국 58,640곳</div>
+    <div class="flow">26,274  47811  의약품 및 의료용품 소매업      <b>← 약국</b>
+26,215  47813  화장품; 비누 및 방향제 소매업   <b>← 여기가 통째로 ‘의료’로</b>
+ 6,151  47812  의료용 기구 소매업</div>
+  </div>
+  <p>거의 반반이다. 화장품 브랜드 매장이 통째로 ‘의료’로 간다. 한 건이 재수 없게 걸린 게 아니라 <b>원래 절반이 틀리는 자리</b>였다.</p>
+  <p>그리고 여기에 우리 실수가 하나 더 겹쳐 있었다. <b>업종코드를 앞 네 자리만 잘라 썼다.</b> 그 정도면 우리 카테고리는 나오겠거니 했다.</p>
+  <p>그런데 잘린 자리에 답이 있었다. 앞 네 자리만 보면 셋이 하나가 되고, 화장품 가게가 약국과 같은 칸에 앉는다. <b>코드를 자르는 순간 절반이 자리를 잘못 찾는다.</b></p>
+  <p>같은 구조의 자리가 더 있다. 편의점과 슈퍼마켓이 한 앞자리에 있고, 헬스장과 당구장과 골프연습장이 한 앞자리에 있다. 그래서 코드를 자르지 않고 끝까지 받는 것으로 바꿨다.</p>
+  <p>더 근본적으로는, 우리 47개 코드가 덮는 점포가 <strong>전국의 59.3%</strong>다. 나머지 40.7%는 칸 자체가 없다.</p>
+
+  <h3>그리고 모든 사용자에게 공통으로 적용하는 하나의 정답은 만들지 않기로 했다</h3>
+  <p><span class="mono">펀엔펀</span>이라는 가게가 있다. 작년에 포항에 있을 때 가끔 가던, 팝콘을 주는 술집이다.</p>
+  <p>그런데 상가정보에는 <b>커피 전문점</b>으로 등록돼 있다.</p>
+  <p>처음엔 “원천 데이터가 틀렸다”고 생각했다. 그런데 아니었다. KSIC는 통계 분류라 <b>주된 활동 하나</b>만 찍는다. 그리고 일반음식점으로 신고했다면 커피도 술도 밥도 다 합법이다. 낮엔 카페, 밤엔 바로 도는 가게는 흔하다.</p>
+  <p>그래서 사용자가 고친 답을 모두의 답으로 올리려던 계획을 접었다.</p>
+  <div class="pull">낮에 커피를 마신 사람에게 그곳은 카페다.<br>밤에 술을 마신 사람에게는 술집이고,<br>파스타를 먹은 사람에게는 식당이다. 셋 다 참이다.</div>
+  <p>모든 사용자에게 공통으로 적용하는 하나의 정답은 <b>한 사람의 이용 맥락을 모두의 정답으로 못박는 일</b>이 된다. 그래서 교정은 개인 것으로만 둔다.</p>
+
+  <h3>결과</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>단계</th><th class="n">카테고리 미분류 (금액 비중)</th></tr></thead>
+    <tbody>
+      <tr><td>시작 — 업종코드만</td><td class="n">46.0%</td></tr>
+      <tr><td>+ 브랜드 이름</td><td class="n">45.8%</td></tr>
+      <tr><td>+ 사용자 확인 13종</td><td class="n">43.3%</td></tr>
+      <tr><td><b>+ 상가정보, 근거 2곳 이상만</b></td><td class="n"><b>40.4%</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>줄어든 폭보다 중요한 게 있다. 근거 1곳짜리를 다 믿으면 32.3%까지 떨어지는데, <b>그렇게 하지 않았다.</b> 실제로 채점해보니 근거가 1곳뿐인 건은 절반이 틀렸고, 2곳 이상은 아직 틀린 적이 없다.</p>
+  <p>그래서 “확정”이라는 한 단어로 둘을 묶지 않기로 했다. 카테고리는 정석대로 채우되, 그 답이 <b>어디서 왔고 근거가 얼마나 두꺼운지</b>를 따로 기록한다. 그리고 낭비 판정과 절약 후보는 이 값을 본다.</p>
+  <div class="stat">
+    <div><b>78.3%</b><small>믿을 만한 것</small></div>
+    <div><b>21.7%</b><small>확인이 필요한 것 (금액 26.5%)</small></div>
+  </div>
+  <div class="pull">“모른다”를 숫자로 들고 있는 것이,<br>46%가 조용히 사라지는 것보다 낫다.</div>
+</div></section>
+
+<!-- 9 -->
+<section id="s9"><div class="col">
+  <div class="eyebrow"><i>09</i> 결론</div>
+  <h2>결국, 질문이 바뀌었다</h2>
+  <p>처음 질문으로 돌아가면, 소비 분석 로직을 얼마나 정교하게 만들어야 하는가. 이 실험이 준 답은 이렇다.</p>
+  <p><b>카테고리 분류에 집중한다.</b> 실제 지출액을 맞추는 일에는 데이터만으로 풀 수 없는 한계가 있고 골격은 정확도를 덜 요구하니, 노력 대비 효과가 가장 큰 자리가 여기다. 게다가 카테고리가 서야 그 위층이 다 돌아간다. 생활 패턴 찾기도 결국 분류된 거래를 재료로 쓴다.</p>
+  <p><b>실제 지출액은 확실히 맞출 수 있는 것만 처리한다.</b> 취소·계좌 간 이체·간편결제 이중까지. 거래 기록 안에서 서로 짝을 찾을 수 있는 경우이고, 이것만 해도 금액은 거의 맞는다.</p>
+  <p><b>못 푸는 건 못 푼다고 표시한다.</b> 1/n 정산이나 대납은 사용자가 직접 고치게 한다. 업종을 알 수 없는 거래는 낭비 판정에도 넣지 않는다. 못 푸는 걸 푼 척하면 신뢰가 무너지지만, 모른다고 말하면 오히려 올라간다. 리뷰의 한 사용자가 정확히 그렇게 썼다.</p>
+  <blockquote>정 안된다면 총이용금액 합계로 표시하고 실적금액/달성 같은 표현을 하면 안된다고 봅니다. 잘못된 정보는 없느니만 못합니다.<cite>5★ 토스</cite></blockquote>
+  <p><b>낭비 판정은 많이 잡는 것보다 틀린 지적을 줄이는 쪽을 택한다.</b> 현재 모델은 기준선을 0.479로 높여, 더 많은 낭비를 잡아내는 대신 사용자가 억울하다고 느낄 지적을 줄였다. 그리고 판정과 함께 “평소보다 3.4배 큰 금액”, “23시 결제”처럼 사용자가 확인하고 반박할 수 있는 이유를 보여준다. 사용자가 “이 소비는 나에게 필수”라고 정하면 그 판단이 모델보다 우선한다.</p>
+  <p><b>골격은 그 위에서 따라온다.</b> 자주 머무는 지역, 이동 패턴, 반복 결제 같은 생활의 골격도 별도의 복잡한 AI 없이 정확히 분류된 거래를 기간별로 다시 묶으면 보이기 시작한다.</p>
+</div></section>
+
+<div class="end">
+  <div class="col">
+    <h2>마치며</h2>
+    <p>과제문은 소비 패턴 분석 기준과 상품 추천 알고리즘 기준을 요구했다. 여기까지 와서 내가 쓴 답은 이렇다.</p>
+    <p>분석 기준의 단위를 <b style="color:#fff">‘거래’에서 ‘기간 내 반복 구조’로</b> 옮긴다. 거래 단위로 물으면 “이건 낭비인가”가 되고, 그 질문으로는 내 3년치에서 별로 나온 게 없었다. 기간 단위로 물으면 “이 생활에서 최적화 가능한 지점은 어디인가”가 되고, 거점과 이동과 구독이 나왔다.</p>
+    <p>그리고 추천은 골격까지만 쓴다. AI의 정확도를 올리는 것보다, 그 앞에서 실제 지출액을 맞추고 소비를 제대로 분류하는 일이 먼저다.</p>
+    <p>이 실험을 하고 나니 추천 AI보다 먼저 만들어야 할 것이 보였다. <b style="color:#fff">사람을 해석하는 AI가 아니라, 거래를 제대로 세는 규칙이었다.</b></p>
+    <p>소비 데이터는 사람을 다 설명하지 못한다. 현금도, 남이 대신 결제한 것도 안 보인다. 무엇보다 결제되지 않은 것은 데이터가 아니다. 굶은 끼니, 못 간 운동, 참은 소비는 어디에도 안 남는다.</p>
+    <p>그런데 이번에 확인한 건 조금 다른 방향이었다.</p>
+    <div class="last">문제는 우리가 사람을 너무 깊이 읽는 게 아니라,<br>깊이 읽을 필요도 없는 것조차 아직 제대로 못 읽고 있다는 것이다.</div>
+    <p style="margin-top:26px">읽을 수 있는 건 골격까지고, 그 위는 못 읽는다. 그리고 어쩌면 못 읽는 게 다행이다. 읽혔다면 말해도 되는지를 따로 고민해야 했을 테니까.</p>
+  </div>
+</div>
+
+<div class="limits">
+  <div class="col">
+    <h2>이 글의 한계</h2>
+    <ul>
+      <li>리뷰 코딩은 키워드 기반이라 오탐·누락이 있다. 특히 한국어 ‘추천’은 추천사와 추천 기능이 섞여, 0.2%라는 숫자 자체보다 20건을 전수로 읽은 내용이 근거다.</li>
+      <li>카드 데이터는 표본 1인이다. 일반화가 아니라 “이런 구조가 존재한다”는 존재 증명으로 읽어주시길. 계좌 이체 비중 94%도 개인 습관이 크게 반영된 수치다.</li>
+      <li>마이데이터가 다루는 여러 금융 분야 중 카드 데이터만 썼다. 계좌·투자·보험·통신은 빠져 있다.</li>
+      <li>그리고 가장 큰 한계. 공개된 표준 문서에서 각 데이터 항목까지 확인했지만, 실제 금융사가 운영하는 API 데이터 자체는 보지 못했다. 규격이 “시각 또는 날짜”라고 열어둔 자리에 각 은행이 실제로 무엇을 넣는지, 가맹점명 동의율이 실무에서 몇 %인지는 사업자만 안다.</li>
+    </ul>
+    <p class="ask">마이데이터가 실제로 어떻게 생겼는지 너무 궁금하다. 알려주실 분은 안 계시겠죠?</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var bar=document.getElementById('bar');
+  function upd(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?(h.scrollTop||document.body.scrollTop)/max*100:0)+'%';
+  }
+  document.addEventListener('scroll',upd,{passive:true});upd();
+})();
+</script>
+
+<footer class="site-footer">© monicalee | <a href="../index.html">Investigating Products</a></footer>
+</body>
+</html>
