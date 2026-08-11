@@ -366,6 +366,204 @@ tbody tr:last-child td{border-bottom:0}
   .ig-split{grid-template-columns:1fr}
 }
 
+
+/* === v4 Responsive data-story system === */
+:root{
+  --wide:960px;
+  --mid:840px;
+  --radius-xl:24px;
+}
+
+/* wide visual breakout while body text stays 720px */
+.visual-wide{
+  width:min(var(--wide), calc(100vw - 48px));
+  margin-left:50%;
+  transform:translateX(-50%);
+}
+.visual-mid{
+  width:min(var(--mid), calc(100vw - 48px));
+  margin-left:50%;
+  transform:translateX(-50%);
+}
+
+/* Chapter rhythm */
+section:nth-of-type(even) .chapter-wash{
+  background:linear-gradient(180deg,rgba(0,113,227,.025),rgba(0,113,227,0));
+}
+.chapter-break{
+  width:min(var(--wide),calc(100vw - 48px));
+  margin:72px auto 0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--line),transparent);
+}
+
+/* Infographic polish */
+.inline-infographic{
+  overflow:hidden;
+  box-shadow:0 8px 28px rgba(15,23,42,.045);
+}
+.inline-infographic .ig-title{max-width:22ch}
+.ig-three .ig-issue{
+  min-width:0;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+@media (hover:hover){
+  .ig-three .ig-issue:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.06)}
+}
+.ig-system{grid-template-columns:minmax(0,1fr) 50px minmax(0,1.18fr)}
+.ig-panel,.ig-lane{min-width:0}
+
+/* compact data visualization */
+.data-bars{
+  display:grid;
+  gap:14px;
+  margin:24px 0 8px;
+}
+.data-bar-row{
+  display:grid;
+  grid-template-columns:110px 1fr 88px;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+}
+.data-bar-track{
+  height:10px;
+  border-radius:999px;
+  background:var(--soft);
+  overflow:hidden;
+}
+.data-bar-fill{
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--blue),#55a7ff);
+  transform-origin:left center;
+}
+.data-bar-value{
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+  color:var(--ink-2);
+}
+
+.timeline-mini{
+  margin:26px 0 8px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.timeline-year{
+  border:1px solid var(--line-2);
+  border-radius:16px;
+  padding:16px;
+  background:#fff;
+  min-width:0;
+}
+.timeline-year b{display:block;font-size:14px;margin-bottom:10px}
+.timeline-year .pulse{
+  height:8px;border-radius:999px;background:var(--soft);overflow:hidden;margin-top:8px;
+}
+.timeline-year .pulse i{
+  display:block;height:100%;border-radius:999px;background:var(--blue);transform-origin:left center;
+}
+
+/* Sanctuary interaction */
+.sanctuary-demo{
+  margin:28px 0;
+  border:1px solid var(--line-2);
+  border-radius:22px;
+  padding:22px;
+  background:linear-gradient(180deg,#fff,#fafcff);
+}
+.sanctuary-demo .sd-title{
+  font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--ink-3);margin-bottom:14px
+}
+.sanctuary-lanes{
+  display:grid;
+  grid-template-columns:1fr 50px 1fr;
+  gap:12px;
+  align-items:stretch;
+}
+.sanctuary-side{
+  min-height:148px;
+  border-radius:16px;
+  padding:16px;
+  background:var(--soft);
+}
+.sanctuary-side.protected{
+  background:rgba(0,113,227,.055);
+  border:1px solid rgba(0,113,227,.16);
+}
+.sanctuary-side .label{font-size:11.5px;color:var(--ink-3);font-weight:700;margin-bottom:12px}
+.sanctuary-chips{display:flex;flex-wrap:wrap;gap:8px}
+.s-chip{
+  padding:9px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);
+  font-size:13px;font-weight:600;white-space:nowrap;
+}
+.s-chip.active{
+  background:#0b74de;color:#fff;border-color:#0b74de;box-shadow:0 6px 18px rgba(0,113,227,.22)
+}
+.sanctuary-arrow{display:grid;place-items:center;color:var(--ink-3);font-weight:700}
+.sanctuary-note{margin-top:15px;font-size:13px;line-height:1.6;color:var(--ink-2)}
+
+/* animation initial states: JS reveals them */
+.js-anime [data-anim="reveal"]{opacity:0;transform:translateY(18px)}
+.js-anime [data-anim="scale-x"]{transform:scaleX(.02)}
+.js-anime [data-anim="fade"]{opacity:.25}
+.motion-safe{will-change:transform,opacity}
+
+/* 960px: tablet */
+@media (max-width:960px){
+  .visual-wide,.visual-mid{width:min(100%,calc(100vw - 40px))}
+  .ig-three{grid-template-columns:1fr 1fr}
+  .ig-three .ig-issue:last-child{grid-column:1 / -1}
+  .ig-system{grid-template-columns:1fr}
+  .ig-mid{transform:rotate(90deg);height:34px}
+  .pg-map{grid-template-columns:1fr 36px 1fr}
+}
+
+/* 720px: mobile/tablet portrait */
+@media (max-width:720px){
+  .visual-wide,.visual-mid{width:100%;margin-left:0;transform:none}
+  .inline-infographic{border-radius:18px;padding:20px}
+  .inline-infographic .ig-title{font-size:21px;max-width:none}
+  .ig-three{grid-template-columns:1fr}
+  .ig-three .ig-issue:last-child{grid-column:auto}
+  .ig-split{grid-template-columns:1fr}
+  .pg-map{grid-template-columns:1fr}
+  .pg-arrow{transform:rotate(90deg);height:32px}
+  .data-bar-row{grid-template-columns:86px 1fr 76px;font-size:13px}
+  .timeline-mini{grid-template-columns:1fr}
+  .sanctuary-lanes{grid-template-columns:1fr}
+  .sanctuary-arrow{transform:rotate(90deg);height:28px}
+}
+
+/* 480px: compact mobile */
+@media (max-width:480px){
+  .col,.wide{padding-left:18px;padding-right:18px}
+  body{font-size:15.5px}
+  h1{font-size:34px}
+  h2{font-size:25px}
+  .hero{padding-top:82px}
+  .meta{display:grid;grid-template-columns:1fr}
+  .inline-infographic{padding:16px}
+  .ig-compare{grid-template-columns:1fr}
+  .ig-arrow{transform:rotate(90deg)}
+  .ig-num{font-size:30px}
+  .reason-chain .rc-grid{grid-template-columns:1fr}
+  .data-bar-row{grid-template-columns:1fr;gap:6px}
+  .data-bar-value{text-align:left}
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition-duration:.001ms!important;
+  }
+  [data-anim]{opacity:1!important;transform:none!important}
+}
+
 .home-link{display:inline-block;margin-bottom:20px;font-size:13px;font-weight:600;color:#a1a1a6;text-decoration:none;letter-spacing:-.01em;transition:color .2s ease}
 .home-link:hover{color:#fff}
 .site-footer{background:#fff;border-top:1px solid var(--line-2);padding:32px 24px;text-align:center;color:var(--ink-3);font-size:12.5px}
@@ -403,12 +601,12 @@ tbody tr:last-child td{border-bottom:0}
   <div class="ig-compare">
     <div class="ig-card">
       <div class="ig-label">처음 계산한 금액</div>
-      <div class="ig-num">550만 원</div>
+      <div class="ig-num motion-safe" data-count-from="0" data-count-to="550">550만 원</div>
     </div>
     <div class="ig-arrow">→</div>
     <div class="ig-card strong">
       <div class="ig-label">취소 거래 반영 후 실제 지출</div>
-      <div class="ig-num">320만 원</div>
+      <div class="ig-num motion-safe" data-count-from="550" data-count-to="320">320만 원</div>
     </div>
   </div>
   <div class="ig-note">230만 원의 차이. 소비 습관의 문제가 아니라 <b>데이터를 어떻게 읽느냐의 문제</b>였다.</div>
@@ -425,11 +623,11 @@ tbody tr:last-child td{border-bottom:0}
       <li><a href="#s2">실제 마이데이터를 쓸 수 없어서 1,120만 건의 더미 마이데이터를 직접 만들었다</a></li>
       <li><a href="#s3">내 카드이용내역 3년치를 넣어보니 결과는 달랐다</a></li>
       <li><a href="#s4">소비 데이터는 어디까지 나를 알 수 있을까?</a></li>
-      <li><a href="#s5">읽히는 건 골격까지다</a></li>
-      <li><a href="#s6">그리고 골격이면 충분하다</a></li>
+      <li><a href="#s5">데이터로 읽히는 건 골격까지다</a></li>
+      <li><a href="#s6">생활의 골격 다음에는, 사용자의 맥락이 필요하다</a></li>
       <li><a href="#s7">1,120만 건으로도 발견하지 못한 이유</a></li>
       <li><a href="#s8">‘잘 맞히는 것’보다 ‘틀리지 않는 것’부터</a></li>
-      <li><a href="#s9">결국, 질문이 바뀌었다</a></li>
+      <li><a href="#s9">결국, 질문이 한 번 더 바뀌었다</a></li>
     </ol>
   </nav>
 </div>
@@ -572,23 +770,23 @@ tbody tr:last-child td{border-bottom:0}
   <p>택시에서는 그 생각이 맞았다. <b>188개 이름이 사업자번호 3개</b>로 깔끔하게 정리된다.</p>
   <p>그런데 배달의민족에서는 정반대였다. <b>한 회사가 사업자번호 5개</b>로 흩어진다.</p>
   <p>그리고 온라인 결제에서는 더 이상한 일이 생겼다. <b>넷플릭스도, 배달의민족도, 맥도날드도 데이터에서는 같은 회사처럼 보일 수 있었다.</b></p>
-<div class="inline-infographic" aria-label="실제 데이터에서 깨진 세 가지 전제">
+<div class="inline-infographic visual-wide" aria-label="실제 데이터에서 깨진 세 가지 전제">
   <div class="ig-kicker">INFOGRAPHIC 02 · 실제 데이터를 넣자 보인 세 가지 문제</div>
   <div class="ig-title">거래 기록을 그대로 ‘소비’라고 부를 수 없었다.</div>
   <div class="ig-three">
-    <div class="ig-issue">
+    <div class="ig-issue motion-safe" data-anim="reveal">
       <div class="n">01</div>
       <b>같은 곳에서 썼는데 이름이 달랐다</b>
       <div class="ig-eq">카드에 찍힌 이름 ≠ 실제 소비처</div>
       <div class="ig-metric">‘한국철도공사’ 검색<strong>3건 → 실제 123건</strong></div>
     </div>
-    <div class="ig-issue">
+    <div class="ig-issue motion-safe" data-anim="reveal">
       <div class="n">02</div>
       <b>돈이 빠져나갔다고 모두 소비는 아니었다</b>
       <div class="ig-eq">출금 ≠ 소비</div>
       <div class="ig-metric">내 계좌 출금 내역 중<strong>94%는 소비 아님</strong></div>
     </div>
-    <div class="ig-issue">
+    <div class="ig-issue motion-safe" data-anim="reveal">
       <div class="n">03</div>
       <b>다른 곳에서 썼는데 같은 회사로 보였다</b>
       <div class="ig-eq">결제한 회사 ≠ 실제 소비처</div>
@@ -607,13 +805,13 @@ tbody tr:last-child td{border-bottom:0}
     <div class="pg-map">
       <div class="pg-side">
         <div class="label">내가 실제로 쓴 곳</div>
-        <div class="pg-item"><b>넷플릭스</b><small>OTT · 콘텐츠</small></div>
-        <div class="pg-item"><b>배달의민족</b><small>배달 · 식비</small></div>
-        <div class="pg-item"><b>맥도날드</b><small>외식 · 식비</small></div>
-        <div class="pg-item"><b>주차장 서비스</b><small>교통 · 주차</small></div>
+        <div class="pg-item motion-safe" data-anim="reveal"><b>넷플릭스</b><small>OTT · 콘텐츠</small></div>
+        <div class="pg-item motion-safe" data-anim="reveal"><b>배달의민족</b><small>배달 · 식비</small></div>
+        <div class="pg-item motion-safe" data-anim="reveal"><b>맥도날드</b><small>외식 · 식비</small></div>
+        <div class="pg-item motion-safe" data-anim="reveal"><b>주차장 서비스</b><small>교통 · 주차</small></div>
       </div>
       <div class="pg-arrow">→</div>
-      <div class="pg-result">
+      <div class="pg-result motion-safe" data-anim="reveal">
         <div class="label">데이터가 본 것</div>
         <b>같은 결제대행사(PG) 사업자번호</b>
         <p>서로 다른 소비가 하나의 회사 아래 묶여, 사업자번호만으로는 내가 무엇에 쓴 돈인지 알 수 없었다.</p>
@@ -657,6 +855,11 @@ tbody tr:last-child td{border-bottom:0}
   </table>
   </div>
 
+  <div class="data-bars visual-mid" aria-label="택시 지역별 건당 평균 비교">
+    <div class="data-bar-row"><b>경북</b><div class="data-bar-track"><div class="data-bar-fill motion-safe" data-anim="scale-x" style="width:55%"></div></div><span class="data-bar-value">8,102원</span></div>
+    <div class="data-bar-row"><b>서울</b><div class="data-bar-track"><div class="data-bar-fill motion-safe" data-anim="scale-x" style="width:100%"></div></div><span class="data-bar-value">14,707원</span></div>
+  </div>
+
   <p>같은 ‘택시’인데 두 도시에서 성격이 다르다. 서울 택시가 거의 두 배 비싸다. 하나는 도시 안 짧은 이동이고 하나는 더 긴 이동이다.</p>
   <p><b>자차 없음.</b> 주유 결제가 사실상 없고 택시·KTX·후불교통이 반복된다.</p>
   <p>그리고 그 거점에는 <b>시작과 끝</b>이 있다.</p>
@@ -670,6 +873,12 @@ tbody tr:last-child td{border-bottom:0}
       <tr><td>포항 소재 가맹점</td><td class="n">3건</td><td class="n">167건</td><td class="n">0건</td></tr>
     </tbody>
   </table>
+  </div>
+
+  <div class="timeline-mini visual-mid" aria-label="포항 생활 패턴 연도별 변화">
+    <div class="timeline-year" data-anim="reveal"><b>2024</b><span>경북 택시 0건 · 포항 가맹점 3건</span><div class="pulse"><i data-anim="scale-x" style="width:8%"></i></div></div>
+    <div class="timeline-year" data-anim="reveal"><b>2025</b><span>경북 택시 107건 · 포항 가맹점 167건</span><div class="pulse"><i data-anim="scale-x" style="width:100%"></i></div></div>
+    <div class="timeline-year" data-anim="reveal"><b>2026</b><span>경북 택시 0건 · 포항 가맹점 0건</span><div class="pulse"><i data-anim="scale-x" style="width:2%"></i></div></div>
   </div>
 
   <p>2025년 한 해에만 존재한다. 1분기에 솟아서 3분기에 정점을 찍고 연말에 꺼진다. 데이터는 이 사람의 다거점 생활이 <b>언제 시작해서 언제 끝났는지</b>를 정확히 안다.</p>
@@ -702,7 +911,7 @@ tbody tr:last-child td{border-bottom:0}
 <!-- 5 -->
 <section id="s5"><div class="col">
   <div class="eyebrow"><i>05</i> 경계</div>
-  <h2>읽히는 건 골격까지다</h2>
+  <h2>데이터로 읽히는 건 골격까지다</h2>
   <p>읽힌 것과 안 읽힌 것을 나란히 놓으면 경계가 뚜렷하다.</p>
 
   <div class="tw">
@@ -741,45 +950,72 @@ tbody tr:last-child td{border-bottom:0}
   <p>그런데 친구들과 밥을 먹고 내 카드로 3인분을 결제한 뒤 2인분을 계좌로 돌려받으면? 카드 명세서에는 3인분이 찍히고, 계좌에는 친구 이름으로 입금이 찍히고, 둘을 잇는 정보는 어디에도 없다. 금액도 안 맞고 날짜도 안 맞는다.</p>
   <p>이건 더 좋은 알고리즘으로 풀리는 문제가 아니다. <b>데이터에 정보가 없다.</b> 결제되지 않은 것이 데이터가 아니듯, 결제됐다가 되돌아온 돈도 그 되돌아옴이 원장에 안 남으면 데이터가 아니다.</p>
   <p>그리고 골격이 신뢰할 만한 이유는 <b>여러 신호가 겹치는 지점에서만</b> 만들어지기 때문이다. 거점은 KTX와 택시 번호판과 지역 가맹점 셋이 동시에 가리켰다. 해석은 하나의 신호를 늘여서 만든다. 그래서 골격은 정확하고 해석은 부정확하다. 우연이 아니라 구조적이다.</p>
-  <div class="pull">소비 데이터로 읽을 수 있는 건 생활의 골격까지다.<br>라이프스타일이 아니다.</div>
+  <div class="pull">거래 데이터만으로 읽을 수 있는 건 생활의 골격까지다.<br>그 소비가 왜 중요한지는 데이터 밖에 있다.</div>
 </div></section>
 
 <!-- 6 -->
 <section id="s6"><div class="col">
-  <div class="eyebrow"><i>06</i> 그러면 충분한가</div>
-  <h2>그리고 골격이면 충분하다</h2>
-  <p>여기서 뜻밖의 결론이 나왔다. <strong>골격만으로도 추천은 성립한다.</strong></p>
-  <p>두 도시를 정기적으로 오간다는 사실만 알면 철도 할인 상품을 제안할 수 있다. 왜 오가는지는 몰라도 된다. 교육 과정이든 이직이든 가족이든 상품 조건은 같다. 코레일도 안 물어본다.</p>
-  <p>반대로 이유를 알아야만 가능한 추천을 생각해보자. 장거리 이동이 잦으니 기차에서 쓸 헤드셋을 추천한다면?</p>
+  <div class="eyebrow"><i>06</i> 다음 개인화</div>
+  <h2>생활의 골격 다음에는,<br>사용자의 맥락이 필요하다</h2>
+  <p>생활의 골격만으로도 가능한 추천은 있다. 두 도시를 정기적으로 오간다는 사실만 알면 철도 할인 상품을 제안할 수 있다. 왜 오가는지까지 몰라도 상품 조건은 달라지지 않는다.</p>
+  <p>하지만 MOA가 하려는 건 여기서 한 걸음 더 나아간다. <b>사용자에게 무엇을 줄여볼지 제안하려면, 그 사람이 무엇을 중요하게 생각하는지도 알아야 한다.</b></p>
+  <p>같은 카페 지출도 누군가에게는 줄이고 싶은 소비지만, 누군가에게는 하루를 버티게 해주는 작은 즐거움일 수 있다. 몇 달째 보지 않는 OTT는 새는 돈일 수 있지만, 매일 야구 중계를 보는 사람에게는 쉽게 포기할 수 없는 소비다.</p>
+  <p>거래 데이터만으로는 이 차이를 알기 어렵다. 그렇다고 AI가 그 이유까지 그럴듯하게 추측하게 하고 싶지는 않았다.</p>
 
-  <div class="reason-chain" aria-label="KTX 이용 기록에서 헤드셋 추천까지 추론이 늘어나는 과정">
-    <div class="rc-title">데이터가 말하는 것과 우리가 추측하는 것</div>
+  <div class="reason-chain" aria-label="거래 데이터에서 사용자 맥락까지의 경계">
+    <div class="rc-title">데이터가 말하는 것과 사용자가 알려줘야 하는 것</div>
     <div class="rc-grid">
-      <div class="rc-node fact"><b>KTX를 반복 이용한다</b><small>데이터로 확인 가능한 사실</small></div>
-      <div class="rc-node guess"><b>기차에서 오래 머문다</b><small>그럴듯하지만 직접 확인되지 않은 추정</small></div>
-      <div class="rc-node unknown"><b>그 시간에 무엇을 하는가</b><small>데이터에는 정보가 없음</small></div>
-      <div class="rc-node unknown"><b>그래서 헤드셋이 필요하다</b><small>사용자 정보가 아니라 판매자의 가정</small></div>
+      <div class="rc-node fact"><b>카페에 자주 쓴다</b><small>거래 데이터로 확인 가능한 사실</small></div>
+      <div class="rc-node fact"><b>평소보다 많이 쓴 날이 있다</b><small>반복과 금액으로 계산 가능</small></div>
+      <div class="rc-node guess"><b>카페를 줄이고 싶을 것이다</b><small>데이터만으로는 알 수 없는 추정</small></div>
+      <div class="rc-node unknown"><b>커피는 포기할 수 없다</b><small>사용자만 알고 있는 가치와 맥락</small></div>
     </div>
-    <div class="rc-note"><b>첫 칸만 사실이다.</b> 오른쪽으로 갈수록 사용자의 실제 맥락이 아니라 서비스가 만들어낸 추측이 늘어난다.</div>
+    <div class="rc-note"><b>앞의 두 칸은 데이터가 알려준다.</b> 뒤의 두 칸은 서비스가 추측할 게 아니라, 사용자가 자연스럽게 알려줄 수 있어야 한다.</div>
   </div>
 
-  <p>두 번째 칸부터 데이터가 없다. 자는지, 일하는지, 이미 있는지 명세서에는 아무것도 없다. 그리고 틀리면 “얘가 나를 뭘로 보고”가 되고, 맞아도 감시당하는 느낌이 든다.</p>
-  <p>2012년 Target 사례가 그랬다. 25개 상품으로 임신 예측 점수를 산출했고 통계적으로는 작동했다. 아버지보다 먼저 알았다는 이야기로 번지며 브랜드 위기가 됐다. 쿠폰을 무관한 상품 사이에 숨긴 대응은 “몰래 쓰는 게 더 나쁘다”는 2차 비판을 불렀다. <b>실패한 건 모델이 아니라 전달이었다.</b></p>
-  <div class="pull">이유를 몰라도 되는 추천이 좋은 추천이고,<br>이유를 알아야 성립하는 추천은 대개 광고다.</div>
-  <p>우연히 맞아떨어지는 게 아니다. 반복되는 행동에 붙는 상품은 원래 이유와 무관하다. 교통 패스, 구독 통합, 카드 실적 최적화 — 전부 “얼마나 자주”만 알면 된다.</p>
-  <p>그래서 개인화의 단계는 이렇게 정리된다.</p>
+  <p>개인화가 잘 된 서비스는 사용자가 매번 자신의 취향을 길게 설명하지 않아도 점점 나를 더 잘 이해한다. 음악 서비스가 내가 반복해서 듣는 곡과 직접 선택한 취향을 함께 쌓아 새로운 음악을 추천하듯, MOA도 <b>거래 데이터와 사용자 인풋을 함께 보며 소비의 의미를 알아가는 방식</b>을 고민하고 있다.</p>
+
+  <h3>첫 번째 시도는 ‘성역 설정’이다</h3>
+  <p>그렇다고 처음부터 “당신에게 가장 중요한 소비는 무엇인가요?”라고 긴 설문을 받고 싶지는 않았다. 서비스를 쓰는 과정에서 자신의 기준을 자연스럽게 알려줄 수 있어야 했다.</p>
+  <p>그래서 만든 첫 번째 장치가 <b>성역 설정</b>이다. MOA가 최근 소비를 분석해 줄여볼 만한 카테고리를 보여주면, 사용자는 그중 <b>“이건 줄이고 싶지 않다”</b>고 생각하는 소비를 성역으로 지정할 수 있다.</p>
+  <div class="sanctuary-demo visual-mid" aria-label="성역 설정 인터랙션 예시">
+    <div class="sd-title">사용자 인풋이 개인화 정보가 되는 순간</div>
+    <div class="sanctuary-lanes">
+      <div class="sanctuary-side">
+        <div class="label">절약 후보</div>
+        <div class="sanctuary-chips">
+          <span class="s-chip motion-safe" data-sanctuary="cafe">카페</span>
+          <span class="s-chip">배달</span>
+          <span class="s-chip">쇼핑</span>
+          <span class="s-chip">취미</span>
+        </div>
+      </div>
+      <div class="sanctuary-arrow">→</div>
+      <div class="sanctuary-side protected">
+        <div class="label">내가 지킬 소비</div>
+        <div class="sanctuary-chips" data-sanctuary-target>
+          <span class="s-chip" data-placeholder>성역으로 지정한 소비</span>
+        </div>
+      </div>
+    </div>
+    <div class="sanctuary-note">“카페는 줄이고 싶지 않아요”라는 한 번의 선택이, 이 사람의 가치 소비를 이해하는 명시적 인풋이 된다.</div>
+  </div>
+  <p>겉으로 보면 절약 대상에서 특정 카테고리를 제외하는 기능이다. 하지만 서비스 입장에서는 중요한 사용자 인풋이 하나 생긴다.</p>
+  <div class="pull dark">이 사람은 어디에 돈을 쓰는 것을<br>가치 있다고 생각하는가?</div>
+  <p>성역 설정은 단순한 예외 처리가 아니라, <b>사용자의 가치 소비가 어디에 방점이 찍혀 있는지 알아가기 위한 첫 번째 시도</b>다.</p>
+  <p>그래서 지금 개인화의 단계를 이렇게 보고 있다.</p>
   <ol class="steps" aria-label="개인화의 세 단계">
     <li class="now">
-      <div class="step-head"><b>카테고리 합산</b><span class="step-tag">현재 대부분의 서비스</span></div>
-      <span class="step-desc">카페·교통·쇼핑처럼 어디에 얼마를 썼는지 묶어 보여주는 단계. 소비 현황은 알 수 있지만, 아직 개인화라고 하기는 어렵다.</span>
+      <div class="step-head"><b>카테고리 합산</b><span class="step-tag">소비 현황</span></div>
+      <span class="step-desc">카페·교통·쇼핑처럼 어디에 얼마를 썼는지 묶어 보여준다.</span>
     </li>
     <li class="goal">
-      <div class="step-head"><b>생활의 골격 찾기</b><span class="step-tag">MOA의 목표</span></div>
-      <span class="step-desc">반복되는 이동, 고정지출, 자주 쓰는 카테고리처럼 여러 데이터가 함께 가리키는 생활 패턴까지 읽는다. 추천에 필요한 정보는 여기까지로 충분하다.</span>
+      <div class="step-head"><b>생활의 골격 찾기</b><span class="step-tag">데이터가 잘하는 일</span></div>
+      <span class="step-desc">반복되는 이동, 고정지출, 자주 쓰는 카테고리처럼 여러 거래가 함께 가리키는 생활 패턴을 읽는다.</span>
     </li>
-    <li class="no">
-      <div class="step-head"><b>사람의 이유까지 해석하기</b><span class="step-tag">넘지 않을 선</span></div>
-      <span class="step-desc">왜 이동하는지, 왜 그 소비를 좋아하는지까지 추측하는 단계. 데이터에 근거가 부족하고, 맞더라도 사용자가 감시받는다고 느낄 수 있다.</span>
+    <li class="goal">
+      <div class="step-head"><b>사용자 맥락 이해하기</b><span class="step-tag">다음 탐구</span></div>
+      <span class="step-desc">왜 이 소비가 중요한지는 추측하지 않는다. 성역 설정처럼 UX 안에서 자연스럽게 받은 사용자 인풋으로 그 의미를 조금씩 알아간다.</span>
     </li>
   </ol>
 </div></section>
@@ -803,6 +1039,72 @@ tbody tr:last-child td{border-bottom:0}
   <h2>‘잘 맞히는 것’보다 ‘틀리지 않는 것’부터</h2>
   <p>금융 데이터가 주는 건 결국 가맹점 이름과 사업자번호 같은 원재료다. 그걸 “카페”, “교통”, “배달”처럼 사람이 이해할 수 있는 소비 카테고리로 바꾸는 건 서비스를 만드는 쪽의 일이다.</p>
   <div class="explain"><b>MOA의 15개 소비 유형</b>은 식비 · 교통/자동차 · 의료 · 금융/보험 · 주거/통신 · 카페/간식 · 술/유흥 · 쇼핑 · 취미/여가 · 생활 · 미용 · 건강/피트니스 · 여행/숙박 · 대형마트 · 편의점/잡화다. <b>카테고리 미분류</b>은 15개 중 하나가 아니라, 무엇에 쓴 돈인지 끝내 확신할 수 없을 때 남겨두는 별도 상태다.</div>
+  <div class="inline-infographic visual-wide" aria-label="소비 분석 로직 before after">
+    <div class="ig-kicker">INFOGRAPHIC 03 · 실제 데이터 검증 후 바뀐 소비 분석 구조</div>
+    <div class="ig-title">모델을 바꾼 게 아니라, 판단하기 전에 확인할 것을 늘렸다.</div>
+    <div class="ig-system">
+      <div class="ig-panel motion-safe" data-anim="fade">
+        <div class="tag">BEFORE</div>
+        <div class="ig-topflow">
+          <div class="ig-node">거래 발생</div><span>→</span><div class="ig-node">마이데이터 유입</div>
+        </div>
+        <div class="ig-split">
+          <div class="ig-lane">
+            <h4>1-1. 카테고리 분류</h4>
+            <div class="ig-step motion-safe" data-anim="reveal">가맹점명·사업자정보</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">LLM 분류</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">15개 소비 유형 중 하나</div>
+          </div>
+          <div class="ig-lane">
+            <h4>1-2. 낭비 판정</h4>
+            <div class="ig-step motion-safe" data-anim="reveal">사용자 통계 생성</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">11개 특징 추출</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">EBM 점수 합산</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">기준선 0.274</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ig-mid">→</div>
+
+      <div class="ig-panel after motion-safe" data-anim="reveal">
+        <div class="tag">AFTER</div>
+        <div class="ig-topflow">
+          <div class="ig-node">거래 발생</div><span>→</span><div class="ig-node">마이데이터 유입</div>
+        </div>
+        <div class="ig-split">
+          <div class="ig-lane">
+            <h4>1-1. 카테고리 분류 <span class="ig-badge">신뢰도 추가</span></h4>
+            <div class="ig-step motion-safe" data-anim="reveal">가맹점명 우선 확인</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">사업자번호는 검증 신호</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">공공 상가정보 교차 확인</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">근거가 약하면 ‘카테고리 미분류’</div>
+          </div>
+          <div class="ig-lane">
+            <h4>1-2. 낭비 판정 <span class="ig-badge">신뢰 우선</span></h4>
+            <div class="ig-step motion-safe" data-anim="reveal">분류 가능한 거래만</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">사용자 통계 + 11개 특징</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">EBM 점수 + 이유 공개</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">기준선 0.479</div>
+            <div class="ig-down">↓</div>
+            <div class="ig-step motion-safe" data-anim="reveal">사용자 정정·보호 우선</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ig-note">더 똑똑한 모델을 만드는 것보다, <b>믿을 수 있는 판단 구조를 만드는 쪽</b>을 택했다.</div>
+  </div>
 
   <h3>왜 업종코드 하나만 봤나</h3>
   <p>처음부터 게을렀던 게 아니다. 이전 방식이 실제로 문제를 냈고, 그걸 고치다 나온 결과였다.</p>
@@ -891,27 +1193,24 @@ tbody tr:last-child td{border-bottom:0}
 <!-- 9 -->
 <section id="s9"><div class="col">
   <div class="eyebrow"><i>09</i> 결론</div>
-  <h2>결국, 질문이 바뀌었다</h2>
-  <p>처음 질문으로 돌아가면, 소비 분석 로직을 얼마나 정교하게 만들어야 하는가. 이 실험이 준 답은 이렇다.</p>
-  <p><b>카테고리 분류에 집중한다.</b> 실제 지출액을 맞추는 일에는 데이터만으로 풀 수 없는 한계가 있고 골격은 정확도를 덜 요구하니, 노력 대비 효과가 가장 큰 자리가 여기다. 게다가 카테고리가 서야 그 위층이 다 돌아간다. 생활 패턴 찾기도 결국 분류된 거래를 재료로 쓴다.</p>
-  <p><b>실제 지출액은 확실히 맞출 수 있는 것만 처리한다.</b> 취소·계좌 간 이체·간편결제 이중까지. 거래 기록 안에서 서로 짝을 찾을 수 있는 경우이고, 이것만 해도 금액은 거의 맞는다.</p>
-  <p><b>못 푸는 건 못 푼다고 표시한다.</b> 1/n 정산이나 대납은 사용자가 직접 고치게 한다. 업종을 알 수 없는 거래는 낭비 판정에도 넣지 않는다. 못 푸는 걸 푼 척하면 신뢰가 무너지지만, 모른다고 말하면 오히려 올라간다. 리뷰의 한 사용자가 정확히 그렇게 썼다.</p>
-  <blockquote>정 안된다면 총이용금액 합계로 표시하고 실적금액/달성 같은 표현을 하면 안된다고 봅니다. 잘못된 정보는 없느니만 못합니다.<cite>5★ 토스</cite></blockquote>
-  <p><b>낭비 판정은 많이 잡는 것보다 틀린 지적을 줄이는 쪽을 택한다.</b> 현재 모델은 기준선을 0.479로 높여, 더 많은 낭비를 잡아내는 대신 사용자가 억울하다고 느낄 지적을 줄였다. 그리고 판정과 함께 “평소보다 3.4배 큰 금액”, “23시 결제”처럼 사용자가 확인하고 반박할 수 있는 이유를 보여준다. 사용자가 “이 소비는 나에게 필수”라고 정하면 그 판단이 모델보다 우선한다.</p>
-  <p><b>골격은 그 위에서 따라온다.</b> 자주 머무는 지역, 이동 패턴, 반복 결제 같은 생활의 골격도 별도의 복잡한 AI 없이 정확히 분류된 거래를 기간별로 다시 묶으면 보이기 시작한다.</p>
+  <h2>결국, 질문이 한 번 더 바뀌었다</h2>
+  <p>처음에는 <b>“AI가 얼마나 정확하게 소비를 판단할 수 있을까?”</b>를 고민했다.</p>
+  <p>실제 카드이용내역을 넣어본 뒤에는 <b>“우리가 가진 데이터만으로 어디까지 판단해도 될까?”</b>로 질문이 바뀌었다.</p>
+  <p>그리고 지금은 여기서 한 걸음 더 나아가고 있다.</p>
+  <div class="pull">데이터만으로 알 수 없는 사용자 맥락을<br>어떻게 자연스럽게 이해할 수 있을까?</div>
+  <p>취소한 결제를 제대로 빼고, 같은 소비를 찾아 묶고, 무엇에 쓴 돈인지 정확하게 분류하는 일은 여전히 중요하다. 그 기반이 흔들리면 개인화도 흔들린다.</p>
+  <p>하지만 거래를 제대로 읽는 것과 사람을 제대로 이해하는 것은 다른 문제였다.</p>
+  <p>소비 데이터는 반복되는 이동과 결제, 자주 찾는 장소와 카테고리를 통해 생활의 골격을 꽤 잘 보여준다. 반면 왜 그 소비를 포기할 수 없는지, 무엇에는 기꺼이 돈을 쓰고 싶은지까지 알려주지는 않는다.</p>
+  <p>그래서 그 빈칸을 AI의 추측으로 채우기보다, <b>사용자가 서비스를 쓰는 과정에서 자신의 맥락을 자연스럽게 알려줄 수 있는 UX</b>를 고민하고 있다.</p>
+  <p>성역 설정은 그 첫 번째 시도다. 앞으로는 사용자의 정정, 반복되는 선택, 챌린지 결과처럼 서비스 안에서 자연스럽게 생기는 행동을 통해 소비의 맥락을 조금씩 이해할 수 있는 방법도 더 실험해보려 한다.</p>
+  <p>아직 답을 찾은 것은 아니다. 오히려 질문이 하나 더 생겼다.</p>
 </div></section>
 
 <div class="end">
   <div class="col">
-    <h2>마치며</h2>
-    <p>과제문은 소비 패턴 분석 기준과 상품 추천 알고리즘 기준을 요구했다. 여기까지 와서 내가 쓴 답은 이렇다.</p>
-    <p>분석 기준의 단위를 <b style="color:#fff">‘거래’에서 ‘기간 내 반복 구조’로</b> 옮긴다. 거래 단위로 물으면 “이건 낭비인가”가 되고, 그 질문으로는 내 3년치에서 별로 나온 게 없었다. 기간 단위로 물으면 “이 생활에서 최적화 가능한 지점은 어디인가”가 되고, 거점과 이동과 구독이 나왔다.</p>
-    <p>그리고 추천은 골격까지만 쓴다. AI의 정확도를 올리는 것보다, 그 앞에서 실제 지출액을 맞추고 소비를 제대로 분류하는 일이 먼저다.</p>
-    <p>이 실험을 하고 나니 추천 AI보다 먼저 만들어야 할 것이 보였다. <b style="color:#fff">사람을 해석하는 AI가 아니라, 거래를 제대로 세는 규칙이었다.</b></p>
-    <p>소비 데이터는 사람을 다 설명하지 못한다. 현금도, 남이 대신 결제한 것도 안 보인다. 무엇보다 결제되지 않은 것은 데이터가 아니다. 굶은 끼니, 못 간 운동, 참은 소비는 어디에도 안 남는다.</p>
-    <p>그런데 이번에 확인한 건 조금 다른 방향이었다.</p>
-    <div class="last">문제는 우리가 사람을 너무 깊이 읽는 게 아니라,<br>깊이 읽을 필요도 없는 것조차 아직 제대로 못 읽고 있다는 것이다.</div>
-    <p style="margin-top:26px">읽을 수 있는 건 골격까지고, 그 위는 못 읽는다. 그리고 어쩌면 못 읽는 게 다행이다. 읽혔다면 말해도 되는지를 따로 고민해야 했을 테니까.</p>
+    <h2>마이데이터를 분석하기 전에,<br>‘소비’부터 다시 정의했다.</h2>
+    <p>그리고 소비를 제대로 읽고 나니, 다음에는 그 소비가 사용자에게 어떤 의미인지 이해해야 했다.</p>
+    <div class="last">사용자에게 계속 물어보지 않으면서도,<br>어떻게 하면 이 사람의 소비 맥락을 조금 더 잘 이해할 수 있을까?</div>
   </div>
 </div>
 
@@ -937,6 +1236,92 @@ tbody tr:last-child td{border-bottom:0}
     bar.style.width=(max>0?(h.scrollTop||document.body.scrollTop)/max*100:0)+'%';
   }
   document.addEventListener('scroll',upd,{passive:true});upd();
+})();
+</script>
+
+<script type="module">
+(async function(){
+  document.documentElement.classList.add('js-anime');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    document.querySelectorAll('[data-anim]').forEach(el => { el.style.opacity='1'; el.style.transform='none'; });
+    return;
+  }
+
+  let anime;
+  try {
+    anime = await import('https://cdn.jsdelivr.net/npm/animejs@4.1.3/+esm');
+  } catch(e) {
+    document.documentElement.classList.remove('js-anime');
+    return;
+  }
+  const { animate, stagger } = anime;
+
+  const once = new WeakSet();
+  const reveal = (el, opts={}) => {
+    if (once.has(el)) return;
+    once.add(el);
+    animate(el, { opacity:[0,1], translateY:[18,0], duration:650, ease:'out(3)', ...opts });
+  };
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const root = entry.target;
+
+      if(root.classList.contains('inline-infographic')){
+        const cards = root.querySelectorAll('.ig-issue[data-anim="reveal"]');
+        if(cards.length){
+          animate(cards,{opacity:[0,1],translateY:[18,0],delay:stagger(110),duration:600,ease:'out(3)'});
+          cards.forEach(c=>once.add(c));
+        }
+        const panels = root.querySelectorAll('.ig-panel[data-anim]');
+        if(panels.length){
+          animate(panels,{opacity:[.25,1],translateY:[12,0],delay:stagger(180),duration:720,ease:'out(3)'});
+          panels.forEach(c=>once.add(c));
+          const steps = root.querySelectorAll('.ig-step[data-anim="reveal"]');
+          animate(steps,{opacity:[0,1],translateY:[10,0],delay:stagger(70,{start:200}),duration:480,ease:'out(2)'});
+          steps.forEach(c=>once.add(c));
+        }
+      }
+
+      root.querySelectorAll?.('[data-anim="reveal"]').forEach(el=>reveal(el));
+      root.querySelectorAll?.('[data-anim="scale-x"]').forEach(el=>{
+        if(once.has(el)) return; once.add(el);
+        animate(el,{scaleX:[.02,1],duration:850,ease:'out(4)'});
+      });
+
+      if(root.classList.contains('pg-visual')){
+        const items=root.querySelectorAll('.pg-item');
+        const result=root.querySelector('.pg-result');
+        animate(items,{opacity:[0,1],translateX:[-18,0],delay:stagger(90),duration:520,ease:'out(3)'});
+        if(result) animate(result,{opacity:[0,1],scale:[.96,1],delay:430,duration:600,ease:'out(3)'});
+      }
+
+      if(root.classList.contains('sanctuary-demo')){
+        const cafe=root.querySelector('[data-sanctuary="cafe"]');
+        const target=root.querySelector('[data-sanctuary-target]');
+        const placeholder=root.querySelector('[data-placeholder]');
+        if(cafe && target && !root.dataset.played){
+          root.dataset.played='1';
+          animate(cafe,{scale:[1,1.06,1],duration:700,ease:'inOut(3)'});
+          setTimeout(()=>{
+            cafe.classList.add('active');
+            if(placeholder) placeholder.remove();
+            const clone=cafe.cloneNode(true);
+            clone.removeAttribute('data-sanctuary');
+            clone.style.opacity='0';
+            target.appendChild(clone);
+            animate(clone,{opacity:[0,1],translateX:[-16,0],duration:520,ease:'out(3)'});
+          },500);
+        }
+      }
+
+      io.unobserve(root);
+    });
+  },{threshold:.18});
+
+  document.querySelectorAll('.inline-infographic,.pg-visual,.data-bars,.timeline-mini,.sanctuary-demo').forEach(el=>io.observe(el));
 })();
 </script>
 
